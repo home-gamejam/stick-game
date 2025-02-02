@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cylmulnexilu1"]
+[gd_scene load_steps=10 format=3 uid="uid://cylmulnexilu1"]
 
 [ext_resource type="PackedScene" uid="uid://b0w31x4vrnheq" path="res://art/stickman.glb" id="1_2apgm"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_6irgt"]
@@ -7,16 +7,21 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u6pd7"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_j5vtk"]
-animation = &"stickman_animations/_TPose"
+animation = &"stickman_animations/Idle"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hj1rf"]
 animation = &"stickman_animations/Walk"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_772ii"]
+animation = &"stickman_animations/Run"
 
 [sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_vcy5j"]
 blend_point_0/node = SubResource("AnimationNodeAnimation_j5vtk")
 blend_point_0/pos = 0.0
 blend_point_1/node = SubResource("AnimationNodeAnimation_hj1rf")
 blend_point_1/pos = 1.0
+blend_point_2/node = SubResource("AnimationNodeAnimation_772ii")
+blend_point_2/pos = 2.0
 min_space = 0.0
 max_space = 2.0
 
@@ -59,4 +64,4 @@ unique_name_in_owner = true
 root_node = NodePath("%Model")
 tree_root = SubResource("AnimationNodeBlendTree_xfbxg")
 anim_player = NodePath("../AnimationPlayer")
-parameters/Movement/blend_position = -0.0432973
+parameters/Movement/blend_position = 0.0

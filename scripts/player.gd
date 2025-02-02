@@ -52,7 +52,7 @@ func _physics_process(delta: float) -> void:
 	velocity = velocity.move_toward(direction * speed, ACCELERATION * delta)
 	velocity.y = vel_y
 
-	print('v:', velocity)
+	#print('v:', velocity)
 	move_and_slide()
 
 	if direction.length() > 0.2:
