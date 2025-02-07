@@ -45,14 +45,13 @@ func _physics_process(delta: float) -> void:
 
 	var direction := forward * input_dir.y + right * input_dir.x
 	direction = direction.normalized()
-	
+
 	# temporarily zero the y velocity while we call move_toward, then restore it
 	var vel_y := velocity.y
 	velocity.y = 0.0
 	velocity = velocity.move_toward(direction * speed, ACCELERATION * delta)
 	velocity.y = vel_y
 
-	#print('v:', velocity)
 	move_and_slide()
 
 	if direction.length() > 0.2:
