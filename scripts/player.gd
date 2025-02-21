@@ -3,8 +3,7 @@ extends CharacterBody3D
 
 @export_range(0.0, 1.0) var mouse_sensitivity = 0.01
 @export var tilt_limit = deg_to_rad(75)
-@onready var _camera := %Camera as Camera3D
-@onready var _camera_pivot := %CameraPivot as Node3D
+@onready var _player_camera := %PlayerCamera as PlayerCamera
 @onready var _animation_tree = %AnimationTree as AnimationTree
 @onready var _model = %Model as Node3D
 
@@ -17,9 +16,16 @@ var is_running = false
 var last_direction := Vector3.BACK
 var speed = SPEED
 
+func _enter_tree():
+	# this assumes that name was set to the pid
+	set_multiplayer_authority(int(str(name)))
+
 func _physics_process(delta: float) -> void:
 	#if Engine.is_editor_hint():
 		#return
+
+	if !is_multiplayer_authority():
+		return
 
 	# Add the gravity.
 	if not is_on_floor():
@@ -40,8 +46,9 @@ func _physics_process(delta: float) -> void:
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 
-	var forward := _camera.global_basis.z
-	var right := _camera.global_basis.x
+	var camera: Camera3D = _player_camera.camera
+	var forward := camera.global_basis.z
+	var right := camera.global_basis.x
 
 	var direction := forward * input_dir.y + right * input_dir.x
 	direction = direction.normalized()
@@ -68,6 +75,6 @@ func _physics_process(delta: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
-		_camera_pivot.rotation.x -= event.relative.y * mouse_sensitivity
-		_camera_pivot.rotation.x = clampf(_camera_pivot.rotation.x, -tilt_limit, tilt_limit)
-		_camera_pivot.rotation.y += -event.relative.x * mouse_sensitivity
+		_player_camera.rotation.x -= event.relative.y * mouse_sensitivity
+		_player_camera.rotation.x = clampf(_player_camera.rotation.x, -tilt_limit, tilt_limit)
+		_player_camera.rotation.y += -event.relative.x * mouse_sensitivity

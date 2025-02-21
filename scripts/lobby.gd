@@ -17,21 +17,23 @@ func _on_host_pressed():
 	print("_on_host_pressed")
 
 	var peer = ENetMultiplayerPeer.new()
-	peer.create_client(HOST, PORT)
+	peer.create_server(PORT, MAX_CLIENTS)
 	multiplayer.set_multiplayer_peer(peer)
 
 	multiplayer.peer_connected.connect(
-		func _on_peer_connected():
-			print("_on_peer_connected")
-			player_added.emit()
+		func _on_peer_connected(pid: int):
+			print("_on_peer_connected", pid)
+			# Client
+			player_added.emit(pid)
 	)
 
-	player_added.emit()
+	# Server
+	player_added.emit(multiplayer.get_unique_id())
 
 
 func _on_join_pressed():
 	print("_on_join_pressed")
 
 	var peer = ENetMultiplayerPeer.new()
-	peer.create_server(PORT, MAX_CLIENTS)
+	peer.create_client(HOST, PORT)
 	multiplayer.set_multiplayer_peer(peer)

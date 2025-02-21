@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://cylmulnexilu1"]
+[gd_scene load_steps=12 format=3 uid="uid://cylmulnexilu1"]
 
 [ext_resource type="PackedScene" uid="uid://b0w31x4vrnheq" path="res://art/stickman.glb" id="1_2apgm"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_6irgt"]
 [ext_resource type="AnimationLibrary" uid="uid://bjbobcjthd56o" path="res://resources/stickman_animations.tres" id="2_k4r30"]
+[ext_resource type="PackedScene" uid="uid://cefi4xatbdx3p" path="res://scenes/player_camera.tscn" id="3_bsw13"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u6pd7"]
 
@@ -30,6 +31,17 @@ nodes/Movement/node = SubResource("AnimationNodeBlendSpace1D_vcy5j")
 nodes/Movement/position = Vector2(50, 100)
 node_connections = [&"output", 0, &"Movement"]
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_tummt"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("AnimationTree:parameters/Movement/blend_position")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("Model:rotation")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_6irgt")
 tilt_limit = 0.5
@@ -41,16 +53,7 @@ shape = SubResource("CapsuleShape3D_u6pd7")
 [node name="Model" parent="." instance=ExtResource("1_2apgm")]
 unique_name_in_owner = true
 
-[node name="CameraPivot" type="Node3D" parent="."]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 0.960634, -0.277818, 0, 0.277818, 0.960634, 0, 0.595059, 0)
-
-[node name="CameraArm" type="SpringArm3D" parent="CameraPivot"]
-unique_name_in_owner = true
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
-spring_length = 6.0
-
-[node name="Camera" type="Camera3D" parent="CameraPivot/CameraArm"]
+[node name="PlayerCamera" parent="." instance=ExtResource("3_bsw13")]
 unique_name_in_owner = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -66,3 +69,6 @@ root_node = NodePath("%Model")
 tree_root = SubResource("AnimationNodeBlendTree_xfbxg")
 anim_player = NodePath("../AnimationPlayer")
 parameters/Movement/blend_position = 0.0
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_tummt")
