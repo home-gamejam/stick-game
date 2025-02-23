@@ -9,10 +9,10 @@ signal player_added()
 
 
 func _ready():
-	if OS.has_feature(""):
+	if OS.has_feature("dedicated_server"):
 		print("Starting dedicated server...")
 		_on_host_pressed()
-		
+
 	%Host.connect("pressed", _on_host_pressed)
 	%Join.connect("pressed", _on_join_pressed)
 
