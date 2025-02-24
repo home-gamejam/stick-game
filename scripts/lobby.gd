@@ -1,8 +1,8 @@
 extends Node
 
-const PORT = 8911
-#const HOST = "192.168.68.68"
-const HOST = "127.0.0.1"
+const PORT = 8080
+const HOST = "192.168.68.64"
+# const HOST = "127.0.0.1"
 const MAX_CLIENTS = 8
 
 
@@ -21,7 +21,7 @@ func _ready():
 
 func _on_server_start():
 	print("Starting server on port:", PORT, "...")
-
+	print("IPs:", IP.get_local_addresses())
 	var peer = ENetMultiplayerPeer.new()
 	peer.create_server(PORT, MAX_CLIENTS)
 	#var peer = WebSocketMultiplayerPeer.new() # ENetMultiplayerPeer.new()
