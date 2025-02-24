@@ -2,10 +2,12 @@ extends Node
 
 const CLIENT_PORT = 8888
 const SERVER_PORT = 8888
-const HOST = "192.168.68.64"
+# const HOST = "192.168.68.64"
 # const HOST = "127.0.0.1"
+const HOST = "local.emeraldwalk.com"
 const MAX_CLIENTS = 8
-const CERT_NAME = "pi44g.local"
+# const CERT_NAME = "pi44g.local"
+const CERT_NAME = "local.emeraldwalk"
 
 
 signal player_added()
@@ -42,8 +44,9 @@ func _on_server_start():
 			player_added.emit(pid)
 	)
 
-	# Server
-	player_added.emit(multiplayer.get_unique_id())
+	# Add server play if not dedicated server
+	if !OS.has_feature("dedicated_server"):
+		player_added.emit(multiplayer.get_unique_id())
 
 
 func _on_client_connect():
