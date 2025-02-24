@@ -10,5 +10,15 @@
       "debug_navigation": false,
       "additional_options": ""
     }
+  ],
+  "compounds": [
+    {
+      "name": "GDScript: Multiple Instance",
+      "configurations": [
+        "GDScript: Launch Project",
+        "GDScript: Launch Project"
+      ],
+      "stopAll": true
+    }
   ]
 }
