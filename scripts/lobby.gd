@@ -1,6 +1,5 @@
 extends Node
 
-const CLIENT_PORT = 8888
 const SERVER_PORT = 8888
 # const HOST = "192.168.68.64"
 # const HOST = "127.0.0.1"
@@ -51,7 +50,7 @@ func _on_server_start():
 
 func _on_client_connect():
 	var remote = %Remote.text
-	print("Client connecting to ", remote, ":", CLIENT_PORT, "...")
+	print("Client connecting to ", remote, ":", SERVER_PORT, "...")
 
 	# var peer = ENetMultiplayerPeer.new()
 	# peer.create_client(remote, SERVER_PORT)
@@ -59,6 +58,6 @@ func _on_client_connect():
 	var peer = WebSocketMultiplayerPeer.new()
 	var client_trusted_cas = load("res://certs/rootCA.crt")
 	var client_tls_options = TLSOptions.client(client_trusted_cas)
-	peer.create_client("wss://" + remote + ":" + str(CLIENT_PORT), client_tls_options)
+	peer.create_client("wss://" + remote + ":" + str(SERVER_PORT), client_tls_options)
 
 	multiplayer.set_multiplayer_peer(peer)
