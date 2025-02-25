@@ -3,10 +3,11 @@ extends Node
 const SERVER_PORT = 8888
 # const HOST = "192.168.68.64"
 # const HOST = "127.0.0.1"
-const HOST = "local.emeraldwalk.com"
+# const HOST = "local.emeraldwalk.com"
+const HOST = "pi44g.local"
 const MAX_CLIENTS = 8
-# const CERT_NAME = "pi44g.local"
-const CERT_NAME = "local.emeraldwalk"
+const CERT_NAME = "pi44g.local"
+# const CERT_NAME = "local.emeraldwalk"
 
 
 signal player_added()
