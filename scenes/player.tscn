@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cylmulnexilu1"]
+[gd_scene load_steps=14 format=3 uid="uid://cylmulnexilu1"]
 
 [ext_resource type="PackedScene" uid="uid://b0w31x4vrnheq" path="res://art/stickman.glb" id="1_2apgm"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_6irgt"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/player_input.gd" id="4_f0hcx"]
 [ext_resource type="Script" path="res://addons/netfox/rollback/rollback-synchronizer.gd" id="5_q20ij"]
 [ext_resource type="PackedScene" uid="uid://cefi4xatbdx3p" path="res://scenes/player_camera.tscn" id="6_mve7r"]
+[ext_resource type="Script" path="res://addons/netfox/tick-interpolator.gd" id="7_1x7pt"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u6pd7"]
 
@@ -62,11 +63,16 @@ parameters/Movement/blend_position = 0.0
 [node name="Input" type="Node" parent="."]
 script = ExtResource("4_f0hcx")
 
+[node name="PlayerCamera" parent="." instance=ExtResource("6_mve7r")]
+unique_name_in_owner = true
+
 [node name="RollbackSynchronizer" type="Node" parent="." node_paths=PackedStringArray("root")]
 script = ExtResource("5_q20ij")
 root = NodePath("..")
 state_properties = Array[String]([":position", "Model:rotation", "AnimationTree:parameters/Movement/blend_position"])
 input_properties = Array[String](["Input:input_dir", "Input:is_jumping", "Input:is_running"])
 
-[node name="PlayerCamera" parent="." instance=ExtResource("6_mve7r")]
-unique_name_in_owner = true
+[node name="TickInterpolator" type="Node" parent="." node_paths=PackedStringArray("root")]
+script = ExtResource("7_1x7pt")
+root = NodePath("..")
+properties = Array[String]([":position", "Model:rotation", "AnimationTree:parameters/Movement/blend_position"])
