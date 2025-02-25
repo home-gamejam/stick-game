@@ -1,8 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://cylmulnexilu1"]
+[gd_scene load_steps=13 format=3 uid="uid://cylmulnexilu1"]
 
 [ext_resource type="PackedScene" uid="uid://b0w31x4vrnheq" path="res://art/stickman.glb" id="1_2apgm"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_6irgt"]
 [ext_resource type="AnimationLibrary" uid="uid://bjbobcjthd56o" path="res://resources/stickman_animations.tres" id="2_k4r30"]
+[ext_resource type="Script" path="res://scripts/player_input.gd" id="4_f0hcx"]
+[ext_resource type="Script" path="res://addons/netfox/rollback/rollback-synchronizer.gd" id="5_q20ij"]
+[ext_resource type="PackedScene" uid="uid://cefi4xatbdx3p" path="res://scenes/player_camera.tscn" id="6_mve7r"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u6pd7"]
 
@@ -30,20 +33,10 @@ nodes/Movement/node = SubResource("AnimationNodeBlendSpace1D_vcy5j")
 nodes/Movement/position = Vector2(50, 100)
 node_connections = [&"output", 0, &"Movement"]
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_tummt"]
-properties/0/path = NodePath(".:position")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath("AnimationTree:parameters/Movement/blend_position")
-properties/1/spawn = true
-properties/1/replication_mode = 1
-properties/2/path = NodePath("Model:rotation")
-properties/2/spawn = true
-properties/2/replication_mode = 1
-
-[node name="Player" type="CharacterBody3D"]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("player_input")]
 script = ExtResource("1_6irgt")
 tilt_limit = 0.5
+player_input = NodePath("Input")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -66,5 +59,14 @@ tree_root = SubResource("AnimationNodeBlendTree_xfbxg")
 anim_player = NodePath("../AnimationPlayer")
 parameters/Movement/blend_position = 0.0
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_tummt")
+[node name="Input" type="Node" parent="."]
+script = ExtResource("4_f0hcx")
+
+[node name="RollbackSynchronizer" type="Node" parent="." node_paths=PackedStringArray("root")]
+script = ExtResource("5_q20ij")
+root = NodePath("..")
+state_properties = Array[String]([":position", "Model:rotation", "AnimationTree:parameters/Movement/blend_position"])
+input_properties = Array[String](["Input:input_dir", "Input:is_jumping", "Input:is_running"])
+
+[node name="PlayerCamera" parent="." instance=ExtResource("6_mve7r")]
+unique_name_in_owner = true

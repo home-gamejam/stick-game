@@ -3,8 +3,12 @@ extends CharacterBody3D
 
 @export_range(0.0, 1.0) var mouse_sensitivity = 0.01
 @export var tilt_limit = deg_to_rad(75)
+@export var player_input: PlayerNetInput
+
+@onready var rollback_synchronizer = $RollbackSynchronizer
 @onready var _animation_tree = %AnimationTree as AnimationTree
 @onready var _model = %Model as Node3D
+@onready var _player_camera = %PlayerCamera as PlayerCamera
 
 const PLAYER_CAMERA = preload("res://scenes/player_camera.tscn")
 const ACCELERATION = 20.0
@@ -15,22 +19,25 @@ const ROTATION_SPEED = TAU * 2
 var is_running = false
 var last_direction := Vector3.BACK
 var speed = SPEED
-var _player_camera: PlayerCamera
 
 func _enter_tree():
+	set_multiplayer_authority(1)
 	# this assumes that name was set to the pid
-	set_multiplayer_authority(int(str(name)))
+	player_input.set_multiplayer_authority(str(name).to_int())
 
 func _ready():
-	if is_multiplayer_authority():
-		_player_camera = PLAYER_CAMERA.instantiate()
-		add_child(_player_camera)
+
+	# Set owner
+	print("peer_id:", str(name).to_int())
+	rollback_synchronizer.process_settings()
+
+	if multiplayer.get_unique_id() == name.to_int():
+		_player_camera.camera.current = true
+	else:
+		_player_camera.camera.current = false
 
 
-func _physics_process(delta: float) -> void:
-	#if Engine.is_editor_hint():
-		#return
-
+func _rollback_tick(delta: float, _tick, _is_fresh) -> void:
 	if !is_multiplayer_authority():
 		return
 
@@ -39,10 +46,10 @@ func _physics_process(delta: float) -> void:
 		velocity += get_gravity() * delta
 
 	# Handle jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+	if player_input.is_jumping and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
-	is_running = Input.is_action_pressed("run")
+	is_running = player_input.is_running
 
 	if is_running:
 		speed = SPEED * 2
@@ -51,7 +58,7 @@ func _physics_process(delta: float) -> void:
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
-	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	var input_dir := player_input.input_dir
 
 	var camera: Camera3D = _player_camera.camera
 	var forward := camera.global_basis.z
@@ -66,7 +73,12 @@ func _physics_process(delta: float) -> void:
 	velocity = velocity.move_toward(direction * speed, ACCELERATION * delta)
 	velocity.y = vel_y
 
+	var velocity_old := velocity
+	velocity *= NetworkTime.physics_factor
+
 	move_and_slide()
+
+	velocity = velocity_old
 
 	if direction.length() > 0.2:
 		last_direction = direction
