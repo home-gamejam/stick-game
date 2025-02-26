@@ -9,13 +9,20 @@ import (
 )
 
 const (
-	certFilePath = "local.emeraldwalk.crt"
-	keyFilePath  = "local.emeraldwalk.key"
-	publicDir    = "./web"
-	serverAddr   = ":8080"
+	publicDir  = "./web"
+	serverAddr = ":8080"
 )
 
+var certBaseName string
+
 func main() {
+	if certBaseName == "" {
+		log.Fatal("certName is empty")
+	}
+
+	certFileName := certBaseName + ".crt"
+	keyFileName := certBaseName + ".key"
+
 	// Get the directory of the executable
 	exePath, err := os.Executable()
 	if err != nil {
@@ -37,7 +44,7 @@ func main() {
 
 	// Start HTTPS server
 	log.Println("Server listening on https://localhost:8080")
-	err = http.ListenAndServeTLS(serverAddr, certFilePath, keyFilePath, nil)
+	err = http.ListenAndServeTLS(serverAddr, certFileName, keyFileName, nil)
 
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)

@@ -6,10 +6,14 @@ fi
 
 host=$1
 
+./build/build-web.sh $host
+
 # echo "Building Web..."
 /Applications/Godot-v4.3.app/Contents/MacOS/Godot \
  --headless \
  --export-release "Web" build/web/index.html
+
+cp certs/$host.* build/
 
 echo "Building Pi..."
 /Applications/Godot-v4.3.app/Contents/MacOS/Godot \
@@ -18,3 +22,7 @@ echo "Building Pi..."
 
 echo "Copying to $host..."
 scp ./build/pi/pi.arm64 $USER@$host:~/stick-world/
+
+echo "Copying web to $host..."
+scp -r ./build/web/* $USER@$host:~/stick-world-web/web
+scp ./build/$host.* $USER@$host:~/stick-world-web/
