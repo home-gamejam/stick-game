@@ -6,7 +6,7 @@ fi
 
 host=$1
 
-echo "Building Web..."
+# echo "Building Web..."
 /Applications/Godot-v4.3.app/Contents/MacOS/Godot \
  --headless \
  --export-release "Web" build/web/index.html
