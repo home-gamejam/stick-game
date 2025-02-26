@@ -16,5 +16,5 @@ echo "Building Pi..."
  --headless \
  --export-release "Raspberry Pi" build/pi/pi.arm64
 
-echo "Copying to $1..."
-scp ./build/pi/pi.arm64 $USER@$1:~/stick-world/
+echo "Copying to $host..."
+scp ./build/pi/pi.arm64 $USER@$host:~/stick-world/
