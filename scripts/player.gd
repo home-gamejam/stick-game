@@ -73,12 +73,11 @@ func _rollback_tick(delta: float, _tick, _is_fresh) -> void:
 	velocity = velocity.move_toward(direction * speed, ACCELERATION * delta)
 	velocity.y = vel_y
 
-	var velocity_old := velocity
 	velocity *= NetworkTime.physics_factor
 
 	move_and_slide()
 
-	velocity = velocity_old
+	velocity /= NetworkTime.physics_factor
 
 	if direction.length() > 0.2:
 		last_direction = direction
