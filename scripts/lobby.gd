@@ -7,9 +7,7 @@ const SERVER_PORT = 8888
 const HOST = "pi44g.local"
 # const HOST = "pi5.local"
 const MAX_CLIENTS = 8
-const CERT_NAME = "pi44g.local"
-# const CERT_NAME = "pi5.local"
-# const CERT_NAME = "local.emeraldwalk"
+const CERT_NAME = HOST
 
 
 signal player_added()
