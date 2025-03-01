@@ -5,11 +5,10 @@ const SERVER_PORT = 8888
 # const HOST = "127.0.0.1"
 # const HOST = "local.emeraldwalk.com"
 const HOST = "pi44g.local"
-# const HOST = "pi5.local"
 const MAX_CLIENTS = 8
 const CERT_NAME = HOST
 
-const IS_WEBSOCKETS = false
+const IS_WEBSOCKETS = true
 
 signal player_added()
 
