@@ -7,13 +7,13 @@ fi
 host=$1
 
 ./build/build-web.sh $host
+cp certs/$host.* build/
 
 echo "Building Web..."
 /Applications/Godot-v4.3.app/Contents/MacOS/Godot \
  --headless \
  --export-release "Web" build/web/index.html
 
-cp certs/$host.* build/
 
 echo "Copying web to $host..."
 scp -r ./build/web/* $USER@$host:~/stick-world-web/web
