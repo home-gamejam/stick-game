@@ -1,13 +1,16 @@
 extends Node
 
 const SERVER_PORT = 8888
-# const HOST = "192.168.68.64"
-# const HOST = "127.0.0.1"
-const HOST = "local.emeraldwalk.com"
+const HOST = "pi44g.local"
 const MAX_CLIENTS = 8
-# const CERT_NAME = "pi44g.local"
-const CERT_NAME = "local.emeraldwalk"
+const CERT_NAME = HOST
 
+enum TransportType {
+	Enet,
+	Websocket
+}
+
+const transportType = TransportType.Websocket
 
 signal player_added()
 
@@ -23,16 +26,28 @@ func _ready():
 
 
 func _on_server_start():
-	print("Starting server on port:", SERVER_PORT, "...")
-	print("IPs:", IP.get_local_addresses())
-	# var peer = ENetMultiplayerPeer.new()
-	# peer.create_server(SERVER_PORT, MAX_CLIENTS)
+	var peer
 
-	var peer = WebSocketMultiplayerPeer.new()
-	var server_certs = load("res://certs/" + CERT_NAME + ".crt")
-	var server_key = load("res://certs/" + CERT_NAME + ".key")
-	var server_tls_options = TLSOptions.server(server_key, server_certs)
-	peer.create_server(SERVER_PORT, "*", server_tls_options)
+	if transportType == TransportType.Enet:
+		print("Starting server on port:", SERVER_PORT, "...")
+		print("IPs:", IP.get_local_addresses())
+
+		peer = ENetMultiplayerPeer.new()
+		peer.create_server(SERVER_PORT, MAX_CLIENTS)
+
+	elif transportType == TransportType.Websocket:
+		print("Starting server on port:", SERVER_PORT, "...")
+		print("IPs:", IP.get_local_addresses())
+
+		peer = WebSocketMultiplayerPeer.new()
+		var server_certs = load("res://certs/" + CERT_NAME + ".crt")
+		var server_key = load("res://certs/" + CERT_NAME + ".key")
+		var server_tls_options = TLSOptions.server(server_key, server_certs)
+		peer.create_server(SERVER_PORT, "*", server_tls_options)
+
+	else:
+		print("Unknown transport type")
+		return
 
 	multiplayer.set_multiplayer_peer(peer)
 
@@ -50,14 +65,24 @@ func _on_server_start():
 
 func _on_client_connect():
 	var remote = %Remote.text
-	print("Client connecting to ", remote, ":", SERVER_PORT, "...")
 
-	# var peer = ENetMultiplayerPeer.new()
-	# peer.create_client(remote, SERVER_PORT)
+	var peer
 
-	var peer = WebSocketMultiplayerPeer.new()
-	var client_trusted_cas = load("res://certs/rootCA.crt")
-	var client_tls_options = TLSOptions.client(client_trusted_cas)
-	peer.create_client("wss://" + remote + ":" + str(SERVER_PORT), client_tls_options)
+	if transportType == TransportType.Enet:
+		print("Client connecting to ", remote, ":", SERVER_PORT, "...")
+		peer = ENetMultiplayerPeer.new()
+		peer.create_client(remote, SERVER_PORT)
+
+	elif transportType == TransportType.Websocket:
+		print("Client connecting to ", remote, ":", SERVER_PORT, "...")
+		peer = WebSocketMultiplayerPeer.new()
+		var client_trusted_cas = load("res://certs/rootCA.crt")
+		var client_tls_options = TLSOptions.client(client_trusted_cas)
+		peer.create_client("wss://" + remote + ":" + str(SERVER_PORT), client_tls_options)
+
+
+	else:
+		print("Unknown transport type")
+		return
 
 	multiplayer.set_multiplayer_peer(peer)
