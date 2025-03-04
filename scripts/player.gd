@@ -19,7 +19,8 @@ var _player_camera: PlayerCamera
 
 func _enter_tree():
 	# this assumes that name was set to the pid
-	set_multiplayer_authority(int(str(name)))
+	var id = int(str(name))
+	set_multiplayer_authority(id)
 
 func _ready():
 	if is_multiplayer_authority():
