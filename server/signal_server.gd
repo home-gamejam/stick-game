@@ -52,11 +52,6 @@ func _process(_delta: float) -> void:
 			udp.set_dest_address(peer.addr, peer.port)
 			udp.put_packet(JSON.stringify(message).to_utf8_buffer())
 
-			# for peer_id in peer_ids:
-			# 	var peer = peers[peer_id]
-			# 	print("Sending ", message.type, " to ", peer_id, ", ", peer.addr, ":", peer.port)
-			# 	udp.set_dest_address(peer.addr, peer.port)
-			# 	udp.put_packet(JSON.stringify(message).to_utf8_buffer())
 
 func _send_peer_connected(connected_id, to_id):
 	print("Sending peer_connected ", connected_id, " to ", to_id)
