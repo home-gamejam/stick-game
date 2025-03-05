@@ -4,6 +4,8 @@
 .godot/
 /android/
 
+build/ios
+build/mac
 build/pi
 build/*.webserver
 build/*.crt
