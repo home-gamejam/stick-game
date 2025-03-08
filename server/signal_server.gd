@@ -12,6 +12,13 @@ func _ready():
 	else:
 		print("UDP signaling server started on port ", SERVER_PORT)
 
+		var ip_regex = RegEx.new()
+		ip_regex.compile("^\\d+\\.")
+
+		for ip in IP.get_local_addresses():
+			if ip_regex.search(ip):
+				print(ip)
+
 func _process(_delta: float) -> void:
 	# Remove peers that have timed out
 	for peer_id in peers.keys():
