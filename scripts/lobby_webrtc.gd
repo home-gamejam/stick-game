@@ -16,10 +16,6 @@ func _ready():
 		signal_client.server_ip = %IP.text
 	)
 
-
-	# signal_client.send_data({"source_id": peer_id, "type": "register"})
-
-
 	signal_client.peer_connected.connect(
 		func(pid: int):
 			_log_message("peer_connected", pid)

@@ -2,11 +2,16 @@ extends Node3D
 
 
 const PLAYER_SCENE = preload("res://scenes/player.tscn")
+const LOBBY_SCENE = preload("res://scenes/lobby.tscn")
+const LOBBY_WEBRTC_SCENE = preload("res://scenes/lobby_webrtc.tscn")
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	%Lobby.player_added.connect(_on_player_added)
+	var lobby = LOBBY_WEBRTC_SCENE.instantiate()
+	add_child(lobby)
+
+	lobby.player_added.connect(_on_player_added)
 
 
 func _on_player_added(pid: int):
