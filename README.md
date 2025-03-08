@@ -5,6 +5,14 @@
 Signaling server
 ./server/server.sh
 
+### Web Build + Html Server
+
+Build godot project + golang static file server
+./build/build-web.sh [hostname]
+
+Run the server
+./build/[hostname].webserver
+
 ## Multiplayer
 
 - World scene has MultiplayerSpawner node. This watches a specific node for anything added and replicates it. Spawn path is set to World where players get added. Auto spawn list inclues Player scene.

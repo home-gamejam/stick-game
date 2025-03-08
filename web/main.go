@@ -13,15 +13,16 @@ const (
 	serverAddr = ":8080"
 )
 
-var certBaseName string
+// Gets passed in at build time via -ldflags
+var hostName string
 
 func main() {
-	if certBaseName == "" {
+	if hostName == "" {
 		log.Fatal("certName is empty")
 	}
 
-	certFileName := certBaseName + ".crt"
-	keyFileName := certBaseName + ".key"
+	certFileName := hostName + ".crt"
+	keyFileName := hostName + ".key"
 
 	// Get the directory of the executable
 	exePath, err := os.Executable()
@@ -43,7 +44,7 @@ func main() {
 	http.Handle("/", fs)
 
 	// Start HTTPS server
-	log.Println("Server listening on https://localhost:8080")
+	log.Println("Server listening on https://" + hostName + ":8080")
 	err = http.ListenAndServeTLS(serverAddr, certFileName, keyFileName, nil)
 
 	if err != nil {

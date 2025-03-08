@@ -14,4 +14,4 @@ host=$1
 echo "Building web server..."
 # Set these 2 env variables to build for arm64
 # GOOS=linux GOARCH=arm64
-go build -ldflags "-X main.certBaseName=$host" -o build/$host.webserver web/main.go
+go build -ldflags "-X main.hostName=$host" -o build/$host.webserver web/main.go
