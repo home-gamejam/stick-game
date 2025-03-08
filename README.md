@@ -1,5 +1,10 @@
 # Stick World
 
+## Dev
+
+Signaling server
+./server/server.sh
+
 ## Multiplayer
 
 - World scene has MultiplayerSpawner node. This watches a specific node for anything added and replicates it. Spawn path is set to World where players get added. Auto spawn list inclues Player scene.
