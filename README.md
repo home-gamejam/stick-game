@@ -1,19 +1,24 @@
 # Stick World
 
-## Dev WebRTC
+## Dev
 
-In world.gd, set `IS_WEB_RTC = true`
+In world.gd, set `IS_WEB_RTC` to determine client / server or WebRTC
+
+### Dev WebRTC
 
 Run signaling server
 ./server/server.sh
 
 Build or run the game
 
-## Dev Client / Server
+### Build iOS
 
-In world.gd, set `IS_WEB_RTC = false`
+Need to connect phone first
+./build/build-ios.sh
 
 ### Web Build + Html Server
+
+> TODO: support for WebRTC over websockets
 
 Build godot project + golang static file server
 ./build/build-web.sh [hostname]
