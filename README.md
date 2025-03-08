@@ -1,9 +1,17 @@
 # Stick World
 
-## Dev
+## Dev WebRTC
 
-Signaling server
+In world.gd, set `IS_WEB_RTC = true`
+
+Run signaling server
 ./server/server.sh
+
+Build or run the game
+
+## Dev Client / Server
+
+In world.gd, set `IS_WEB_RTC = false`
 
 ### Web Build + Html Server
 
@@ -12,6 +20,10 @@ Build godot project + golang static file server
 
 Run the server
 ./build/[hostname].webserver
+
+### Build Pi
+
+./build/build-pi.sh [pihostname]
 
 ## Multiplayer
 
