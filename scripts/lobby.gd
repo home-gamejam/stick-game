@@ -1,7 +1,7 @@
 extends Node
 
 const SERVER_PORT = 8888
-const HOST = "pi44g.local"
+const HOST = "brianmac.local"
 const MAX_CLIENTS = 8
 const CERT_NAME = HOST
 
