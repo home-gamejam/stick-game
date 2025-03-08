@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://dv2as56644e08"]
+[gd_scene load_steps=5 format=3 uid="uid://f55g1b7idup7"]
 
 [ext_resource type="Script" path="res://controls/scripts/debug_controls.gd" id="1_nclca"]
 [ext_resource type="PackedScene" uid="uid://b5masvrk3omor" path="res://controls/labeled_slider.tscn" id="2_jsh7a"]
