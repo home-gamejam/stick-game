@@ -1,0 +1,85 @@
+[gd_scene load_steps=5 format=3 uid="uid://dv2as56644e08"]
+
+[ext_resource type="Script" path="res://controls/scripts/debug_controls.gd" id="1_nclca"]
+[ext_resource type="PackedScene" uid="uid://b5masvrk3omor" path="res://controls/labeled_slider.tscn" id="2_jsh7a"]
+
+[sub_resource type="Gradient" id="Gradient_vyvwv"]
+offsets = PackedFloat32Array(0, 0.894934, 0.988743, 0.994371, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.844373, 0.844373, 0.844373, 1, 0.870926, 0.870926, 0.870926, 1, 1, 1, 1, 1, 0.939963, 0.939963, 0.939963, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_pttvp"]
+gradient = SubResource("Gradient_vyvwv")
+fill_to = Vector2(0.0106838, 0)
+
+[node name="debug_controls" type="HBoxContainer"]
+offset_right = 644.0
+offset_bottom = 100.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_constants/separation = 50
+script = ExtResource("1_nclca")
+
+[node name="SpeedFwd" parent="." instance=ExtResource("2_jsh7a")]
+layout_mode = 2
+size_flags_vertical = 0
+label = "Speed Fwd"
+
+[node name="PortraitScale" parent="." instance=ExtResource("2_jsh7a")]
+layout_mode = 2
+size_flags_vertical = 0
+label = "Scale (P)"
+
+[node name="Label" parent="PortraitScale/Left" index="0"]
+text = "Scale (P)"
+
+[node name="Value" parent="PortraitScale/Left" index="1"]
+text = "0"
+
+[node name="Slider" parent="PortraitScale" index="1"]
+min_value = -10.0
+max_value = 10.0
+
+[node name="LandscapeScale" parent="." instance=ExtResource("2_jsh7a")]
+layout_mode = 2
+size_flags_vertical = 0
+label = "Scale (L)"
+value = 10.0
+
+[node name="Label" parent="LandscapeScale/Left" index="0"]
+text = "Scale (L)"
+
+[node name="Value" parent="LandscapeScale/Left" index="1"]
+text = "10"
+
+[node name="Slider" parent="LandscapeScale" index="1"]
+min_value = -10.0
+max_value = 10.0
+value = 10.0
+
+[node name="Buttons" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Reset" type="Control" parent="Buttons"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+
+[node name="TouchScreenButton" type="TouchScreenButton" parent="Buttons/Reset"]
+texture_normal = SubResource("GradientTexture2D_pttvp")
+action = "reload"
+
+[node name="RotateScreen" type="Button" parent="Buttons"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+text = "Flip"
+
+[connection signal="value_changed" from="SpeedFwd" to="." method="_on_speed_fwd_value_changed"]
+[connection signal="value_changed" from="PortraitScale" to="." method="_on_portrait_scale_value_changed"]
+[connection signal="value_changed" from="LandscapeScale" to="." method="_on_landscape_scale_value_changed"]
+[connection signal="pressed" from="Buttons/Reset/TouchScreenButton" to="." method="_on_reset_button_pressed"]
+[connection signal="pressed" from="Buttons/RotateScreen" to="." method="_on_flip_button_pressed"]
+
+[editable path="PortraitScale"]
+[editable path="LandscapeScale"]

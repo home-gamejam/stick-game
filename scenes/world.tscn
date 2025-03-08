@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://b5m57eryima4q"]
+[gd_scene load_steps=9 format=3 uid="uid://b5m57eryima4q"]
 
 [ext_resource type="Script" path="res://scripts/world.gd" id="1_wieu3"]
 [ext_resource type="PackedScene" uid="uid://bi7qruhaba4fm" path="res://scenes/lobby_webrtc.tscn" id="2_lxwqy"]
+[ext_resource type="PackedScene" uid="uid://bwkse6fquphh2" path="res://controls/controls.tscn" id="2_s8l70"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gt8p8"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -43,6 +44,8 @@ shape = SubResource("BoxShape3D_olpak")
 
 [node name="Lobby" parent="." instance=ExtResource("2_lxwqy")]
 unique_name_in_owner = true
+
+[node name="controls" parent="." instance=ExtResource("2_s8l70")]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://scenes/player.tscn")

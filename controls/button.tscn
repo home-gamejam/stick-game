@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://b37sk1idnypwa"]
+
+[ext_resource type="Texture2D" uid="uid://dm2o00po7oabu" path="res://assets/circle128.png" id="1_a3jo4"]
+
+[node name="button" type="Control"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -622.0
+offset_bottom = -1496.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TouchScreenButton" type="TouchScreenButton" parent="."]
+texture_normal = ExtResource("1_a3jo4")
+action = "shoot"
