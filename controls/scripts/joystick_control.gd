@@ -43,7 +43,7 @@ func _input(event):
 		if event is InputEventScreenTouch:
 			is_active[event.index] = is_in_bounds
 
-		if is_active[event.index]:
+		if is_active.has(event.index) and is_active[event.index]:
 			if is_in_bounds:
 				set_stick_position(direction)
 			elif event is InputEventScreenDrag:

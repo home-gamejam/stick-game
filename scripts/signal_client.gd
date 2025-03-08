@@ -13,7 +13,7 @@ const DEFAULT_SERVER_PORT = 9000
 
 var udp = PacketPeerUDP.new()
 
-var server_ip = DEFAULT_SERVER_IP
+@export var server_ip = DEFAULT_SERVER_IP
 var server_port = DEFAULT_SERVER_PORT
 
 func _process(_delta: float) -> void:
@@ -34,5 +34,6 @@ func _process(_delta: float) -> void:
 
 
 func send_data(data: Dictionary):
+	print("send data to signaling server: ", server_ip)
 	udp.set_dest_address(server_ip, server_port)
 	udp.put_packet(JSON.stringify(data).to_utf8_buffer())
