@@ -42,10 +42,10 @@ mesh = SubResource("BoxMesh_7bgyp")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
 shape = SubResource("BoxShape3D_olpak")
 
+[node name="controls" parent="." instance=ExtResource("2_s8l70")]
+
 [node name="Lobby" parent="." instance=ExtResource("2_lxwqy")]
 unique_name_in_owner = true
-
-[node name="controls" parent="." instance=ExtResource("2_s8l70")]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://scenes/player.tscn")

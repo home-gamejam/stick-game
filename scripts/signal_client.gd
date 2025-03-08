@@ -7,11 +7,14 @@ signal offer_received(pid: int, sdp: String)
 signal answer_received(pid: int, sdp: String)
 signal candidate_received(pid: int, mid: String, index: int, sdp: String)
 
-const SERVER_IP = '127.0.0.1'
-const SERVER_PORT = 9000
+# '192.168.88.253' # '192.168.68.62' # '127.0.0.1'
+const DEFAULT_SERVER_IP = '127.0.0.1'
+const DEFAULT_SERVER_PORT = 9000
 
 var udp = PacketPeerUDP.new()
 
+var server_ip = DEFAULT_SERVER_IP
+var server_port = DEFAULT_SERVER_PORT
 
 func _process(_delta: float) -> void:
 	while udp.get_available_packet_count() > 0:
@@ -31,5 +34,5 @@ func _process(_delta: float) -> void:
 
 
 func send_data(data: Dictionary):
-	udp.set_dest_address(SERVER_IP, SERVER_PORT)
+	udp.set_dest_address(server_ip, server_port)
 	udp.put_packet(JSON.stringify(data).to_utf8_buffer())

@@ -12,9 +12,12 @@ var mesh_initialized = false
 func _ready():
 	%Host.connect("pressed", _on_server_start)
 	%Join.connect("pressed", _on_client_connect)
+	%IP.connect("text_changed", func _on_ip_entered():
+		signal_client.server_ip = %IP.text
+	)
 
 
-	signal_client.send_data({"source_id": peer_id, "type": "register"})
+	# signal_client.send_data({"source_id": peer_id, "type": "register"})
 
 
 	signal_client.peer_connected.connect(
@@ -137,5 +140,6 @@ func _on_server_start():
 
 func _on_client_connect():
 	_log_message("client_connect")
+	signal_client.send_data({"source_id": peer_id, "type": "register"})
 	# _on_connected(2)
 	# _on_peer_connected(1)
