@@ -1,9 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://bi7qruhaba4fm"]
 
-[ext_resource type="Script" uid="uid://ktb7mid1vc5o" path="res://main/scripts/lobby_webrtc.gd" id="1_da43x"]
+[ext_resource type="Script" uid="uid://ktb7mid1vc5o" path="res://main/scripts/lobby_webrtc_utc.gd" id="1_ni7kh"]
 
 [node name="Lobby" type="Node"]
-script = ExtResource("1_da43x")
+script = ExtResource("1_ni7kh")
 
 [node name="UI" type="Control" parent="."]
 unique_name_in_owner = true

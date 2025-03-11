@@ -3,7 +3,7 @@ extends Node3D
 
 const PLAYER_SCENE = preload("res://main/player.tscn")
 const LOBBY_SCENE = preload("res://main/lobby.tscn")
-const LOBBY_WEBRTC_SCENE = preload("res://main/lobby_webrtc.tscn")
+const LOBBY_WEBRTC_SCENE = preload("res://main/lobby_webrtc_utc.tscn")
 
 # Set this to determine client / server or WebRTC lobby
 var IS_WEB_RTC = true
