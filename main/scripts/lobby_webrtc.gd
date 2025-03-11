@@ -5,7 +5,7 @@ signal player_added()
 
 var peer_id = randi() % 100
 var peer = WebRTCMultiplayerPeer.new()
-var signal_client = SignalClient.new()
+var signal_client_udp = SignalClientUDP.new()
 var mesh_initialized = false
 
 
@@ -13,7 +13,7 @@ func _ready():
 	%Host.connect("pressed", _on_server_start)
 	%Join.connect("pressed", _on_client_connect)
 
-	signal_client.peer_connected.connect(
+	signal_client_udp.peer_connected.connect(
 		func(pid: int):
 			_log_message("peer_connected", pid)
 
@@ -27,7 +27,7 @@ func _ready():
 			_on_peer_connected(pid)
 	)
 
-	signal_client.offer_received.connect(
+	signal_client_udp.offer_received.connect(
 		func _on_offer_received(pid: int, sdp: String):
 			_log_message("offer_received", [pid, sdp])
 
@@ -37,7 +37,7 @@ func _ready():
 				peer_cn.set_remote_description("offer", sdp)
 	)
 
-	signal_client.answer_received.connect(
+	signal_client_udp.answer_received.connect(
 		func _on_answer_received(pid: int, sdp: String):
 			_log_message("answer_received", [pid, sdp])
 
@@ -47,7 +47,7 @@ func _ready():
 				peer_cn.set_remote_description("answer", sdp)
 	)
 
-	signal_client.candidate_received.connect(
+	signal_client_udp.candidate_received.connect(
 		func _on_candidate_received(pid: int, mid: String, index: int, sdp: String):
 			_log_message("candidate_received", [pid, mid, index, sdp])
 
@@ -59,7 +59,7 @@ func _ready():
 
 
 func _process(delta):
-	signal_client._process(delta)
+	signal_client_udp._process(delta)
 
 
 # This will need to be triggered by the server when a new peer connects. Demo
@@ -79,9 +79,9 @@ func _on_peer_connected(id: int):
 				return
 
 			_log_message("session_description_created", [id, type, sdp])
-			peer_cn.set_local_description(type,  sdp)
+			peer_cn.set_local_description(type, sdp)
 
-			signal_client.send_data({
+			signal_client_udp.send_data({
 				"source_id": peer_id,
 				"target_id": id,
 				"type": type,
@@ -91,9 +91,9 @@ func _on_peer_connected(id: int):
 
 	peer_cn.ice_candidate_created.connect(
 		func _on_ice_candidate_created(mid: String, index: int, sdp: String):
-			_log_message("ice_candidate_created", [id, mid, index,  sdp])
+			_log_message("ice_candidate_created", [id, mid, index, sdp])
 
-			signal_client.send_data({
+			signal_client_udp.send_data({
 				"source_id": peer_id,
 				"target_id": id,
 				"type": "candidate",
@@ -134,9 +134,9 @@ func _on_server_start():
 func _on_client_connect():
 	_log_message("client_connect")
 
-	signal_client.server_ip = %IP.text
-	print("Setting signal server to: ", signal_client.server_ip)
+	signal_client_udp.server_ip = %IP.text
+	print("Setting signal server to: ", signal_client_udp.server_ip)
 
-	signal_client.send_data({"source_id": peer_id, "type": "register"})
+	signal_client_udp.send_data({"source_id": peer_id, "type": "register"})
 	# _on_connected(2)
 	# _on_peer_connected(1)

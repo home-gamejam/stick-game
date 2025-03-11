@@ -1,6 +1,6 @@
 extends Node
 
-class_name SignalClient
+class_name SignalClientUDP
 
 signal peer_connected(pid: int)
 signal offer_received(pid: int, sdp: String)
