@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b5masvrk3omor"]
 
-[ext_resource type="Script" path="res://controls/scripts/labeled_slider.gd" id="1_08tqk"]
+[ext_resource type="Script" uid="uid://rfp3rrjqsrfq" path="res://controls/scripts/labeled_slider.gd" id="1_08tqk"]
 
 [node name="labeled_slider" type="HBoxContainer"]
 custom_minimum_size = Vector2(0, 100)

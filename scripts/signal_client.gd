@@ -32,7 +32,6 @@ func _process(_delta: float) -> void:
 				candidate_received.emit(message.source_id, message.mid, message.index, message.sdp)
 
 
-
 func send_data(data: Dictionary):
 	print("send data to signaling server: ", server_ip)
 	udp.set_dest_address(server_ip, server_port)

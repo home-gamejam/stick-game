@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://cylmulnexilu1"]
 
 [ext_resource type="PackedScene" uid="uid://b0w31x4vrnheq" path="res://art/stickman.glb" id="1_2apgm"]
-[ext_resource type="Script" path="res://scripts/player.gd" id="1_6irgt"]
+[ext_resource type="Script" uid="uid://cfmxrgd1aajts" path="res://scripts/player.gd" id="1_6irgt"]
 [ext_resource type="AnimationLibrary" uid="uid://bjbobcjthd56o" path="res://resources/stickman_animations.tres" id="2_k4r30"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u6pd7"]
@@ -56,7 +56,7 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 root_node = NodePath("../Model")
 libraries = {
-"stickman_animations": ExtResource("2_k4r30")
+&"stickman_animations": ExtResource("2_k4r30")
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]

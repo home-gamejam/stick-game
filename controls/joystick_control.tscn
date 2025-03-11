@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dk5btu0qn8w6q" path="res://assets/circle128.png" id="1_ddp4w"]
 [ext_resource type="Texture2D" uid="uid://bo2ojpi2di1kh" path="res://assets/circle64.png" id="1_j1t01"]
-[ext_resource type="Script" path="res://controls/scripts/joystick_control.gd" id="1_km4ei"]
+[ext_resource type="Script" uid="uid://bjhxsocmj3m06" path="res://controls/scripts/joystick_control.gd" id="1_km4ei"]
 
 [node name="Control" type="Control"]
 custom_minimum_size = Vector2(128, 128)

@@ -7,7 +7,7 @@ fi
 host=$1
 
 echo "Building PI..."
-/Applications/Godot-v4.3.app/Contents/MacOS/Godot \
+/Applications/Godot-v4.4.app/Contents/MacOS/Godot \
  --headless \
  --export-release "Raspberry Pi" build/pi/pi.arm64
 

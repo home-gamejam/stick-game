@@ -1,5 +1,5 @@
 echo "Building iOS..."
-/Applications/Godot-v4.3.app/Contents/MacOS/Godot \
+/Applications/Godot-v4.4.app/Contents/MacOS/Godot \
  --headless \
  --export-debug iOS build/ios/stickworld.ipa
 

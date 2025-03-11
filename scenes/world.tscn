@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://b5m57eryima4q"]
 
-[ext_resource type="Script" path="res://scripts/world.gd" id="1_wieu3"]
+[ext_resource type="Script" uid="uid://df1pkogd0jj71" path="res://scripts/world.gd" id="1_wieu3"]
 [ext_resource type="PackedScene" uid="uid://bwkse6fquphh2" path="res://controls/controls.tscn" id="2_s8l70"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gt8p8"]
@@ -44,5 +44,5 @@ shape = SubResource("BoxShape3D_olpak")
 [node name="controls" parent="." instance=ExtResource("2_s8l70")]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://scenes/player.tscn")
+_spawnable_scenes = PackedStringArray("uid://cylmulnexilu1")
 spawn_path = NodePath("..")

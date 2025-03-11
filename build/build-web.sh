@@ -5,7 +5,7 @@ if [ -z "$1" ]; then
 fi
 
 echo "Building Web..."
-/Applications/Godot-v4.3.app/Contents/MacOS/Godot \
+/Applications/Godot-v4.4.app/Contents/MacOS/Godot \
  --headless \
  --export-release "Web" build/web/index.html
 
