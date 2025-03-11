@@ -14,21 +14,21 @@ Build or run the game
 ### Build iOS
 
 Need to connect phone first
-./build/build-ios.sh
+./scripts/build-ios.sh
 
 ### Web Build + Html Server
 
 > TODO: support for WebRTC over websockets
 
 Build godot project + golang static file server
-./build/build-web.sh [hostname]
+./scripts/build-web.sh [hostname]
 
 Run the server
 ./build/[hostname].webserver
 
 ### Build Pi
 
-./build/build-pi.sh [pihostname]
+./scripts/build-pi.sh [pihostname]
 
 ## Multiplayer
 
