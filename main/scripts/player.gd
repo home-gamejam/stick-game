@@ -6,7 +6,7 @@ extends CharacterBody3D
 @onready var _animation_tree = %AnimationTree as AnimationTree
 @onready var _model = %Model as Node3D
 
-const PLAYER_CAMERA = preload("res://scenes/player_camera.tscn")
+const PLAYER_CAMERA = preload("res://main/player_camera.tscn")
 const ACCELERATION = 20.0
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
@@ -31,7 +31,6 @@ func _ready():
 func _physics_process(delta: float) -> void:
 	#if Engine.is_editor_hint():
 		#return
-
 	if !is_multiplayer_authority():
 		return
 
@@ -78,7 +77,7 @@ func _physics_process(delta: float) -> void:
 	# blend_position is 0, 1, 2 for idle, walk, run respectively. Multiplying
 	# walk or run by the input_dir magnitude should hit the values exactly when
 	# value is 1 and a blend when it is < 1
-	var blend_position =  (2 if is_running else 1) * input_dir.length()
+	var blend_position = (2 if is_running else 1) * input_dir.length()
 	_animation_tree.set("parameters/Movement/blend_position", blend_position)
 
 func _unhandled_input(event: InputEvent) -> void:
