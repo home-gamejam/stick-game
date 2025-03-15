@@ -7,7 +7,8 @@ In world.gd, set `IS_WEB_RTC` to determine client / server or WebRTC
 ### Dev WebRTC
 
 Run signaling server
-./server/signal_server_udp.sh
+./scripts/signal_server_ws.sh
+./scripts/signal_server_udp.sh
 
 Build or run the game
 

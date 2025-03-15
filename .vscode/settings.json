@@ -1,1 +1,3 @@
-{ "liveServer.settings.root": "/build/web" }
+{
+  "liveServer.settings.root": "/build/web"
+}
