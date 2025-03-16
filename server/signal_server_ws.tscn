@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://ck8j7t6gkpvnt"]
-
-[ext_resource type="Script" uid="uid://gkkch03bw58d" path="res://server/scripts/signal_server_ws.gd" id="1_m0x4p"]
-
-[node name="SignalServer" type="Node"]
-script = ExtResource("1_m0x4p")

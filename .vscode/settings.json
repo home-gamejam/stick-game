@@ -1,3 +1,6 @@
 {
-  "liveServer.settings.root": "/build/web"
+  "liveServer.settings.root": "/build/web",
+  "files.exclude": {
+    "**/*.gd.uid": true
+  }
 }
