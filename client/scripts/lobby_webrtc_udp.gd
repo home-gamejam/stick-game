@@ -4,7 +4,7 @@ extends Node
 signal player_added()
 
 var peer_id = randi() % 100
-var peer = WebRTCMultiplayerPeer.new()
+var peer: WebRTCMultiplayerPeer = WebRTCMultiplayerPeer.new()
 var signal_client_udp = SignalClientUDP.new()
 var mesh_initialized = false
 

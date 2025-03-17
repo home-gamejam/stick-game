@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bi7qruhaba4fm"]
 
-[ext_resource type="Script" uid="uid://ktb7mid1vc5o" path="res://client/scripts/lobby_webrtc_utc.gd" id="1_rlwr4"]
+[ext_resource type="Script" uid="uid://ktb7mid1vc5o" path="res://client/scripts/lobby_webrtc_udp.gd" id="1_rlwr4"]
 
 [node name="Lobby" type="Node"]
 script = ExtResource("1_rlwr4")
