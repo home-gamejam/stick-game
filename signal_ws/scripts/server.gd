@@ -46,14 +46,15 @@ class SignalWsServer:
 			print("Peer ", peer.peer_id, " is already in a lobby.")
 			return false
 
-		var lobby_id := _gen_id()
+		peer.lobby_id = _gen_id()
 
-		peer.lobby_id = lobby_id
+		var lobby := SignalWsLobby.new(peer.lobby_id, peer.peer_id)
+		lobbies[peer.lobby_id] = lobby
 
-		var lobby := SignalWsLobby.new(lobby_id, peer.peer_id)
 		lobby.join(peer)
 
-		lobbies[lobby_id] = lobby
+		# Pass newly created lobby id back to host client peer
+		peer.send_msg(SignalWsMsg.new(peer.lobby_id, SignalWsMsg.Type.HOST))
 
 		return true
 
@@ -69,6 +70,8 @@ class SignalWsServer:
 
 		lobbies[lobby_id].join(peer)
 		peer.lobby_id = lobby_id
+
+		# Pass joined lobby_id back to client peer
 		peer.send_msg(SignalWsMsg.new(lobby_id, SignalWsMsg.Type.JOIN))
 
 		return true
@@ -95,7 +98,19 @@ class SignalWsServer:
 
 				return false
 
-		return false
+			[SignalWsMsg.Type.OFFER, SignalWsMsg.Type.ANSWER, SignalWsMsg.Type.CANDIDATE]:
+				# These message types have id as the target peer id but result
+				# in outgoing messages with id set to source id
+				var source_id = peer.peer_id
+				var target_id = msg.id
+
+				peers_all[target_id].send_msg(
+					SignalWsMsg.new(source_id, msg.type, msg.data)
+				)
+
+				return true
+			_:
+				return false
 
 	func poll() -> void:
 		if not tcp_server.is_listening():
@@ -106,7 +121,11 @@ class SignalWsServer:
 		if tcp_server.is_connection_available():
 			var peer_id := _gen_id()
 			var stream = tcp_server.take_connection()
-			peers_all[peer_id] = SignalWsPeer.new(peer_id, stream)
+			var peer = SignalWsPeer.new(peer_id).as_server(stream)
+			peers_all[peer_id] = peer
+
+			# Tell client peer what its ID is
+			peer.send_msg(SignalWsMsg.new(peer_id, SignalWsMsg.Type.CONNECTED))
 
 		var closed_peers: Array[SignalWsPeer] = []
 

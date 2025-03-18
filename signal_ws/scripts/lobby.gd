@@ -28,7 +28,10 @@ func join(new_peer: SignalWsPeer) -> bool:
 		if not peer.is_open():
 			continue
 
-		# Tell the new peer about the existing peer and vice versa
+		# Tell the new peer about the existing peer and vice versa. Note that
+		# this only happens as non-host peers join since the peer gets added
+		# after this loop, but it results in every peer knowing about every other
+		# peer (including the host).
 		new_peer.send_msg(SignalWsMsg.new(peer.peer_id, SignalWsMsg.Type.PEER_CONNECT))
 		peer.send_msg(SignalWsMsg.new(new_peer.peer_id, SignalWsMsg.Type.PEER_CONNECT))
 

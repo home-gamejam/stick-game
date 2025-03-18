@@ -5,10 +5,14 @@ class_name SignalWsMsg
 # Message types for WebSocket messages
 enum Type {
 	INVALID = 0,
+	CONNECTED,
 	HOST,
 	JOIN,
 	PEER_CONNECT,
 	PEER_DISCONNECT,
+	OFFER,
+	ANSWER,
+	CANDIDATE,
 	SEAL
 }
 
@@ -31,7 +35,7 @@ func _init(id_: int, type_: Type, data_: String = "") -> void:
 
 # Parse a message string in the form of "type|pid|data" to a Msg object
 static func parse(msg_str: String) -> SignalWsMsg:
-	var tokens: PackedStringArray = msg_str.split("|")
+	var tokens: PackedStringArray = msg_str.split("|", true, 3)
 
 	var type_ := tokens[0].to_int()
 	var id_ := tokens[1].to_int()

@@ -10,9 +10,18 @@ var lobby_id: int
 var created_at := Time.get_ticks_msec()
 var ws := WebSocketPeer.new()
 
-func _init(id: int, stream: StreamPeerTCP):
+func _init(id: int) -> void:
 	peer_id = id
+
+# Initialize WebSocket as a client and connect to the given server url
+func as_client(url: String) -> SignalWsPeer:
+	ws.connect_to_url(url)
+	return self
+
+# Initialize WebSocket as a server and accept the given stream
+func as_server(stream: StreamPeerTCP) -> SignalWsPeer:
 	ws.accept_stream(stream)
+	return self
 
 func is_open() -> bool:
 	return ws.get_ready_state() == WebSocketPeer.STATE_OPEN
