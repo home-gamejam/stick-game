@@ -14,6 +14,7 @@ var peer: SignalWsPeer
 # Connect to server. Connect to given lobby_id, or if lobby_id is not provided,
 # the client will host a new game
 func connect_to_server(server_url: String, lobby_id: int = 0) -> void:
+	print("Connecting to server: ", server_url)
 	if peer != null:
 		peer.ws.close()
 

@@ -1,3 +1,3 @@
 /Applications/Godot-v4.4.app/Contents/MacOS/Godot \
  --headless \
- server/signal_server_udp.tscn
+ signal_udp/signal_server_udp.tscn

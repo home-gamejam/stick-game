@@ -11,7 +11,7 @@ var mesh_initialized := false
 
 @onready var Host: Button = %Host
 @onready var Join: Button = %Join
-@onready var LobbyID: LineEdit = %Lobby
+@onready var LobbyID: LineEdit = %LobbyID
 
 func _ready():
 	Host.pressed.connect(_on_host_pressed)
