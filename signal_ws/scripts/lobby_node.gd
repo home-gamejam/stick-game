@@ -26,6 +26,9 @@ func _ready():
 	signal_ws_client.offer_received.connect(_on_remote_description_received.bind("offer"))
 	signal_ws_client.candidate_received.connect(_on_candidate_received)
 
+func _process(_delta: float) -> void:
+	signal_ws_client.poll()
+
 func _get_server_url() -> String:
 	return "ws://" + DEFAULT_SERVER_IP + ":" + str(DEFAULT_SERVER_PORT)
 
