@@ -17,7 +17,7 @@ func _ready() -> void:
 
 
 func _on_player_added(pid: int):
-	print("_on_player_added: ", pid)
+	print("[world] _on_player_added: ", pid)
 	var player = PLAYER_SCENE.instantiate()
 	player.name = str(pid)
 	var x = randi() % 10

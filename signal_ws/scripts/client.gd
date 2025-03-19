@@ -10,11 +10,12 @@ signal answer_received(pid: int, answer: String)
 signal candidate_received(pid: int, mid: String, index: int, sdp: String)
 
 var peer: SignalWsPeer
+var prev_state := WebSocketPeer.STATE_CLOSED
 
 # Connect to server. Connect to given lobby_id, or if lobby_id is not provided,
 # the client will host a new game
 func connect_to_server(server_url: String, lobby_id: int = 0) -> void:
-	print("Connecting to server: ", server_url)
+	print("[client] Connecting to server: ", server_url)
 	if peer != null:
 		peer.ws.close()
 
@@ -32,15 +33,12 @@ func handle_peer_msg() -> bool:
 
 	match msg.type:
 		SignalWsMsg.Type.CONNECTED:
+			print("[client] Connected to server with peer id: ", msg.id)
 			peer.peer_id = msg.id
-
-			var host_or_join = SignalWsMsg.Type.HOST if peer.lobby_id == 0 else SignalWsMsg.Type.JOIN
-			peer.send_text(SignalWsMsg.new(peer.lobby_id, host_or_join))
-
 			connected.emit(peer.peer_id)
 
 		SignalWsMsg.Type.HOST:
-			print("Hosted game with lobby id: ", msg.id)
+			print("[client] Hosted game with lobby id: ", msg.id)
 			peer.lobby_id = msg.id
 			lobby_hosted.emit(peer.peer_id, peer.lobby_id)
 
@@ -49,7 +47,7 @@ func handle_peer_msg() -> bool:
 				print("Error: Joined lobby id does not match requested lobby id.")
 				return false
 
-			print("Joined game with lobby id: ", msg.id)
+			print("[client] Joined game with lobby id: ", msg.id)
 			lobby_joined.emit(peer.peer_id, peer.lobby_id)
 
 		SignalWsMsg.Type.PEER_CONNECT:
@@ -59,12 +57,15 @@ func handle_peer_msg() -> bool:
 			peer_disconnected.emit(msg.id)
 
 		SignalWsMsg.Type.OFFER:
+			print("[client] ", peer.peer_id, " offer from ", msg.id)
 			offer_received.emit(msg.id, msg.data)
 
 		SignalWsMsg.Type.ANSWER:
+			print("[client] ", peer.peer_id, " answer from ", msg.id)
 			answer_received.emit(msg.id, msg.data)
 
 		SignalWsMsg.Type.CANDIDATE:
+			print("[client] ", peer.peer_id, " candidate from ", msg.id)
 			# data is in the form of "mid|index|sdp"
 			var tokens: PackedStringArray = msg.data.split("|")
 
@@ -90,16 +91,25 @@ func poll() -> void:
 
 	peer.ws.poll()
 
+	var state = peer.ws.get_ready_state()
+	if state != prev_state:
+		prev_state = state
+
+		if state == WebSocketPeer.STATE_OPEN:
+			print("[client] WebSocket connection opened: ")
+			var host_or_join = SignalWsMsg.Type.HOST if peer.lobby_id == 0 else SignalWsMsg.Type.JOIN
+			peer.send_msg(SignalWsMsg.new(peer.lobby_id, host_or_join))
+
 	while peer.is_open() and peer.has_msg():
 		if not handle_peer_msg():
 			print("Error parsing signal message.")
 
 func send_offer(pid: int, offer: String) -> void:
-	peer.send_text(SignalWsMsg.new(pid, SignalWsMsg.Type.OFFER, offer))
+	peer.send_msg(SignalWsMsg.new(pid, SignalWsMsg.Type.OFFER, offer))
 
 func send_answer(pid: int, answer: String) -> void:
-	peer.send_text(SignalWsMsg.new(pid, SignalWsMsg.Type.ANSWER, answer))
+	peer.send_msg(SignalWsMsg.new(pid, SignalWsMsg.Type.ANSWER, answer))
 
 func send_candidate(pid: int, mid: String, index: int, sdp: String) -> void:
 	var data = mid + "|" + str(index) + "|" + sdp
-	peer.send_text(SignalWsMsg.new(pid, SignalWsMsg.Type.CANDIDATE, data))
+	peer.send_msg(SignalWsMsg.new(pid, SignalWsMsg.Type.CANDIDATE, data))

@@ -41,7 +41,7 @@ static func parse(msg_str: String) -> SignalWsMsg:
 	var id_ := tokens[1].to_int()
 	var data_ := tokens[2] if tokens.size() > 2 else ""
 
-	if type_ == Type.INVALID or id_ == 0:
+	if type_ == Type.INVALID or (type_ != Type.HOST and id_ == 0):
 		print("Could not parse message: ", msg_str)
 		return null
 

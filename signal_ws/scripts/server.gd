@@ -34,7 +34,10 @@ func host_game(peer: SignalWsPeer) -> bool:
 		print("Peer ", peer.peer_id, " is already in a lobby.")
 		return false
 
-	print("hosting game")
+	# Tell client peer what its ID is
+	peer.send_msg(SignalWsMsg.new(peer.peer_id, SignalWsMsg.Type.CONNECTED))
+
+	print("[server] hosting game: ", peer.peer_id)
 
 	peer.lobby_id = _gen_id()
 
@@ -57,6 +60,11 @@ func join_game(peer: SignalWsPeer, lobby_id: int) -> bool:
 	if not lobbies.has(lobby_id):
 		print("Lobby ", lobby_id, " does not exist.")
 		return false
+
+	# Tell client peer what its ID is
+	peer.send_msg(SignalWsMsg.new(peer.peer_id, SignalWsMsg.Type.CONNECTED))
+
+	print("[server] joining game: ", peer.peer_id)
 
 	lobbies[lobby_id].join(peer)
 	peer.lobby_id = lobby_id
@@ -94,6 +102,7 @@ func handle_peer_msg(peer: SignalWsPeer) -> bool:
 			var source_id = peer.peer_id
 			var target_id = msg.id
 
+			print("[server] ", source_id, " -> ", target_id, " ", msg.type)
 			peers_all[target_id].send_msg(
 				SignalWsMsg.new(source_id, msg.type, msg.data)
 			)
@@ -113,9 +122,6 @@ func poll() -> void:
 		var stream = tcp_server.take_connection()
 		var peer = SignalWsPeer.new(peer_id).as_server(stream)
 		peers_all[peer_id] = peer
-
-		# Tell client peer what its ID is
-		peer.send_msg(SignalWsMsg.new(peer_id, SignalWsMsg.Type.CONNECTED))
 
 	var closed_peers: Array[SignalWsPeer] = []
 

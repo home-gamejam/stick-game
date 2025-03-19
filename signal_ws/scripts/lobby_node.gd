@@ -33,14 +33,16 @@ func _get_server_url() -> String:
 	return "ws://" + DEFAULT_SERVER_IP + ":" + str(DEFAULT_SERVER_PORT)
 
 func _on_host_pressed():
+	print("----")
 	signal_ws_client.connect_to_server(_get_server_url())
 
 func _on_join_pressed():
+	print("----")
 	var lobby_id = LobbyID.text.to_int()
 	signal_ws_client.connect_to_server(_get_server_url(), lobby_id)
 
 func _on_connected(pid: int):
-	print("connected: ", pid)
+	print("[lobby] id received: ", pid, " creating mesh")
 	peer.create_mesh(pid)
 	multiplayer.set_multiplayer_peer(peer)
 	mesh_initialized = true
@@ -48,25 +50,26 @@ func _on_connected(pid: int):
 	player_added.emit(pid)
 
 func _on_lobby_hosted(pid: int, lobby_id: int):
-	print("lobby hosted: ", pid, ", ", lobby_id)
+	print("[lobby] ", peer.get_unique_id(), " lobby hosted: lobby:", lobby_id, ", peer:", pid)
+	LobbyID.text = str(lobby_id)
 
 func _on_lobby_joined(pid: int, lobby_id: int):
-	print("lobby joined: ", pid, ", ", lobby_id)
+	print("[lobby] ", peer.get_unique_id(), " lobby joined: lobby:", lobby_id, ", peer:", pid)
 
 func _on_remote_description_received(pid: int, sdp: String, type: String):
 	if peer.has_peer(pid):
-		print("Setting remote description: ", type, ", ", pid)
+		print("[lobby] ", peer.get_unique_id(), " Setting remote description: ", type, ", ", pid)
 		var peer_cn = peer.get_peer(pid).connection
 		peer_cn.set_remote_description(type, sdp)
 
 func _on_candidate_received(pid: int, mid: String, index: int, sdp: String):
 	if peer.has_peer(pid):
-		print("Adding ice candidate: ", pid, ", ", mid, ", ", index, ", ", sdp)
+		print("[lobby] ", peer.get_unique_id(), " Adding ice candidate: ", pid, ", ", mid, ", ", index, ", ", sdp)
 		var peer_cn = peer.get_peer(pid).connection
 		peer_cn.add_ice_candidate(mid, index, sdp)
 
 func _on_peer_connected(pid: int):
-	print("peer connected: ", pid)
+	print("[lobby] ", peer.get_unique_id(), " peer connected: ", pid)
 
 	var peer_cn: WebRTCPeerConnection = WebRTCPeerConnection.new()
 	peer_cn.initialize()
@@ -89,10 +92,13 @@ func _on_peer_connected(pid: int):
 				"answer":
 					signal_ws_client.send_answer(pid, sdp)
 				_:
-					print("Unknown session description type: ", type)
+					print("[lobby] ", peer.get_unique_id(), " Unknown session description type: ", type)
 	)
 
 	peer_cn.ice_candidate_created.connect(
 		func _on_ice_candidate_created(mid: String, index: int, sdp: String):
 			signal_ws_client.send_candidate(pid, mid, index, sdp)
 	)
+
+	print("[lobby] ", peer.get_unique_id(), " adding peer: ", pid)
+	peer.add_peer(peer_cn, pid)
