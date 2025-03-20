@@ -1,24 +1,31 @@
 {
+  "compounds": [
+    {
+      "name": "[All]",
+      "configurations": ["Server", "Client", "Client"],
+      "stopAll": true
+    }
+  ],
   "configurations": [
     {
-      "name": "GDScript: Launch Project",
+      "name": "Client",
+      "type": "godot",
+      "request": "launch",
+      "project": "",
+      "debug_collisions": false,
+      "debug_paths": false,
+      "debug_navigation": false
+      // "additional_options": ""
+    },
+    {
+      "name": "Server",
       "type": "godot",
       "request": "launch",
       "project": "",
       "debug_collisions": false,
       "debug_paths": false,
       "debug_navigation": false,
-      "additional_options": ""
-    }
-  ],
-  "compounds": [
-    {
-      "name": "GDScript: Multiple Instance",
-      "configurations": [
-        "GDScript: Launch Project",
-        "GDScript: Launch Project"
-      ],
-      "stopAll": true
+      "scene": "${workspaceFolder}/signal_ws/signal_ws_server.tscn"
     }
   ]
 }

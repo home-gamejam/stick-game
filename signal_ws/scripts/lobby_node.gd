@@ -13,6 +13,8 @@ var mesh_initialized := false
 @onready var Join: Button = %Join
 @onready var LobbyID: LineEdit = %LobbyID
 
+var is_host := false
+
 func _ready():
 	Host.pressed.connect(_on_host_pressed)
 	Join.pressed.connect(_on_join_pressed)
@@ -34,10 +36,12 @@ func _get_server_url() -> String:
 
 func _on_host_pressed():
 	print("----")
+	is_host = true
 	signal_ws_client.connect_to_server(_get_server_url())
 
 func _on_join_pressed():
 	print("----")
+	is_host = false
 	var lobby_id = LobbyID.text.to_int()
 	signal_ws_client.connect_to_server(_get_server_url(), lobby_id)
 
@@ -102,3 +106,10 @@ func _on_peer_connected(pid: int):
 
 	print("[lobby] ", peer.get_unique_id(), " adding peer: ", pid)
 	peer.add_peer(peer_cn, pid)
+
+	player_added.emit(pid)
+
+	# TBD whether host or peer needs to do this
+	if is_host:
+		print("[lobby] ", peer.get_unique_id(), " creating offer for: ", pid)
+		peer_cn.create_offer()

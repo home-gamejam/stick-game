@@ -35,11 +35,16 @@ func _init(id_: int, type_: Type, data_: String = "") -> void:
 
 # Parse a message string in the form of "type|pid|data" to a Msg object
 static func parse(msg_str: String) -> SignalWsMsg:
-	var tokens: PackedStringArray = msg_str.split("|", true, 3)
+	# Split into max of 3 tokens
+	# (data token for CANDIDATE messages contains additional "|" characters)
+	var tokens: PackedStringArray = msg_str.split("|", true, 2)
 
 	var type_ := tokens[0].to_int()
 	var id_ := tokens[1].to_int()
 	var data_ := tokens[2] if tokens.size() > 2 else ""
+
+	if type_ == SignalWsMsg.Type.CANDIDATE:
+		print("Parsing candidate message: ", data_)
 
 	if type_ == Type.INVALID or (type_ != Type.HOST and id_ == 0):
 		print("Could not parse message: ", msg_str)

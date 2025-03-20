@@ -96,7 +96,7 @@ func handle_peer_msg(peer: SignalWsPeer) -> bool:
 
 			return false
 
-		[SignalWsMsg.Type.OFFER, SignalWsMsg.Type.ANSWER, SignalWsMsg.Type.CANDIDATE]:
+		SignalWsMsg.Type.OFFER, SignalWsMsg.Type.ANSWER, SignalWsMsg.Type.CANDIDATE:
 			# These message types have id as the target peer id but result
 			# in outgoing messages with id set to source id
 			var source_id = peer.peer_id
