@@ -109,7 +109,7 @@ func _on_peer_connected(pid: int):
 
 	player_added.emit(pid)
 
-	# TBD whether host or peer needs to do this
-	if is_host:
+	# Host shouldn't create offers
+	if not is_host:
 		print("[lobby] ", peer.get_unique_id(), " creating offer for: ", pid)
 		peer_cn.create_offer()
