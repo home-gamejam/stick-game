@@ -120,7 +120,12 @@ func poll() -> void:
 	if tcp_server.is_connection_available():
 		var peer_id := _gen_id()
 		var stream = tcp_server.take_connection()
-		var peer = SignalWsPeer.new(peer_id).as_server(stream)
+		var peer = SignalWsPeer.new(peer_id)
+
+		var status = peer.ws.accept_stream(stream)
+		if status != OK:
+			print("Error accepting stream: ", status)
+
 		peers_all[peer_id] = peer
 
 	var closed_peers: Array[SignalWsPeer] = []

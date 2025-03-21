@@ -18,14 +18,6 @@ func as_client(url: String) -> SignalWsPeer:
 	ws.connect_to_url(url)
 	return self
 
-# Initialize WebSocket as a server and accept the given stream
-func as_server(stream: StreamPeerTCP) -> SignalWsPeer:
-	var status := ws.accept_stream(stream)
-	if status != OK:
-		print("Error accepting stream: ", status)
-
-	return self
-
 func is_open() -> bool:
 	return ws.get_ready_state() == WebSocketPeer.STATE_OPEN
 

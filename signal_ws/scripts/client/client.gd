@@ -22,7 +22,8 @@ func connect_to_server(server_url: String, lobby_id: int = 0) -> void:
 	# We don't know the peer id yet, so we use 0 until `SignalWsMsg.Type.CONNECTED`
 	# message is received. Client peer connections are monitored by the server
 	# which will generate / assign peer ids.
-	peer = SignalWsPeer.new(0).as_client(server_url)
+	peer = SignalWsPeer.new(0)
+	peer.ws.connect_to_url(server_url)
 	peer.lobby_id = lobby_id
 
 # Handle current peer message
