@@ -1,9 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://ovf6c5njm4pl"]
 
-[ext_resource type="Script" uid="uid://dxm260m06p08s" path="res://client/scripts/lobby.gd" id="1_5a0lq"]
+[ext_resource type="Script" uid="uid://dxm260m06p08s" path="res://client_server/scripts/lobby.gd" id="1_e343n"]
 
 [node name="Lobby" type="Node"]
-script = ExtResource("1_5a0lq")
+script = ExtResource("1_e343n")
 
 [node name="UI" type="Control" parent="."]
 unique_name_in_owner = true
