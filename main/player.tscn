@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://cylmulnexilu1"]
 
 [ext_resource type="Script" uid="uid://cfmxrgd1aajts" path="res://main/scripts/player.gd" id="1_4v151"]
-[ext_resource type="PackedScene" uid="uid://b0w31x4vrnheq" path="res://art/stickman.glb" id="2_lat6o"]
+[ext_resource type="PackedScene" uid="uid://du24nf2qny717" path="res://art/stickman.glb" id="2_lat6o"]
 [ext_resource type="AnimationLibrary" uid="uid://bjbobcjthd56o" path="res://resources/stickman_animations.tres" id="3_pi8k8"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u6pd7"]
