@@ -27,6 +27,12 @@ Build godot project + golang static file server
 Run the server
 ./build/[hostname].webserver
 
+#### Build Web and Deploy to Pi
+
+GOOS=linux GOARCH=arm64 \
+ ./scripts/build-web.sh pi44g.local && \
+ ./scripts/cp-web.sh pi44g.local
+
 ### Build Pi
 
 ./scripts/build-pi.sh [pihostname]
