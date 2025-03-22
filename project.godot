@@ -19,6 +19,10 @@ config/icon="res://icon.svg"
 
 Signals="*res://main/scripts/global_signals.gd"
 
+[debug]
+
+settings/stdout/verbose_stdout=true
+
 [input]
 
 ui_left={

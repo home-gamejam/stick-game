@@ -2,13 +2,10 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://yacjh1vu4jy4"
+uid="uid://kglleks7ler4"
 path="res://.godot/imported/stickman_base.png-ba503bd2e569917fb0a799c5699e1e3a.ctex"
 metadata={
 "vram_texture": false
-}
-generator_parameters={
-"md5": "c8dc4c0d0440d6a46a78624ef794cd0f"
 }
 
 [deps]
@@ -18,13 +15,13 @@ dest_files=["res://.godot/imported/stickman_base.png-ba503bd2e569917fb0a799c5699
 
 [params]
 
-compress/mode=4
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -34,4 +31,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1
