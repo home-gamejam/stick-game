@@ -14,8 +14,8 @@
       "project": "",
       "debug_collisions": false,
       "debug_paths": false,
-      "debug_navigation": false
-      // "additional_options": ""
+      "debug_navigation": false,
+      "additional_options": "--path ${workspaceFolder}/game"
     },
     {
       "name": "Server",
@@ -25,7 +25,7 @@
       "debug_collisions": false,
       "debug_paths": false,
       "debug_navigation": false,
-      "scene": "${workspaceFolder}/signal_ws/signal_ws_server.tscn"
+      "additional_options": "--path ${workspaceFolder}/signal-ws-server"
     }
   ]
 }

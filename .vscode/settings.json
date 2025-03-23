@@ -1,6 +1,7 @@
 {
   "liveServer.settings.root": "game/build/web",
   "files.exclude": {
-    "**/*.gd.uid": true
-  }
+    "**/*.gd.uid": false
+  },
+  "godotTools.scenePreview.previewRelatedScenes": "anyFolder"
 }
