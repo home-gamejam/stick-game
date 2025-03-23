@@ -7,9 +7,10 @@ fi
 host=$1
 
 echo "Building PI..."
-/Applications/Godot-v4.4.app/Contents/MacOS/Godot \
+godot44 \
+ --path ./game \
  --headless \
- --export-release "Raspberry Pi" build/pi/pi.arm64
+ --export-release "Raspberry Pi" ../build/pi/pi.arm64
 
 echo "Copying to $1..."
 scp ./build/pi/pi.arm64 $USER@$1:~/stick-world/

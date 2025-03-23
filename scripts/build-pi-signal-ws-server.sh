@@ -7,9 +7,10 @@ fi
 host=$1
 
 echo "Building PI Signal WS Server..."
-/Applications/Godot-v4.4.app/Contents/MacOS/Godot \
+godot44 \
+ --path ./game \
  --headless \
- --export-release "Pi - Signal WS Server" build/pi/signal-ws-server.arm64
+ --export-release "Pi - Signal WS Server" ../build/pi/signal-ws-server.arm64
 
 echo "Copying to $1..."
 scp ./build/pi/signal-ws-server.* $USER@$1:~/stick-world/

@@ -5,9 +5,10 @@ if [ -z "$1" ]; then
 fi
 
 echo "Building Web..."
-/Applications/Godot-v4.4.app/Contents/MacOS/Godot \
+godot44 \
+ --path ./game \
  --headless \
- --export-debug "Web" build/web/index.html --verbose
+ --export-debug "Web" ../build/web/index.html --verbose
 
 host=$1
 
