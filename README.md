@@ -33,6 +33,10 @@ GOOS=linux GOARCH=arm64 \
  ./scripts/build-web.sh pi44g.local && \
  ./scripts/cp-web.sh pi44g.local
 
+### Build WS Signal Server to Pi
+
+./scripts/build-pi-signal-ws-server.sh pi44g.local
+
 ### Build Pi
 
 ./scripts/build-pi.sh [pihostname]

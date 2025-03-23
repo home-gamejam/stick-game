@@ -1,6 +1,5 @@
 extends Node
 
-const DEFAULT_SERVER_IP = '127.0.0.1'
 const DEFAULT_SERVER_PORT = 9000
 
 signal player_added()
@@ -11,6 +10,7 @@ var mesh_initialized := false
 
 @onready var Host: Button = %Host
 @onready var Join: Button = %Join
+@onready var Ip: LineEdit = %IP
 @onready var LobbyID: LineEdit = %LobbyID
 
 var is_host := false
@@ -32,7 +32,8 @@ func _process(_delta: float) -> void:
 	signal_ws_client.poll()
 
 func _get_server_url() -> String:
-	return "ws://" + DEFAULT_SERVER_IP + ":" + str(DEFAULT_SERVER_PORT)
+	var host = Ip.text
+	return "ws://" + host + ":" + str(DEFAULT_SERVER_PORT)
 
 func _on_host_pressed():
 	print("----")
