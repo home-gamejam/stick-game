@@ -8,9 +8,9 @@ host=$1
 
 echo "Building PI Signal WS Server..."
 godot44 \
- --path ./game \
+ --path ./signal-ws-server \
  --headless \
- --export-release "Pi - Signal WS Server" ../build/pi/signal-ws-server.arm64
+ --export-release "Pi" ../build/pi/signal-ws-server.arm64
 
 echo "Copying to $1..."
 scp ./build/pi/signal-ws-server.* $USER@$1:~/stick-world/
