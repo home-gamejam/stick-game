@@ -9,6 +9,7 @@ import (
 )
 
 const (
+	isHttps    = true
 	publicDir  = "./web"
 	serverAddr = ":8080"
 )
@@ -44,8 +45,13 @@ func main() {
 	http.Handle("/", fs)
 
 	// Start HTTPS server
-	log.Println("Server listening on https://" + hostName + ":8080")
-	err = http.ListenAndServeTLS(serverAddr, certFileName, keyFileName, nil)
+	if isHttps {
+		log.Println("Server listening on https://" + hostName + serverAddr)
+		err = http.ListenAndServeTLS(serverAddr, certFileName, keyFileName, nil)
+	} else {
+		log.Println("Server listening on http://" + hostName + serverAddr)
+		err = http.ListenAndServe(serverAddr, nil)
+	}
 
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
