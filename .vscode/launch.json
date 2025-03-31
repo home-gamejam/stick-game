@@ -4,6 +4,11 @@
       "name": "[All]",
       "configurations": ["Server", "Client", "Client"],
       "stopAll": true
+    },
+    {
+      "name": "Client (2)",
+      "configurations": ["Client", "Client"],
+      "stopAll": true
     }
   ],
   "configurations": [
