@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://b5m57eryima4q"]
+[gd_scene load_steps=9 format=3 uid="uid://b5m57eryima4q"]
 
 [ext_resource type="Script" uid="uid://df1pkogd0jj71" path="res://main/scripts/world.gd" id="1_cadw0"]
 [ext_resource type="PackedScene" uid="uid://bwkse6fquphh2" path="res://controls/controls.tscn" id="2_sdvrk"]
+[ext_resource type="Script" uid="uid://bnih07xomcyq7" path="res://addons/signal_ws/client/lobby_node.gd" id="3_sdvrk"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gt8p8"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -46,3 +47,8 @@ shape = SubResource("BoxShape3D_olpak")
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("uid://cylmulnexilu1")
 spawn_path = NodePath("..")
+
+[node name="SignalLobby" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("3_sdvrk")
+metadata/_custom_type_script = "uid://bnih07xomcyq7"

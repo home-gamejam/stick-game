@@ -1,3 +1,6 @@
 [submodule "addons/godot-golang-webrtc-signal"]
 	path = addons/godot-golang-webrtc-signal
 	url = git@github.com:emeraldwalk/godot-golang-webrtc-signal.git
+[submodule "game/addons/godot-golang-webrtc-signal"]
+	path = game/addons/godot-golang-webrtc-signal
+	url = git@github.com:emeraldwalk/godot-golang-webrtc-signal.git

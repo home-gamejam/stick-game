@@ -23,6 +23,10 @@ Signals="*res://main/scripts/global_signals.gd"
 
 settings/stdout/verbose_stdout=true
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/signal_ws/client/plugin.cfg")
+
 [input]
 
 ui_left={
