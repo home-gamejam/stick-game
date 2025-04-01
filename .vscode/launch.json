@@ -2,7 +2,7 @@
   "compounds": [
     {
       "name": "[All]",
-      "configurations": ["Server", "Client", "Client"],
+      "configurations": ["Go", "Client", "Client"],
       "stopAll": true
     },
     {
@@ -29,16 +29,16 @@
       "mode": "auto",
       "program": "${workspaceFolder}/game/addons/signal_ws/server/cmd",
       "cwd": "${workspaceFolder}/game/addons/signal_ws/server"
-    },
-    {
-      "name": "Server",
-      "type": "godot",
-      "request": "launch",
-      "project": "",
-      "debug_collisions": false,
-      "debug_paths": false,
-      "debug_navigation": false,
-      "additional_options": "--path ${workspaceFolder}/signal-ws-server"
     }
+    // {
+    //   "name": "Server",
+    //   "type": "godot",
+    //   "request": "launch",
+    //   "project": "",
+    //   "debug_collisions": false,
+    //   "debug_paths": false,
+    //   "debug_navigation": false,
+    //   "additional_options": "--path ${workspaceFolder}/signal-ws-server"
+    // }
   ]
 }
