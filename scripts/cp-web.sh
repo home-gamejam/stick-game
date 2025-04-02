@@ -8,8 +8,8 @@ host=$1
 
 echo "Copying web build $host..."
 
-# certs + executable
+# certs + webserver executable to host WASM web build
 scp ./build/$host.* $USER@$host:~/stick-world/
 
-# wasm web build
+# WASM web build
 scp ./build/web/* $USER@$host:~/stick-world/web
