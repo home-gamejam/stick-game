@@ -71,6 +71,11 @@ run={
 
 pointing/emulate_touch_from_mouse=true
 
+[network]
+
+tls/certificate_bundle_override="res://certs/rootCA.crt"
+tls/enable_tls_v1.3=false
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
