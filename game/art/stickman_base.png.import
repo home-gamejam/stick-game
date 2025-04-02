@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://kglleks7ler4"
-path.s3tc="res://.godot/imported/stickman_base.png-ba503bd2e569917fb0a799c5699e1e3a.s3tc.ctex"
-path.etc2="res://.godot/imported/stickman_base.png-ba503bd2e569917fb0a799c5699e1e3a.etc2.ctex"
+path="res://.godot/imported/stickman_base.png-ba503bd2e569917fb0a799c5699e1e3a.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://art/stickman_base.png"
-dest_files=["res://.godot/imported/stickman_base.png-ba503bd2e569917fb0a799c5699e1e3a.s3tc.ctex", "res://.godot/imported/stickman_base.png-ba503bd2e569917fb0a799c5699e1e3a.etc2.ctex"]
+dest_files=["res://.godot/imported/stickman_base.png-ba503bd2e569917fb0a799c5699e1e3a.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
