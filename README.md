@@ -35,7 +35,7 @@ GOOS=linux GOARCH=arm64 \
 
 ### Build WS Signal Server to Pi
 
-./scripts/build-pi-signal-ws-server.sh pi44g.local
+./scripts/build-signal.sh pi44g.local
 
 ### Build Pi
 

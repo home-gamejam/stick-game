@@ -9,7 +9,9 @@ host=$1
 echo "Copying web build $host..."
 
 # certs + webserver executable to host WASM web build
-scp ./build/$host.* $USER@$host:~/stick-world/
+scp ./certs/$host.crt $USER@$host:~/stick-world/
+scp ./certs/$host.key $USER@$host:~/stick-world/
+scp ./build/$host.webserver $USER@$host:~/stick-world/
 
 # WASM web build
-scp ./build/web/* $USER@$host:~/stick-world/web
+scp ./build/web/* $USER@$host:~/stick-world/web/
