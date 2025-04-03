@@ -3,6 +3,8 @@ extends Node3D
 
 const PLAYER_SCENE = preload("res://main/player.tscn")
 
+var waiting_players: Array[Node] = []
+
 # Set this to determine client / server or WebRTC lobby
 # var IS_WEB_RTC = true
 
@@ -24,7 +26,12 @@ func _on_player_added(pid: int):
 	var x = randi() % 10
 	var z = randi() % 10
 	player.position = Vector3(x, 0, z)
-	add_child(player)
+	waiting_players.append(player)
 
-func _on_lobby_sealed(lobby_id: int):
-	print("Yay!!!", lobby_id)
+func _on_lobby_sealed(_lobby_id: int):
+	remove_child(%SignalLobby)
+
+	for player in waiting_players:
+		add_child(player)
+
+	waiting_players.clear()
