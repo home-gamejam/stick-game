@@ -14,6 +14,7 @@ func _ready() -> void:
 	var lobby = %SignalLobby
 
 	lobby.player_added.connect(_on_player_added)
+	lobby.lobby_sealed.connect(_on_lobby_sealed)
 
 
 func _on_player_added(pid: int):
@@ -24,3 +25,6 @@ func _on_player_added(pid: int):
 	var z = randi() % 10
 	player.position = Vector3(x, 0, z)
 	add_child(player)
+
+func _on_lobby_sealed(lobby_id: int):
+	print("Yay!!!", lobby_id)
