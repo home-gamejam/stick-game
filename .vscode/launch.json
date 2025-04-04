@@ -27,8 +27,9 @@
       "type": "go",
       "request": "launch",
       "mode": "auto",
+      "cwd": "${workspaceFolder}/game/addons/signal_ws/server",
       "program": "${workspaceFolder}/game/addons/signal_ws/server/cmd",
-      "cwd": "${workspaceFolder}/game/addons/signal_ws/server"
+      "args": ["-cert", "ssl"]
     }
     // {
     //   "name": "Server",
