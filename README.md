@@ -33,6 +33,42 @@ GOOS=linux GOARCH=arm64 \
  ./scripts/build-web.sh pi44g.local && \
  ./scripts/cp-web.sh pi44g.local
 
+#### Configure Systemd
+
+1. Open a new config file for the service:
+
+   ```sh
+   sudo nano /etc/systemd/system/stickworldweb.service
+   ```
+
+1. Copy / paste the following template filling in <USER> and <APPDIR> placeholders
+
+   ```ini
+   [Unit]
+   Description = Stick World - Web Server
+
+   [Service]
+   Type             = simple
+   Restart          = always
+   RestartSec       = 5s
+   StandardOutput   = append:<APPDIR>/stdout.log
+   StandardError    = append:<APPDIR>/stderr.log
+   ExecStart        = <APPDIR>/signalserver
+   WorkingDirectory = <APPDIR>
+   User             = <USER>
+
+   [Install]
+   WantedBy = multi-user.target
+   ```
+
+1. Enable and start the service
+
+```sh
+sudo systemctl enable stickworldweb.service
+sudo systemctl start stickworldweb.service
+sudo systemctl status stickworldweb.service
+```
+
 ### Build WS Signal Server to Pi
 
 ./scripts/build-signal.sh pi44g.local
