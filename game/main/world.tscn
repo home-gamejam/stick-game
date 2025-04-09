@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://bmjdkwxlrynbu"]
+
+[ext_resource type="Script" uid="uid://bt1vionbruolc" path="res://main/scripts/world.gd" id="1_ch0rr"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_vf3d0"]
+size = Vector3(64, 1, 64)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ch0rr"]
+size = Vector3(64, 1, 64)
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_ch0rr")
+
+[node name="Ground" type="StaticBody3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+collision_layer = 3
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("BoxMesh_vf3d0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape3D_ch0rr")
+
+[node name="Players" type="Node" parent="."]
+unique_name_in_owner = true
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://cylmulnexilu1")
+spawn_path = NodePath("../Players")
