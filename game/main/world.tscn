@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://b5m57eryima4q"]
+[gd_scene load_steps=10 format=3 uid="uid://b5m57eryima4q"]
 
 [ext_resource type="Script" uid="uid://df1pkogd0jj71" path="res://main/scripts/world.gd" id="1_cadw0"]
 [ext_resource type="PackedScene" uid="uid://bwkse6fquphh2" path="res://controls/controls.tscn" id="2_sdvrk"]
 [ext_resource type="Script" uid="uid://bnih07xomcyq7" path="res://addons/signal_ws/client/lobby_node.gd" id="3_sdvrk"]
+[ext_resource type="PackedScene" uid="uid://btv137wy80boc" path="res://main/waiting_room.tscn" id="4_b3acj"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gt8p8"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -33,7 +34,9 @@ transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75
 shadow_enabled = true
 
 [node name="Ground" type="StaticBody3D" parent="."]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+visible = false
 collision_layer = 3
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
@@ -42,13 +45,19 @@ mesh = SubResource("BoxMesh_7bgyp")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
 shape = SubResource("BoxShape3D_olpak")
 
+[node name="Players" type="Node" parent="."]
+unique_name_in_owner = true
+
 [node name="controls" parent="." instance=ExtResource("2_sdvrk")]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("uid://cylmulnexilu1")
-spawn_path = NodePath("..")
+spawn_path = NodePath("../Players")
 
 [node name="SignalLobby" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("3_sdvrk")
 metadata/_custom_type_script = "uid://bnih07xomcyq7"
+
+[node name="WaitingRoom" parent="." instance=ExtResource("4_b3acj")]
+unique_name_in_owner = true
