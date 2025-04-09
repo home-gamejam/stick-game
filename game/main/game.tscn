@@ -1,9 +1,9 @@
 [gd_scene load_steps=10 format=3 uid="uid://b5m57eryima4q"]
 
-[ext_resource type="Script" uid="uid://df1pkogd0jj71" path="res://main/scripts/world.gd" id="1_cadw0"]
-[ext_resource type="PackedScene" uid="uid://bwkse6fquphh2" path="res://controls/controls.tscn" id="2_sdvrk"]
-[ext_resource type="Script" uid="uid://bnih07xomcyq7" path="res://addons/signal_ws/client/lobby_node.gd" id="3_sdvrk"]
-[ext_resource type="PackedScene" uid="uid://btv137wy80boc" path="res://main/waiting_room.tscn" id="4_b3acj"]
+[ext_resource type="Script" uid="uid://df1pkogd0jj71" path="res://main/scripts/game.gd" id="1_46yon"]
+[ext_resource type="PackedScene" uid="uid://bwkse6fquphh2" path="res://controls/controls.tscn" id="2_vfw6y"]
+[ext_resource type="Script" uid="uid://bnih07xomcyq7" path="res://addons/signal_ws/client/lobby_node.gd" id="3_3qcir"]
+[ext_resource type="PackedScene" uid="uid://btv137wy80boc" path="res://main/waiting_room.tscn" id="4_jc0vi"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gt8p8"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -23,8 +23,8 @@ size = Vector3(64, 1, 64)
 [sub_resource type="BoxShape3D" id="BoxShape3D_olpak"]
 size = Vector3(64, 1, 64)
 
-[node name="World" type="Node3D"]
-script = ExtResource("1_cadw0")
+[node name="Game" type="Node3D"]
+script = ExtResource("1_46yon")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_146mr")
@@ -48,7 +48,7 @@ shape = SubResource("BoxShape3D_olpak")
 [node name="Players" type="Node" parent="."]
 unique_name_in_owner = true
 
-[node name="controls" parent="." instance=ExtResource("2_sdvrk")]
+[node name="controls" parent="." instance=ExtResource("2_vfw6y")]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("uid://cylmulnexilu1")
@@ -56,8 +56,8 @@ spawn_path = NodePath("../Players")
 
 [node name="SignalLobby" type="Node" parent="."]
 unique_name_in_owner = true
-script = ExtResource("3_sdvrk")
+script = ExtResource("3_3qcir")
 metadata/_custom_type_script = "uid://bnih07xomcyq7"
 
-[node name="WaitingRoom" parent="." instance=ExtResource("4_b3acj")]
+[node name="WaitingRoom" parent="." instance=ExtResource("4_jc0vi")]
 unique_name_in_owner = true
