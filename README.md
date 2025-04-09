@@ -29,9 +29,25 @@ Run the server
 
 #### Build Web and Deploy to Pi
 
+On pi:
+
+```
+sudo systemctl stop stickworldweb.service
+```
+
+Local:
+
+```
 GOOS=linux GOARCH=arm64 \
  ./scripts/build-web.sh pi44g.local && \
  ./scripts/cp-web.sh pi44g.local
+```
+
+On pi:
+
+```
+sudo systemctl start stickworldweb.service
+```
 
 #### Configure Systemd
 
@@ -71,7 +87,14 @@ sudo systemctl status stickworldweb.service
 
 ### Build WS Signal Server to Pi
 
+On Pi:
+sudo systemctl stop gowebrtcsignal.service
+
+Local:
 ./scripts/build-signal.sh pi44g.local
+
+On Pi:
+sudo systemctl start gowebrtcsignal.service
 
 ### Build Pi
 
