@@ -11,10 +11,8 @@ var game_started = false
 
 
 func _ready() -> void:
-	var lobby = %SignalLobby
-
-	lobby.player_added.connect(_on_player_added)
-	lobby.lobby_sealed.connect(_on_lobby_sealed)
+	signal_lobby.player_added.connect(_on_player_added)
+	signal_lobby.lobby_sealed.connect(_on_lobby_sealed)
 
 
 # When players are added, add them to the waiting room. If game has started,
