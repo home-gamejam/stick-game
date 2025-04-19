@@ -104,3 +104,9 @@ sudo systemctl start gowebrtcsignal.service
 
 - World scene has MultiplayerSpawner node. This watches a specific node for anything added and replicates it. Spawn path is set to World where players get added. Auto spawn list inclues Player scene.
 - Player has a MultiplayerSynchronizer node that syncs position. Also calls set_multiplayer_authority in \_enter_tree() with its name / pid so that it only controls itself
+
+## Blender
+
+### Mixamo
+
+I tried to use Mixamo with the idea I could easily apply different animations. Main challenge is that Blender uses a different naming convention for left / right than Blender, so armatures don't symetrize or mirror. There are addons to convert the naming convention, but this makes the armature incompatible with animations. Seems simpler to just use Rigify since it is supported by Blender more natively and just learn to create my own animations. If a compelling reason ever arises to support Mixamo animations, maybe there's a way to convert the animations to map to a Mixamo rig.
