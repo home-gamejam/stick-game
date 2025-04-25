@@ -24,17 +24,8 @@ func physics_process(delta: float) -> State:
 	else:
 		speed = SPEED
 
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-
-	# TODO: figure out how to abstract _player_camera
-	var camera: Camera3D = character._player_camera.camera
-	var forward := camera.global_basis.z
-	var right := camera.global_basis.x
-
-	var direction := forward * input_dir.y + right * input_dir.x
-	direction = direction.normalized()
+	var direction = character.get_direction(input_dir)
 
 	# temporarily zero the y velocity while we call move_toward, then restore it
 	var vel_y := character.velocity.y
@@ -45,20 +36,19 @@ func physics_process(delta: float) -> State:
 	character.move_and_slide()
 
 	if direction.length() > 0.2:
-		# TODO: figure out how to abstract last_direction
 		character.last_direction = direction
 
 	if character.velocity.length() == 0:
 		return idle_state
 
 	var target_angle := Vector3.BACK.signed_angle_to(character.last_direction, Vector3.UP)
-	character._model.global_rotation.y = lerp_angle(character._model.rotation.y, target_angle, rotation_speed * delta)
+	character.model.global_rotation.y = lerp_angle(character.model.rotation.y, target_angle, rotation_speed * delta)
 
 	# blend_position is 0, 1, 2 for idle, walk, run respectively. Multiplying
 	# walk or run by the input_dir magnitude should hit the values exactly when
 	# value is 1 and a blend when it is < 1
 	var blend_position = (2 if is_running else 1) * input_dir.length()
-	# TODO: abstract _animation_tree
-	character._animation_tree.set("parameters/Movement/blend_position", blend_position)
+
+	character.set_animation_blend_position(blend_position)
 
 	return null

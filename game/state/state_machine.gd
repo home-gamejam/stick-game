@@ -2,7 +2,7 @@ extends Node
 
 class_name StateMachine
 
-@export var character: CharacterBody3D
+@export var character: Character
 @export var initial_state: State
 
 var current_state: State = null

@@ -2,7 +2,7 @@ extends Node
 
 class_name State
 
-var character: CharacterBody3D
+var character: Character
 
 func enter() -> void:
 	pass
