@@ -1,0 +1,21 @@
+extends Node
+
+class_name State
+
+var character: CharacterBody3D
+
+func enter() -> void:
+	pass
+
+func exit() -> void:
+	pass
+
+# Corresponds to _physics_process on the character but returns a State instance
+# to transition to. Returning null indicates the state is unchanged.
+func physics_process(_delta: float) -> State:
+	return null
+
+# Corresponds to _unhandled_input on the character but returns a State instance
+# to transition to. Returning null indicates the state is unchanged.
+func unhandled_input(_event: InputEvent) -> State:
+	return null
