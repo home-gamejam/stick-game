@@ -16,11 +16,10 @@
       "name": "Client",
       "type": "godot",
       "request": "launch",
-      "project": "",
+      "project": "${workspaceFolder}/game",
       "debug_collisions": false,
       "debug_paths": false,
-      "debug_navigation": false,
-      "additional_options": "--path ${workspaceFolder}/game"
+      "debug_navigation": false
     },
     {
       "name": "Go",
