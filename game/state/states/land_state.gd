@@ -1,21 +1,14 @@
 extends State
 
-class_name JumpState
+class_name LandState
 
 @export var idle_state: IdleState
-@export var fall_state: FallState
-
-const JUMP_VELOCITY = 4.5
 
 func enter() -> void:
-	character.velocity.y = JUMP_VELOCITY
-	character.play_animation("stickman_animations/Jump")
+	character.play_animation("stickman_animations/Land")
 
 func physics_process(delta: float) -> State:
 	character.velocity += character.get_gravity() * delta
-
-	if character.velocity.y > 0:
-		return fall_state
 
 	character.move_and_slide()
 

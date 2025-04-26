@@ -3,6 +3,7 @@ extends Character
 
 @export_range(0.0, 1.0) var mouse_sensitivity = 0.01
 @export var tilt_limit = deg_to_rad(75)
+@onready var _animation_player = %AnimationPlayer as AnimationPlayer
 @onready var _animation_tree = %AnimationTree as AnimationTree
 @onready var _state_machine = %StateMachine as StateMachine
 
@@ -50,3 +51,13 @@ func get_model() -> Node3D:
 
 func set_animation_blend_position(blend_position: int) -> void:
 	_animation_tree.set("parameters/Movement/blend_position", blend_position)
+
+func play_animation(animation: String) -> void:
+	match animation:
+		"stickman_animations/Idle", "stickman_animations/Walk", "stickman_animations/Run":
+			_animation_tree.active = true
+			_animation_tree.set("parameters/Movement/blend_position", 0)
+
+		_:
+			_animation_tree.active = false
+			_animation_player.play(animation)

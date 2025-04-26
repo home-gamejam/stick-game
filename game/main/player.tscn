@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://cylmulnexilu1"]
+[gd_scene load_steps=17 format=3 uid="uid://cylmulnexilu1"]
 
 [ext_resource type="Script" uid="uid://cfmxrgd1aajts" path="res://main/scripts/player.gd" id="1_4v151"]
 [ext_resource type="PackedScene" uid="uid://du24nf2qny717" path="res://art/stickman.glb" id="2_lat6o"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://dh36acmyc2bd5" path="res://state/states/idle_state.gd" id="5_07mow"]
 [ext_resource type="Script" uid="uid://c1rjheg257voc" path="res://state/states/jump_state.gd" id="6_55rq2"]
 [ext_resource type="Script" uid="uid://d0at0ldflqlv5" path="res://state/states/fall_state.gd" id="7_07mow"]
+[ext_resource type="Script" uid="uid://mbi065r3y6qw" path="res://state/states/land_state.gd" id="8_1gbna"]
 [ext_resource type="Script" uid="uid://dyntvmtwbtox0" path="res://state/states/move_state.gd" id="8_55rq2"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u6pd7"]
@@ -94,8 +95,12 @@ idle_state = NodePath("../IdleState")
 fall_state = NodePath("../FallState")
 metadata/_custom_type_script = "uid://c1rjheg257voc"
 
-[node name="FallState" type="Node" parent="StateMachine" node_paths=PackedStringArray("idle_state")]
+[node name="FallState" type="Node" parent="StateMachine" node_paths=PackedStringArray("land_state")]
 script = ExtResource("7_07mow")
+land_state = NodePath("../LandState")
+
+[node name="LandState" type="Node" parent="StateMachine" node_paths=PackedStringArray("idle_state")]
+script = ExtResource("8_1gbna")
 idle_state = NodePath("../IdleState")
 
 [node name="MoveState" type="Node" parent="StateMachine" node_paths=PackedStringArray("idle_state", "jump_state", "fall_state")]

@@ -2,7 +2,10 @@ extends State
 
 class_name FallState
 
-@export var idle_state: IdleState
+@export var land_state: LandState
+
+func enter() -> void:
+	character.play_animation("stickman_animations/Fall")
 
 func physics_process(delta: float) -> State:
 	character.velocity += character.get_gravity() * delta
@@ -10,6 +13,6 @@ func physics_process(delta: float) -> State:
 	character.move_and_slide()
 
 	if character.is_on_floor():
-		return idle_state
+		return land_state
 
 	return null

@@ -18,3 +18,6 @@ func get_direction(input_dir: Vector2) -> Vector3:
 
 func set_animation_blend_position(_blend_position: int) -> void:
 	pass
+
+func play_animation(_animation: String) -> void:
+	pass

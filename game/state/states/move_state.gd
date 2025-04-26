@@ -13,8 +13,14 @@ const SPEED = 5.0
 
 var speed = SPEED
 
+# func enter() -> void:
+# 	character.play_animation("stickman_animations/Walk")
+
 func physics_process(delta: float) -> State:
-	if Input.is_action_just_pressed("ui_accept") and character.is_on_floor():
+	if not character.is_on_floor():
+		return fall_state
+
+	if Input.is_action_just_pressed("ui_accept"):
 		return jump_state
 
 	var is_running = Input.is_action_pressed("run")

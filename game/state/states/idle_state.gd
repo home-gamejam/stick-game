@@ -6,8 +6,7 @@ class_name IdleState
 @export var move_state: MoveState
 
 func enter():
-	var blend_position := 0
-	character._animation_tree.set("parameters/Movement/blend_position", blend_position)
+	character.play_animation("stickman_animations/Idle")
 
 func physics_process(_delta: float) -> State:
 	if Input.is_action_just_pressed("ui_accept") and character.is_on_floor():
