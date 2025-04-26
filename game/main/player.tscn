@@ -31,6 +31,7 @@ min_space = 0.0
 max_space = 2.0
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_xfbxg"]
+graph_offset = Vector2(-52.4726, -16.9106)
 nodes/Movement/node = SubResource("AnimationNodeBlendSpace1D_vcy5j")
 nodes/Movement/position = Vector2(50, 100)
 node_connections = [&"output", 0, &"Movement"]
