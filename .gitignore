@@ -1,4 +1,6 @@
 .DS_Store
+*.blend*
+!*.blend
 
 # Godot 4+ specific ignores
 .godot/
