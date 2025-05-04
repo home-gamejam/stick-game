@@ -46,24 +46,33 @@ func get_forward_axis() -> Vector3:
 func get_right_axis() -> Vector3:
 	return _player_camera.camera.global_basis.x
 
-func move_based_on_input(delta: float, input_dir: Vector2 = Vector2.ZERO) -> void:
+func move_based_on_input(delta: float, input_dir: Vector2 = Vector2.ZERO, rotation_input_dir: Vector2 = input_dir) -> void:
 	last_input_direction = input_dir
+	last_rotation_input_direction = rotation_input_dir
 
-	var direction := get_forward_axis() * input_dir.y + get_right_axis() * input_dir.x
-	direction = direction.normalized()
+	var move_direction := get_forward_axis() * input_dir.y + get_right_axis() * input_dir.x
+	move_direction = move_direction.normalized()
+
+	var rotation_direction := move_direction
+	if input_dir != rotation_input_dir:
+		rotation_direction = get_forward_axis() * rotation_input_dir.y + get_right_axis() * rotation_input_dir.x
+		rotation_direction = rotation_direction.normalized()
 
 	# temporarily zero the y velocity while we call move_toward, then restore it
 	var vel_y := velocity.y
 	velocity.y = 0.0
-	velocity = velocity.move_toward(direction * move_speed, acceleration * delta)
+	velocity = velocity.move_toward(move_direction * move_speed, acceleration * delta)
 	velocity.y = vel_y
 
 	move_and_slide()
 
-	if direction.length() > 0.2:
-		last_direction = direction
+	if move_direction.length() > 0.2:
+		last_move_direction = move_direction
 
-	var target_angle := Vector3.BACK.signed_angle_to(last_direction, Vector3.UP)
+	if rotation_direction.length() > 0.2:
+		last_rotation_direction = rotation_direction
+
+	var target_angle := Vector3.BACK.signed_angle_to(last_rotation_direction, Vector3.UP)
 	model.global_rotation.y = lerp_angle(model.rotation.y, target_angle, rotation_speed * delta)
 
 

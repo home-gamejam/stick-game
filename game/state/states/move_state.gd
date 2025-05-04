@@ -23,7 +23,7 @@ func physics_process(delta: float) -> State:
 	else:
 		character.move_speed = character.MOVE_SPEED
 
-	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	var input_dir = get_input_dir()
 	character.move_based_on_input(delta, input_dir)
 
 	if character.velocity.length() == 0:

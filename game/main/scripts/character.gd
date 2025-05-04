@@ -4,8 +4,10 @@ class_name Character
 
 const MOVE_SPEED = 5.0
 var move_speed = MOVE_SPEED
-var last_direction := Vector3.BACK
 var last_input_direction := Vector2.ZERO
+var last_rotation_input_direction := Vector2.ZERO
+var last_move_direction := Vector3.BACK
+var last_rotation_direction := Vector3.BACK
 
 var model: Node3D: get = get_model
 func get_model() -> Node3D:
@@ -17,7 +19,7 @@ func get_forward_axis() -> Vector3:
 func get_right_axis() -> Vector3:
 	return -global_basis.x
 
-func move_based_on_input(_delta: float, _input_dir: Vector2 = Vector2.ZERO) -> void:
+func move_based_on_input(_delta: float, _input_dir: Vector2 = Vector2.ZERO, _rotation_input_dir: Vector2 = _input_dir) -> void:
 	pass
 
 func set_animation_blend_position(_blend_position: int) -> void:

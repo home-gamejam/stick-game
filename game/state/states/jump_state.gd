@@ -17,7 +17,10 @@ func physics_process(delta: float) -> State:
 	if character.velocity.y > 0:
 		return fall_state
 
-	character.move_based_on_input(delta, character.last_input_direction)
+	character.move_based_on_input(
+		delta,
+		character.last_input_direction,
+		get_input_dir())
 
 	if character.is_on_floor():
 		return idle_state
