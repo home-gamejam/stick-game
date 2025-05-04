@@ -10,7 +10,7 @@ func enter() -> void:
 func physics_process(delta: float) -> State:
 	character.velocity += character.get_gravity() * delta
 
-	character.move_and_slide()
+	character.move_based_on_input(delta, character.last_input_direction)
 
 	if character.is_on_floor():
 		return land_state

@@ -83,8 +83,9 @@ character = NodePath("..")
 initial_state = NodePath("IdleState")
 metadata/_custom_type_script = "uid://bkx1cncw4hy8p"
 
-[node name="IdleState" type="Node" parent="StateMachine" node_paths=PackedStringArray("jump_state", "move_state")]
+[node name="IdleState" type="Node" parent="StateMachine" node_paths=PackedStringArray("fall_state", "jump_state", "move_state")]
 script = ExtResource("5_07mow")
+fall_state = NodePath("../FallState")
 jump_state = NodePath("../JumpState")
 move_state = NodePath("../MoveState")
 metadata/_custom_type_script = "uid://dh36acmyc2bd5"
