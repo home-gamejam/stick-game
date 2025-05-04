@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://b5m57eryima4q"]
+[gd_scene load_steps=6 format=3 uid="uid://b5m57eryima4q"]
 
 [ext_resource type="Script" uid="uid://df1pkogd0jj71" path="res://main/scripts/game.gd" id="1_46yon"]
 [ext_resource type="PackedScene" uid="uid://bwkse6fquphh2" path="res://controls/controls.tscn" id="2_vfw6y"]
@@ -6,27 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://btv137wy80boc" path="res://main/waiting_room.tscn" id="4_jc0vi"]
 [ext_resource type="PackedScene" uid="uid://bmjdkwxlrynbu" path="res://main/world.tscn" id="5_vfw6y"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gt8p8"]
-sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-
-[sub_resource type="Sky" id="Sky_4u7v3"]
-sky_material = SubResource("ProceduralSkyMaterial_gt8p8")
-
-[sub_resource type="Environment" id="Environment_146mr"]
-background_mode = 2
-sky = SubResource("Sky_4u7v3")
-tonemap_mode = 2
-
 [node name="Game" type="Node3D"]
 script = ExtResource("1_46yon")
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_146mr")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
-shadow_enabled = true
 
 [node name="controls" parent="." instance=ExtResource("2_vfw6y")]
 

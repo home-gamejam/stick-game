@@ -4,6 +4,11 @@ class_name World
 
 const PLAYER_SCENE = preload("res://main/player.tscn")
 
+func _ready():
+	# If we start this as the main scene, add the player to start
+	# automatically
+	if get_parent() == get_tree().root:
+		add_player(1)
 
 func add_player(pid: int):
 	print("[world] add_player: ", pid)

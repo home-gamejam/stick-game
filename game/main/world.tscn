@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bmjdkwxlrynbu"]
+[gd_scene load_steps=7 format=3 uid="uid://bmjdkwxlrynbu"]
 
 [ext_resource type="Script" uid="uid://bt1vionbruolc" path="res://main/scripts/world.gd" id="1_ch0rr"]
 
@@ -7,6 +7,18 @@ size = Vector3(64, 1, 64)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ch0rr"]
 size = Vector3(64, 1, 64)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ch0rr"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_cadw0"]
+sky_material = SubResource("ProceduralSkyMaterial_ch0rr")
+
+[sub_resource type="Environment" id="Environment_sdvrk"]
+background_mode = 2
+sky = SubResource("Sky_cadw0")
+tonemap_mode = 2
 
 [node name="World" type="Node3D"]
 script = ExtResource("1_ch0rr")
@@ -28,3 +40,10 @@ unique_name_in_owner = true
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("uid://cylmulnexilu1")
 spawn_path = NodePath("../Players")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_sdvrk")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
