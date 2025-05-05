@@ -1,9 +1,20 @@
-[gd_scene load_steps=8 format=3 uid="uid://bmjdkwxlrynbu"]
+[gd_scene load_steps=10 format=3 uid="uid://bmjdkwxlrynbu"]
 
 [ext_resource type="Script" uid="uid://bt1vionbruolc" path="res://main/scripts/world.gd" id="1_ch0rr"]
 [ext_resource type="PackedScene" uid="uid://cqil5euk3imr3" path="res://main/Box.tscn" id="2_cadw0"]
+[ext_resource type="Shader" uid="uid://y26ovivinbqr" path="res://shaders/ground.gdshader" id="2_sdvrk"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b3acj"]
+render_priority = 0
+shader = ExtResource("2_sdvrk")
+shader_parameter/dirt_color = Color(0.35, 0.25, 0.15, 1)
+shader_parameter/roughness = 0.9
+shader_parameter/noise_scale = 2.0
+shader_parameter/noise_strength = 0.2
+shader_parameter/normal_strength = 0.5
 
 [sub_resource type="BoxMesh" id="BoxMesh_vf3d0"]
+material = SubResource("ShaderMaterial_b3acj")
 size = Vector3(64, 1, 64)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ch0rr"]
