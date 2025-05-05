@@ -25,3 +25,4 @@ size_flags_vertical = 8
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
+action = "jump"

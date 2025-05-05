@@ -13,7 +13,7 @@ func physics_process(delta: float) -> State:
 	if not character.is_on_floor():
 		return fall_state
 
-	if Input.is_action_just_pressed("ui_accept"):
+	if Input.is_action_just_pressed("jump"):
 		return jump_state
 
 	var is_running = Input.is_action_pressed("run")

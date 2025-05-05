@@ -13,7 +13,7 @@ func physics_process(delta: float) -> State:
 	if not character.is_on_floor():
 		return fall_state
 
-	if Input.is_action_just_pressed("ui_accept") and character.is_on_floor():
+	if Input.is_action_just_pressed("jump") and character.is_on_floor():
 		return jump_state
 
 	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")

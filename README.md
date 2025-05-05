@@ -29,6 +29,8 @@ Run the server
 
 #### Build Web and Deploy to Pi
 
+NOTE: Be sure to update export file list if any files have been added
+
 On pi:
 
 ```
