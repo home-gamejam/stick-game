@@ -5,7 +5,7 @@ class_name JumpState
 @export var idle_state: IdleState
 @export var fall_state: FallState
 
-const JUMP_VELOCITY = 4.5 * 1.5
+const JUMP_VELOCITY = 4.5 * 1.2
 
 func enter() -> void:
 	character.velocity.y = JUMP_VELOCITY
@@ -17,10 +17,11 @@ func physics_process(delta: float) -> State:
 	if character.velocity.y > 0:
 		return fall_state
 
+	var input_dir = get_input_dir()
 	character.move_based_on_input(
 		delta,
-		character.last_input_direction,
-		get_input_dir())
+		input_dir * .1,
+		character.last_input_dir)
 
 	if character.is_on_floor():
 		return idle_state
