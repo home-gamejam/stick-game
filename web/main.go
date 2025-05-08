@@ -2,10 +2,11 @@ package main
 
 import (
 	_ "embed"
+	"flag"
 	"log"
 	"net/http"
-	"os"
 	"path/filepath"
+	"strings"
 )
 
 const (
@@ -18,6 +19,10 @@ const (
 var hostName string
 
 func main() {
+	// Set a default value for hostName from ldflags and allow runtime override
+	flag.StringVar(&hostName, "host", hostName, "Hostname for the server")
+	flag.Parse()
+
 	if hostName == "" {
 		log.Fatal("certName is empty")
 	}
@@ -25,24 +30,61 @@ func main() {
 	certFileName := hostName + ".crt"
 	keyFileName := hostName + ".key"
 
-	// Get the directory of the executable
-	exePath, err := os.Executable()
-	if err != nil {
-		log.Fatal(err)
-	}
-	exeDir := filepath.Dir(exePath)
-
-	// Change the working directory to the directory of the executable
-	err = os.Chdir(exeDir)
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	// Directory to serve files from
 	fs := http.FileServer(http.Dir(publicDir))
 
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// // Set CORS headers
+		// origin := "https://" + hostName + serverAddr
+		// w.Header().Set("Access-Control-Allow-Origin", origin)
+		// w.Header().Set("Cross-Origin-Embedder-Policy", "require-corp")
+		// w.Header().Set("Cross-Origin-Opener-Policy", "same-origin")
+
+		// // Expose headers to the service worker
+		// w.Header().Set("Access-Control-Expose-Headers", "Content-Type, Cross-Origin-Embedder-Policy, Cross-Origin-Opener-Policy")
+
+		// // Handle navigation preload requests
+		// if r.Header.Get("Service-Worker-Navigation-Preload") != "" {
+		// 	w.Header().Set("Service-Worker-Navigation-Preload", "true")
+		// }
+
+		// http.FileServer usually 301 redirects index.html to / . This causes
+		// issues with service workers, so serve the file directly.
+		// See https://github.com/golang/go/issues/53870
+		if strings.HasSuffix(r.URL.Path, "index.html") {
+			// Serve the file directly without redirecting
+			filePath := filepath.Join(publicDir, r.URL.Path)
+			log.Println("Serving file:", filePath)
+
+			// Open the file
+			file, err := http.Dir(publicDir).Open("index.html")
+			if err != nil {
+				http.Error(w, "File not found", http.StatusNotFound)
+				return
+			}
+			defer file.Close()
+
+			// Get file info for ServeContent
+			fileInfo, err := file.Stat()
+			if err != nil {
+				http.Error(w, "File not found", http.StatusNotFound)
+				return
+			}
+
+			// Serve the file using ServeContent
+			http.ServeContent(w, r, "index.html", fileInfo.ModTime(), file)
+
+			return
+		}
+
+		// Serve the file
+		fs.ServeHTTP(w, r)
+	})
+
 	// Handler to serve files
-	http.Handle("/", fs)
+	http.Handle("/", handler)
+
+	var err error
 
 	// Start HTTPS server
 	if isHttps {
