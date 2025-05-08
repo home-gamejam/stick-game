@@ -12,11 +12,6 @@ Run signaling server
 
 Build or run the game
 
-### Build iOS
-
-Need to connect phone first
-./scripts/build-ios.sh
-
 ### Web Build + Html Server
 
 > TODO: support for WebRTC over websockets
@@ -26,6 +21,15 @@ Build godot project + golang static file server
 
 Run the server
 ./build/[hostname].webserver
+
+#### Web localhost
+
+e.g. For local dev
+
+```sh
+./scripts/build-web.sh localhost
+./build/localhost.webserver
+```
 
 #### Build Web and Deploy to Pi
 
@@ -97,6 +101,11 @@ Local:
 
 On Pi:
 sudo systemctl start gowebrtcsignal.service
+
+### Build iOS
+
+Need to connect phone first
+./scripts/build-ios.sh
 
 ### Build Pi
 
