@@ -34,20 +34,6 @@ func main() {
 	fs := http.FileServer(http.Dir(publicDir))
 
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// // Set CORS headers
-		// origin := "https://" + hostName + serverAddr
-		// w.Header().Set("Access-Control-Allow-Origin", origin)
-		// w.Header().Set("Cross-Origin-Embedder-Policy", "require-corp")
-		// w.Header().Set("Cross-Origin-Opener-Policy", "same-origin")
-
-		// // Expose headers to the service worker
-		// w.Header().Set("Access-Control-Expose-Headers", "Content-Type, Cross-Origin-Embedder-Policy, Cross-Origin-Opener-Policy")
-
-		// // Handle navigation preload requests
-		// if r.Header.Get("Service-Worker-Navigation-Preload") != "" {
-		// 	w.Header().Set("Service-Worker-Navigation-Preload", "true")
-		// }
-
 		// http.FileServer usually 301 redirects index.html to / . This causes
 		// issues with service workers, so serve the file directly.
 		// See https://github.com/golang/go/issues/53870
