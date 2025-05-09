@@ -22,10 +22,12 @@ visible = false
 [node name="SignalLobby" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("3_3qcir")
+default_host = "pi44g.local"
 metadata/_custom_type_script = "uid://bnih07xomcyq7"
 
 [node name="WaitingRoom" parent="." instance=ExtResource("4_jc0vi")]
 unique_name_in_owner = true
+visible = false
 
 [node name="World" parent="." instance=ExtResource("5_vfw6y")]
 unique_name_in_owner = true
