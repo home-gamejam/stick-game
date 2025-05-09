@@ -4,6 +4,8 @@ extends Node3D
 const PLAYER_SCENE = preload("res://main/player.tscn")
 
 @onready var signal_lobby = %SignalLobby
+@onready var controls = %Controls
+@onready var landing = %Landing
 @onready var waiting_room: WaitingRoom = %WaitingRoom
 @onready var world: World = %World
 
@@ -11,13 +13,31 @@ var game_started = false
 
 
 func _ready() -> void:
+	landing.play_pressed.connect(_on_play_pressed)
+	landing.multiplayer_pressed.connect(_on_multiplayer_pressed)
+
+	signal_lobby.hide()
 	signal_lobby.player_added.connect(_on_player_added)
 	signal_lobby.lobby_sealed.connect(_on_lobby_sealed)
+
+
+func _on_play_pressed() -> void:
+	landing.hide()
+	controls.show()
+	world.show()
+	world.add_player(1)
+
+
+func _on_multiplayer_pressed() -> void:
+	landing.hide()
+	signal_lobby.show()
+	waiting_room.show()
 
 
 # When players are added, add them to the waiting room. If game has started,
 # move them to the game world.
 func _on_player_added(pid: int):
+	controls.show()
 	waiting_room.add_player(pid)
 
 	if game_started:

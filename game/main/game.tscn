@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://b5m57eryima4q"]
+[gd_scene load_steps=7 format=3 uid="uid://b5m57eryima4q"]
 
 [ext_resource type="Script" uid="uid://df1pkogd0jj71" path="res://main/scripts/game.gd" id="1_46yon"]
+[ext_resource type="PackedScene" uid="uid://beuul4kl5jy6v" path="res://main/landing.tscn" id="2_3qcir"]
 [ext_resource type="PackedScene" uid="uid://bwkse6fquphh2" path="res://controls/controls.tscn" id="2_vfw6y"]
 [ext_resource type="Script" uid="uid://bnih07xomcyq7" path="res://addons/signal_ws/client/signal_lobby_node.gd" id="3_3qcir"]
 [ext_resource type="PackedScene" uid="uid://btv137wy80boc" path="res://main/waiting_room.tscn" id="4_jc0vi"]
@@ -9,7 +10,14 @@
 [node name="Game" type="Node3D"]
 script = ExtResource("1_46yon")
 
-[node name="controls" parent="." instance=ExtResource("2_vfw6y")]
+[node name="Landing" parent="." instance=ExtResource("2_3qcir")]
+unique_name_in_owner = true
+offset_top = -85.0
+offset_bottom = 85.0
+
+[node name="Controls" parent="." instance=ExtResource("2_vfw6y")]
+unique_name_in_owner = true
+visible = false
 
 [node name="SignalLobby" type="Node" parent="."]
 unique_name_in_owner = true
