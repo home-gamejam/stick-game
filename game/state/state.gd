@@ -10,8 +10,8 @@ func enter() -> void:
 func exit() -> void:
 	pass
 
-func get_input_dir():
-	return Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+func get_input_dir() -> Vector2:
+	return Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down", .1)
 
 # Corresponds to _physics_process on the character but returns a State instance
 # to transition to. Returning null indicates the state is unchanged.

@@ -71,7 +71,7 @@ unique_name_in_owner = true
 root_node = NodePath("%Model")
 tree_root = SubResource("AnimationNodeBlendTree_xfbxg")
 anim_player = NodePath("../AnimationPlayer")
-parameters/Movement/blend_position = 0.0
+parameters/Movement/blend_position = 1.0018
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_tummt")

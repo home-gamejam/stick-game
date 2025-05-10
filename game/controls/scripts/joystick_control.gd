@@ -1,5 +1,7 @@
 extends Control
 
+class_name JoystickControl
+
 @export var auto_center = true
 signal stick_position_set(position: Vector2)
 
@@ -13,6 +15,7 @@ func position_to_action(value: float, op: String, action: String):
 	if op == "lt" and value < 0:
 		Input.action_press(action, -value / local_center.x)
 	elif op == "gt" and value > 0:
+		print(action, "value: ", value, ", ", value / local_center.x)
 		Input.action_press(action, value / local_center.x)
 	elif Input.is_action_pressed(action):
 		Input.action_release(action)

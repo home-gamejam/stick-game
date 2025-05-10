@@ -16,7 +16,8 @@ func physics_process(delta: float) -> State:
 	if Input.is_action_just_pressed("jump") and character.is_on_floor():
 		return jump_state
 
-	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	var input_dir := get_input_dir()
+	print("idle_state input_dir: ", input_dir)
 	if input_dir.length() > 0:
 		return move_state
 

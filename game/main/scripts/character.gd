@@ -22,7 +22,7 @@ func get_right_axis() -> Vector3:
 func move_based_on_input(_delta: float, _input_dir: Vector2 = Vector2.ZERO, _rot_input_dir: Vector2 = _input_dir) -> void:
 	pass
 
-func set_animation_blend_position(_blend_position: int) -> void:
+func set_animation_blend_position(_blend_position: Variant) -> void:
 	pass
 
 func play_animation(_animation: String) -> void:
