@@ -2,6 +2,10 @@ extends Node
 
 class_name StateMachine
 
+"""
+State machine for a character.
+"""
+
 @export var character: Character
 @export var initial_state: State
 

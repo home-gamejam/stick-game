@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://cylmulnexilu1"]
+[gd_scene load_steps=21 format=3 uid="uid://cylmulnexilu1"]
 
 [ext_resource type="Script" uid="uid://cfmxrgd1aajts" path="res://main/scripts/player.gd" id="1_4v151"]
 [ext_resource type="PackedScene" uid="uid://du24nf2qny717" path="res://art/stickman.glb" id="2_lat6o"]
@@ -9,6 +9,10 @@
 [ext_resource type="Script" uid="uid://d0at0ldflqlv5" path="res://state/states/fall_state.gd" id="7_07mow"]
 [ext_resource type="Script" uid="uid://mbi065r3y6qw" path="res://state/states/land_state.gd" id="8_1gbna"]
 [ext_resource type="Script" uid="uid://dyntvmtwbtox0" path="res://state/states/move_state.gd" id="8_55rq2"]
+[ext_resource type="Script" uid="uid://ckl5sp72wytq3" path="res://state/states/punch1_start_state.gd" id="10_2skd8"]
+[ext_resource type="Script" uid="uid://c2gyddgjmh4td" path="res://state/states/fight_idle_state.gd" id="10_bsjl6"]
+[ext_resource type="Script" uid="uid://dg1jqc7nac2jp" path="res://state/states/punch1_end_state.gd" id="11_pyttd"]
+[ext_resource type="Script" uid="uid://7qtscrg31fca" path="res://state/states/punch2_start_state.gd" id="12_1vr6g"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u6pd7"]
 radius = 0.29032
@@ -83,11 +87,12 @@ character = NodePath("..")
 initial_state = NodePath("IdleState")
 metadata/_custom_type_script = "uid://bkx1cncw4hy8p"
 
-[node name="IdleState" type="Node" parent="StateMachine" node_paths=PackedStringArray("fall_state", "jump_state", "move_state")]
+[node name="IdleState" type="Node" parent="StateMachine" node_paths=PackedStringArray("fall_state", "jump_state", "move_state", "punch1_start_state")]
 script = ExtResource("5_07mow")
 fall_state = NodePath("../FallState")
 jump_state = NodePath("../JumpState")
 move_state = NodePath("../MoveState")
+punch1_start_state = NodePath("../Punch1StartState")
 metadata/_custom_type_script = "uid://dh36acmyc2bd5"
 
 [node name="JumpState" type="Node" parent="StateMachine" node_paths=PackedStringArray("idle_state", "fall_state")]
@@ -104,9 +109,29 @@ land_state = NodePath("../LandState")
 script = ExtResource("8_1gbna")
 idle_state = NodePath("../IdleState")
 
-[node name="MoveState" type="Node" parent="StateMachine" node_paths=PackedStringArray("idle_state", "jump_state", "fall_state")]
+[node name="MoveState" type="Node" parent="StateMachine" node_paths=PackedStringArray("idle_state", "jump_state", "fall_state", "punch1_start_state")]
 script = ExtResource("8_55rq2")
 idle_state = NodePath("../IdleState")
 jump_state = NodePath("../JumpState")
 fall_state = NodePath("../FallState")
+punch1_start_state = NodePath("../Punch1StartState")
 metadata/_custom_type_script = "uid://dyntvmtwbtox0"
+
+[node name="FightIdleState" type="Node" parent="StateMachine" node_paths=PackedStringArray("idle_state")]
+script = ExtResource("10_bsjl6")
+idle_state = NodePath("../IdleState")
+metadata/_custom_type_script = "uid://c2gyddgjmh4td"
+
+[node name="Punch1StartState" type="Node" parent="StateMachine" node_paths=PackedStringArray("punch1_end_state", "punch2_start_state")]
+script = ExtResource("10_2skd8")
+punch1_end_state = NodePath("../Punch1EndState")
+punch2_start_state = NodePath("../Punch2StartState")
+
+[node name="Punch1EndState" type="Node" parent="StateMachine" node_paths=PackedStringArray("fight_idle_state")]
+script = ExtResource("11_pyttd")
+fight_idle_state = NodePath("../FightIdleState")
+metadata/_custom_type_script = "uid://dg1jqc7nac2jp"
+
+[node name="Punch2StartState" type="Node" parent="StateMachine" node_paths=PackedStringArray("fight_idle_state")]
+script = ExtResource("12_1vr6g")
+fight_idle_state = NodePath("../FightIdleState")

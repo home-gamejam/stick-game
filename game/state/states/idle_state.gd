@@ -5,6 +5,7 @@ class_name IdleState
 @export var fall_state: FallState
 @export var jump_state: JumpState
 @export var move_state: MoveState
+@export var punch1_start_state: Punch1StartState
 
 func enter():
 	character.play_animation("stickman_animations/Idle")
@@ -15,6 +16,9 @@ func physics_process(delta: float) -> State:
 
 	if Input.is_action_just_pressed("jump") and character.is_on_floor():
 		return jump_state
+
+	if Input.is_action_just_pressed("punch"):
+		return punch1_start_state
 
 	var input_dir := get_input_dir()
 	print("idle_state input_dir: ", input_dir)

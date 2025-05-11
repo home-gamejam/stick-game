@@ -5,6 +5,7 @@ class_name MoveState
 @export var idle_state: IdleState
 @export var jump_state: JumpState
 @export var fall_state: FallState
+@export var punch1_start_state: Punch1StartState
 
 # func enter() -> void:
 # 	character.play_animation("stickman_animations/Walk")
@@ -15,6 +16,9 @@ func physics_process(delta: float) -> State:
 
 	if Input.is_action_just_pressed("jump"):
 		return jump_state
+
+	if Input.is_action_just_pressed("punch"):
+		return punch1_start_state
 
 	var is_running = Input.is_action_pressed("run")
 

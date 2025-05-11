@@ -25,5 +25,8 @@ func move_based_on_input(_delta: float, _input_dir: Vector2 = Vector2.ZERO, _rot
 func set_animation_blend_position(_blend_position: Variant) -> void:
 	pass
 
+func is_animation_playing() -> bool:
+	return false
+
 func play_animation(_animation: String) -> void:
 	pass

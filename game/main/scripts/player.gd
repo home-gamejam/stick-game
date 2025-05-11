@@ -84,6 +84,9 @@ func get_model() -> Node3D:
 func set_animation_blend_position(blend_position: Variant) -> void:
 	_animation_tree.set("parameters/Movement/blend_position", blend_position)
 
+func is_animation_playing() -> bool:
+	return _animation_player.is_playing()
+
 func play_animation(animation: String) -> void:
 	match animation:
 		"stickman_animations/Idle", "stickman_animations/Walk", "stickman_animations/Run":
