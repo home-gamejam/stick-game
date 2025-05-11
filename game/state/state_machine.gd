@@ -7,24 +7,38 @@ State machine for a character.
 """
 
 @export var character: Character
-@export var initial_state: State
+@export var initial_state: CharacterState.Type
+
+var states: Dictionary[int, State] = {
+	CharacterState.Type.Fall: FallState.new(),
+	CharacterState.Type.FightIdle: FightIdleState.new(),
+	CharacterState.Type.Idle: IdleState.new(),
+	CharacterState.Type.Jump: JumpState.new(),
+	CharacterState.Type.Land: LandState.new(),
+	CharacterState.Type.Move: MoveState.new(),
+	CharacterState.Type.Punch1Start: Punch1StartState.new(),
+	CharacterState.Type.Punch1End: Punch1EndState.new(),
+	CharacterState.Type.Punch2Start: Punch2StartState.new(),
+}
 
 var current_state: State = null
 
 func init() -> void:
 	assert(character != null, "Character must be set for StateMachine.")
-	assert(initial_state != null, "Initial state must be set for StateMachine.")
+	assert(initial_state != State.Type.None, "Initial state must be set for StateMachine.")
 
-	for child in get_children():
+	for child in states.values():
 		if child is State:
 			child.character = character
 
 	update_state(initial_state)
 
-func update_state(new_state: State) -> void:
+func update_state(new_state_type: int) -> void:
 	# Only update if we have a new state
-	if new_state == null:
+	if new_state_type == State.Type.None:
 		return
+
+	var new_state := states[new_state_type]
 
 	if current_state != null:
 		current_state.exit()

@@ -2,17 +2,15 @@ extends State
 
 class_name LandState
 
-@export var idle_state: IdleState
-
 func enter() -> void:
 	character.play_animation("stickman_animations/Land")
 
-func physics_process(delta: float) -> State:
+func physics_process(delta: float) -> CharacterState.Type:
 	character.velocity += character.get_gravity() * delta
 
 	character.move_based_on_input(delta)
 
 	if character.is_on_floor():
-		return idle_state
+		return CharacterState.Type.Idle
 
-	return null
+	return CharacterState.Type.None

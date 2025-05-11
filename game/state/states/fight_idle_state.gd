@@ -1,8 +1,6 @@
-extends State
+extends IdleState
 
 class_name FightIdleState
-
-@export var idle_state: IdleState
 
 const DURATION = 5.0
 
@@ -12,9 +10,9 @@ func enter():
 	character.play_animation("stickman_animations/FightIdle")
 	timer = 0.0
 
-func physics_process(delta: float) -> State:
+func physics_process(delta: float) -> CharacterState.Type:
 	timer += delta
 	if timer > DURATION:
-		return idle_state
+		return CharacterState.Type.Idle
 
-	return null
+	return super.physics_process(delta)

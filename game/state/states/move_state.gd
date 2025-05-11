@@ -2,23 +2,18 @@ extends State
 
 class_name MoveState
 
-@export var idle_state: IdleState
-@export var jump_state: JumpState
-@export var fall_state: FallState
-@export var punch1_start_state: Punch1StartState
+func enter() -> void:
+	character.play_animation("stickman_animations/Walk")
 
-# func enter() -> void:
-# 	character.play_animation("stickman_animations/Walk")
-
-func physics_process(delta: float) -> State:
+func physics_process(delta: float) -> CharacterState.Type:
 	if not character.is_on_floor():
-		return fall_state
+		return CharacterState.Type.Fall
 
 	if Input.is_action_just_pressed("jump"):
-		return jump_state
+		return CharacterState.Type.Jump
 
 	if Input.is_action_just_pressed("punch"):
-		return punch1_start_state
+		return CharacterState.Type.Punch1Start
 
 	var is_running = Input.is_action_pressed("run")
 
@@ -31,7 +26,7 @@ func physics_process(delta: float) -> State:
 	character.move_based_on_input(delta, input_dir)
 
 	if character.velocity.length() == 0:
-		return idle_state
+		return CharacterState.Type.Idle
 
 	# blend_position is 0, 1, 2 for idle, walk, run respectively. Multiplying
 	# walk or run by the input_dir magnitude should hit the values exactly when
@@ -40,4 +35,4 @@ func physics_process(delta: float) -> State:
 	print("blend_position: ", blend_position)
 	character.set_animation_blend_position(blend_position)
 
-	return null
+	return CharacterState.Type.None

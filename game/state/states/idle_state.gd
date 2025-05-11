@@ -2,29 +2,23 @@ extends State
 
 class_name IdleState
 
-@export var fall_state: FallState
-@export var jump_state: JumpState
-@export var move_state: MoveState
-@export var punch1_start_state: Punch1StartState
-
 func enter():
 	character.play_animation("stickman_animations/Idle")
 
-func physics_process(delta: float) -> State:
+func physics_process(delta: float) -> CharacterState.Type:
 	if not character.is_on_floor():
-		return fall_state
+		return CharacterState.Type.Fall
 
 	if Input.is_action_just_pressed("jump") and character.is_on_floor():
-		return jump_state
+		return CharacterState.Type.Jump
 
 	if Input.is_action_just_pressed("punch"):
-		return punch1_start_state
+		return CharacterState.Type.Punch1Start
 
 	var input_dir := get_input_dir()
-	print("idle_state input_dir: ", input_dir)
 	if input_dir.length() > 0:
-		return move_state
+		return CharacterState.Type.Move
 
 	character.move_based_on_input(delta)
 
-	return null
+	return CharacterState.Type.None

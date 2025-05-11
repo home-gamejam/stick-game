@@ -2,20 +2,17 @@ extends State
 
 class_name JumpState
 
-@export var idle_state: IdleState
-@export var fall_state: FallState
-
 const JUMP_VELOCITY = 4.5 * 1.2
 
 func enter() -> void:
 	character.velocity.y = JUMP_VELOCITY
 	character.play_animation("stickman_animations/Jump")
 
-func physics_process(delta: float) -> State:
+func physics_process(delta: float) -> CharacterState.Type:
 	character.velocity += character.get_gravity() * delta
 
 	if character.velocity.y > 0:
-		return fall_state
+		return CharacterState.Type.Fall
 
 	var input_dir = get_input_dir()
 	character.move_based_on_input(
@@ -24,6 +21,6 @@ func physics_process(delta: float) -> State:
 		character.last_input_dir)
 
 	if character.is_on_floor():
-		return idle_state
+		return CharacterState.Type.Idle
 
-	return null
+	return CharacterState.Type.None
