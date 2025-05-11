@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cfmxrgd1aajts" path="res://main/scripts/player.gd" id="1_4v151"]
 [ext_resource type="PackedScene" uid="uid://du24nf2qny717" path="res://art/stickman.glb" id="2_lat6o"]
 [ext_resource type="AnimationLibrary" uid="uid://bjbobcjthd56o" path="res://resources/stickman_animations.tres" id="3_pi8k8"]
-[ext_resource type="Script" uid="uid://bkx1cncw4hy8p" path="res://state/state_machine.gd" id="4_5ar6u"]
+[ext_resource type="Script" uid="uid://ck5enu3giwshv" path="res://state/states/character_state_machine.gd" id="4_lat6o"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u6pd7"]
 radius = 0.29032
@@ -66,14 +66,13 @@ unique_name_in_owner = true
 root_node = NodePath("%Model")
 tree_root = SubResource("AnimationNodeBlendTree_xfbxg")
 anim_player = NodePath("../AnimationPlayer")
-parameters/Movement/blend_position = 1.0018
+parameters/Movement/blend_position = 1.00231
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_tummt")
 
-[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("character")]
+[node name="CharacterStateMachine" type="Node" parent="." node_paths=PackedStringArray("character")]
 unique_name_in_owner = true
-script = ExtResource("4_5ar6u")
+script = ExtResource("4_lat6o")
 character = NodePath("..")
-initial_state = 1
-metadata/_custom_type_script = "uid://bkx1cncw4hy8p"
+metadata/_custom_type_script = "uid://ck5enu3giwshv"

@@ -7,31 +7,34 @@ State machine for a character.
 """
 
 @export var character: Character
-@export var initial_state: CharacterState.Type
 
-var states: Dictionary[int, State] = {
-	CharacterState.Type.Fall: FallState.new(),
-	CharacterState.Type.FightIdle: FightIdleState.new(),
-	CharacterState.Type.Idle: IdleState.new(),
-	CharacterState.Type.Jump: JumpState.new(),
-	CharacterState.Type.Land: LandState.new(),
-	CharacterState.Type.Move: MoveState.new(),
-	CharacterState.Type.Punch1Start: Punch1StartState.new(),
-	CharacterState.Type.Punch1End: Punch1EndState.new(),
-	CharacterState.Type.Punch2Start: Punch2StartState.new(),
-}
-
+var initial_state_type: int
+var states: Dictionary[int, State] = {}
 var current_state: State = null
 
+
 func init() -> void:
+	initial_state_type = get_initial_state_type()
+	states = get_states()
+
 	assert(character != null, "Character must be set for StateMachine.")
-	assert(initial_state != State.Type.None, "Initial state must be set for StateMachine.")
+	assert(initial_state_type != State.Type.None, "Initial state must be set for StateMachine.")
 
 	for child in states.values():
 		if child is State:
 			child.character = character
 
-	update_state(initial_state)
+	update_state(initial_state_type)
+
+# This should be overridden by a subclass state machine
+func get_initial_state_type() -> int:
+	assert(false, "get_initial_state_type() must be implemented in a subclass")
+	return State.Type.None
+
+# This should be overridden by a subclass state machine
+func get_states() -> Dictionary[int, State]:
+	assert(false, "get_states() must be implemented in a subclass")
+	return {}
 
 func update_state(new_state_type: int) -> void:
 	# Only update if we have a new state

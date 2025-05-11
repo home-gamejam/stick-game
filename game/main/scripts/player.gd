@@ -9,7 +9,7 @@ extends Character
 
 @onready var _animation_player = %AnimationPlayer as AnimationPlayer
 @onready var _animation_tree = %AnimationTree as AnimationTree
-@onready var _state_machine = %StateMachine as StateMachine
+@onready var _state_machine = %CharacterStateMachine as CharacterStateMachine
 
 const PLAYER_CAMERA = preload("res://main/player_camera.tscn")
 
