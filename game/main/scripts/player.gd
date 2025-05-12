@@ -81,6 +81,9 @@ func move_based_on_input(delta: float, input_dir: Vector2 = Vector2.ZERO, rot_in
 func get_model() -> Node3D:
 	return %Model
 
+func get_animation_length(animation: String) -> float:
+	return _animation_player.get_animation(animation).length
+
 func set_animation_blend_position(blend_position: Variant) -> void:
 	_animation_tree.set("parameters/Movement/blend_position", blend_position)
 
