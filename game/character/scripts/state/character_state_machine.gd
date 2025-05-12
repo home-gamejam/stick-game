@@ -5,7 +5,7 @@ class_name CharacterStateMachine
 func get_initial_state_type() -> int:
 	return CharacterState.Type.Idle
 
-func get_states() -> Dictionary[int, State]:
+func get_states() -> Dictionary[int, CharacterState]:
 	return {
 		CharacterState.Type.Fall: FallState.new(),
 		CharacterState.Type.FightIdle: FightIdleState.new(),

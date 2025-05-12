@@ -1,4 +1,4 @@
-extends State
+extends CharacterState
 
 class_name Punch2StartState
 
