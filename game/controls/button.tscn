@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://b37sk1idnypwa"]
 
-[ext_resource type="Texture2D" uid="uid://dk5btu0qn8w6q" path="res://assets/circle128.png" id="1_a3jo4"]
 [ext_resource type="Script" uid="uid://dfwst3uqd1dxs" path="res://controls/scripts/button.gd" id="1_i2xx6"]
+[ext_resource type="Texture2D" uid="uid://bt5ft0w3mvibs" path="res://assets/circle-128.svg" id="2_i2xx6"]
 
 [node name="button" type="Control"]
 custom_minimum_size = Vector2(128, 128)
@@ -17,4 +17,4 @@ script = ExtResource("1_i2xx6")
 
 [node name="TouchScreenButton" type="TouchScreenButton" parent="."]
 unique_name_in_owner = true
-texture_normal = ExtResource("1_a3jo4")
+texture_normal = ExtResource("2_i2xx6")

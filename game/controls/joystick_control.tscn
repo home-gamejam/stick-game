@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://c3dpgo3a87bc"]
 
-[ext_resource type="Texture2D" uid="uid://dk5btu0qn8w6q" path="res://assets/circle128.png" id="1_ddp4w"]
 [ext_resource type="Script" uid="uid://bjhxsocmj3m06" path="res://controls/scripts/joystick_control.gd" id="1_km4ei"]
-[ext_resource type="Texture2D" uid="uid://c7duinl512bke" path="res://assets/circle256.png" id="2_o4fy3"]
+[ext_resource type="Texture2D" uid="uid://fwevy16uku65" path="res://assets/circle-220.svg" id="2_gnjdy"]
+[ext_resource type="Texture2D" uid="uid://csmdmd7h1nrua" path="res://assets/circle-84.svg" id="3_o4fy3"]
 
 [node name="Control" type="Control"]
 custom_minimum_size = Vector2(256, 256)
@@ -13,8 +13,8 @@ offset_bottom = 128.0
 script = ExtResource("1_km4ei")
 
 [node name="Perimeter" type="TouchScreenButton" parent="."]
-texture_normal = ExtResource("2_o4fy3")
+texture_normal = ExtResource("2_gnjdy")
 
 [node name="Stick" type="Sprite2D" parent="."]
-texture = ExtResource("1_ddp4w")
-offset = Vector2(128, 128)
+texture = ExtResource("3_o4fy3")
+offset = Vector2(110, 110)
