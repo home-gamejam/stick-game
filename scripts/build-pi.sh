@@ -13,4 +13,4 @@ godot44 \
  --export-release "Raspberry Pi" ../build/pi/pi.arm64
 
 echo "Copying to $1..."
-scp ./build/pi/pi.arm64 $USER@$1:~/stick-world/
+scp ./build/pi/* $USER@$1:~/stick-world/pi/
