@@ -6,7 +6,7 @@ func enter():
 	character.play_animation("stickman_animations/Idle")
 
 func physics_process(delta: float) -> CharacterState.Type:
-	if not character.is_on_floor():
+	if character.is_in_air():
 		return CharacterState.Type.Fall
 
 	if Input.is_action_just_pressed("jump") and character.is_on_floor():

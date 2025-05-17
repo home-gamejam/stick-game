@@ -22,6 +22,9 @@ func get_right_axis() -> Vector3:
 func move_based_on_input(_delta: float, _input_dir: Vector2 = Vector2.ZERO, _rot_input_dir: Vector2 = _input_dir) -> void:
 	pass
 
+func is_in_air() -> bool:
+	return false
+
 func get_animation_length(_animation: String) -> float:
 	return 0.0
 

@@ -6,10 +6,13 @@ extends Character
 @export var acceleration: float = 20.0
 @export var air_deceleration: float = 3
 @export var rotation_speed = TAU * 2
+@export var max_floor_distance: float = .2
 
 @onready var _animation_player = %AnimationPlayer as AnimationPlayer
 @onready var _animation_tree = %AnimationTree as AnimationTree
 @onready var _state_machine = %CharacterStateMachine as CharacterStateMachine
+@onready var _foot_collider_l = %FootColliderL as CollisionShape3D
+@onready var _foot_collider_r = %FootColliderR as CollisionShape3D
 
 const PLAYER_CAMERA = preload("res://main/player_camera.tscn")
 
@@ -40,6 +43,34 @@ func _unhandled_input(event: InputEvent) -> void:
 		_player_camera.rotation.x -= event.relative.y * mouse_sensitivity
 		_player_camera.rotation.x = clampf(_player_camera.rotation.x, -tilt_limit, tilt_limit)
 		_player_camera.rotation.y += -event.relative.x * mouse_sensitivity
+
+# is_on_floor() has some issues with the foot colliders where it thinks we are
+# in the air sometimes while colliding against walls. This method uses ray
+# casting to check a threshold to consider the player in the air.
+func is_in_air() -> bool:
+	# I'm assuming this is a bit cheaper than checking raycasts on both feet, so
+	# bail early if CharacterBody3D says we're on the floor
+	if is_on_floor():
+		return false
+
+	var space_state := get_world_3d().direct_space_state
+
+	var left_foot_pos: Vector3 = _foot_collider_l.global_position
+	var right_foot_pos: Vector3 = _foot_collider_r.global_position
+
+	for origin_: Vector3 in [left_foot_pos, right_foot_pos]:
+		var end := origin_ + Vector3(0, -max_floor_distance, 0)
+		var query := PhysicsRayQueryParameters3D.create(origin_, end)
+		query.exclude = [self]
+		query.collision_mask = 1 # Adjust to floor's layer
+
+		# At least one of the feet is within the max floor distance, so we're
+		# not in the air
+		var result := space_state.intersect_ray(query)
+		if result:
+			return false
+
+	return true
 
 func get_forward_axis() -> Vector3:
 	return _player_camera.camera.global_basis.z

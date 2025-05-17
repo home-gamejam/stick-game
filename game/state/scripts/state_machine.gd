@@ -47,7 +47,7 @@ func update_state(new_state_type: int) -> void:
 		current_state.exit()
 
 	current_state = new_state
-	print("Transitioning to state: ", current_state.name)
+	print("Transitioning to state: ", new_state_type)
 	current_state.enter()
 
 # Corresponds to _physics_process on the character but delegates to the current

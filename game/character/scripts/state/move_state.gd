@@ -6,7 +6,7 @@ func enter() -> void:
 	character.play_animation("stickman_animations/Walk")
 
 func physics_process(delta: float) -> CharacterState.Type:
-	if not character.is_on_floor():
+	if character.is_in_air():
 		return CharacterState.Type.Fall
 
 	if Input.is_action_just_pressed("jump"):
@@ -32,7 +32,6 @@ func physics_process(delta: float) -> CharacterState.Type:
 	# walk or run by the input_dir magnitude should hit the values exactly when
 	# value is 1 and a blend when it is < 1
 	var blend_position = (2 if is_running else 1) * input_dir.normalized().length()
-	print("blend_position: ", blend_position)
 	character.set_animation_blend_position(blend_position)
 
 	return CharacterState.Type.None
