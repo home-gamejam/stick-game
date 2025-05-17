@@ -8,7 +8,7 @@ func enter():
 	character.play_animation("stickman_animations/Punch2Start")
 	combo_window = 0
 
-func physics_process(_delta: float) -> CharacterState.Type:
+func physics_process(delta: float) -> CharacterState.Type:
 	# if Input.is_action_just_pressed("punch"):
 	# 	combo_window = 5
 	if not character.is_animation_playing():
@@ -16,6 +16,6 @@ func physics_process(_delta: float) -> CharacterState.Type:
 	# 		return punch2_start_state
 		return CharacterState.Type.FightIdle
 
-	character.move_and_slide()
+	character.move_based_on_input(delta, Vector2.ZERO)
 
 	return CharacterState.Type.None
