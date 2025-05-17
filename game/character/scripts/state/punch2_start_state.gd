@@ -16,4 +16,6 @@ func physics_process(_delta: float) -> CharacterState.Type:
 	# 		return punch2_start_state
 		return CharacterState.Type.FightIdle
 
+	character.move_and_slide()
+
 	return CharacterState.Type.None

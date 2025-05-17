@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bmjdkwxlrynbu"]
+[gd_scene load_steps=12 format=3 uid="uid://bmjdkwxlrynbu"]
 
 [ext_resource type="Script" uid="uid://bt1vionbruolc" path="res://main/scripts/world.gd" id="1_ch0rr"]
 [ext_resource type="PackedScene" uid="uid://cqil5euk3imr3" path="res://main/Box.tscn" id="2_cadw0"]
@@ -31,6 +31,12 @@ sky_material = SubResource("ProceduralSkyMaterial_ch0rr")
 background_mode = 2
 sky = SubResource("Sky_cadw0")
 tonemap_mode = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sdvrk"]
+size = Vector3(3, 5, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_b3acj"]
+size = Vector3(3, 5, 3)
 
 [node name="World" type="Node3D"]
 script = ExtResource("1_ch0rr")
@@ -70,3 +76,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.91064, 0, 0)
 
 [node name="Box4" parent="." instance=ExtResource("2_cadw0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.91064, 0, 2.04969)
+
+[node name="Wall" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.66, 2.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Wall"]
+shape = SubResource("BoxShape3D_sdvrk")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Wall"]
+mesh = SubResource("BoxMesh_b3acj")

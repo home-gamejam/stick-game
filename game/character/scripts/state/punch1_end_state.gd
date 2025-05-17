@@ -9,4 +9,6 @@ func physics_process(_delta: float) -> CharacterState.Type:
 	if not character.is_animation_playing():
 		return CharacterState.Type.FightIdle
 
+	character.move_and_slide()
+
 	return CharacterState.Type.None

@@ -24,4 +24,6 @@ func physics_process(delta: float) -> CharacterState.Type:
 
 	combo_timer += delta
 
+	character.move_and_slide()
+
 	return CharacterState.Type.None

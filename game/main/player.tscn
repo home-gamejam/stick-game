@@ -1,9 +1,23 @@
-[gd_scene load_steps=14 format=3 uid="uid://cylmulnexilu1"]
+[gd_scene load_steps=18 format=3 uid="uid://cylmulnexilu1"]
 
 [ext_resource type="Script" uid="uid://cfmxrgd1aajts" path="res://main/scripts/player.gd" id="1_4v151"]
 [ext_resource type="PackedScene" uid="uid://du24nf2qny717" path="res://art/stickman.glb" id="2_lat6o"]
 [ext_resource type="AnimationLibrary" uid="uid://bjbobcjthd56o" path="res://resources/stickman_animations.tres" id="3_pi8k8"]
 [ext_resource type="Script" uid="uid://ck5enu3giwshv" path="res://character/scripts/state/character_state_machine.gd" id="4_lat6o"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_lat6o"]
+radius = 0.1
+
+[sub_resource type="SphereMesh" id="SphereMesh_lat6o"]
+radius = 0.1
+height = 0.2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_pi8k8"]
+radius = 0.1
+
+[sub_resource type="SphereMesh" id="SphereMesh_pi8k8"]
+radius = 0.1
+height = 0.2
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_lat6o"]
 radius = 0.1
@@ -15,7 +29,7 @@ height = 0.4
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_pi8k8"]
 radius = 0.1
-height = 0.5
+height = 0.4
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_j5vtk"]
 animation = &"stickman_animations/Idle"
@@ -56,19 +70,39 @@ properties/2/replication_mode = 1
 script = ExtResource("1_4v151")
 tilt_limit = 0.5
 
-[node name="FootLCollider" type="CollisionShape3D" parent="."]
-transform = Transform3D(-1, 1.10467e-06, 4.82867e-14, 0, -4.37114e-08, 1, 1.10467e-06, 1, 4.37114e-08, 0.118451, 0.0493625, 0.14343)
+[node name="HandColliderL" type="CollisionShape3D" parent="."]
+transform = Transform3D(-0.559866, 0.815618, -0.146001, -0.814082, -0.574283, -0.0864287, -0.154339, 0.0704681, 0.985502, 0.668145, 1.16692, -0.00752049)
+shape = SubResource("SphereShape3D_lat6o")
+debug_color = Color(0, 0.6, 0.701961, 1)
+
+[node name="Debug" type="MeshInstance3D" parent="HandColliderL"]
+visible = false
+mesh = SubResource("SphereMesh_lat6o")
+
+[node name="HandColliderR" type="CollisionShape3D" parent="."]
+transform = Transform3D(-0.5598, -0.815543, 0.145987, 0.813986, -0.57423, -0.0864207, 0.154322, 0.0704621, 0.9854, -0.667704, 1.16705, -0.00718003)
+shape = SubResource("SphereShape3D_pi8k8")
+debug_color = Color(0, 0.6, 0.701961, 1)
+
+[node name="Debug" type="MeshInstance3D" parent="HandColliderR"]
+visible = false
+mesh = SubResource("SphereMesh_pi8k8")
+
+[node name="FootColliderL" type="CollisionShape3D" parent="."]
+transform = Transform3D(-0.999845, 1.10457e-06, 4.82817e-14, 0, -4.37075e-08, 0.999898, 1.1045e-06, 0.99991, 4.37069e-08, 0.118451, 0.0993625, 0.143134)
 shape = SubResource("CapsuleShape3D_lat6o")
 debug_color = Color(0, 0.6, 0.701961, 1)
 
-[node name="Debug" type="MeshInstance3D" parent="FootLCollider"]
+[node name="Debug" type="MeshInstance3D" parent="FootColliderL"]
+visible = false
 mesh = SubResource("CapsuleMesh_lat6o")
 
-[node name="FootRCollider" type="CollisionShape3D" parent="."]
-transform = Transform3D(-1, 3.89414e-07, 1.70218e-14, 0, -4.37114e-08, 1, 3.89414e-07, 1, 4.37114e-08, -0.118451, 0.0493628, 0.143134)
+[node name="FootColliderR" type="CollisionShape3D" parent="."]
+transform = Transform3D(-0.999828, 3.89364e-07, 1.702e-14, 0, -4.37057e-08, 0.999893, 3.89347e-07, 0.999871, 4.37067e-08, -0.116451, 0.0993627, 0.143134)
 shape = SubResource("CapsuleShape3D_pi8k8")
 
-[node name="Debug" type="MeshInstance3D" parent="FootRCollider"]
+[node name="Debug" type="MeshInstance3D" parent="FootColliderR"]
+visible = false
 mesh = SubResource("CapsuleMesh_lat6o")
 
 [node name="Model" parent="." instance=ExtResource("2_lat6o")]
@@ -262,24 +296,44 @@ bones/219/rotation = Quaternion(7.42755e-08, 6.85761e-26, 1, -2.37814e-24)
 bones/220/position = Vector3(-0.640224, 0.52501, 0.639309)
 bones/220/rotation = Quaternion(-0.707107, 0, 0, 0.707107)
 
-[node name="FootR" type="BoneAttachment3D" parent="Model/rig/Skeleton3D" index="1"]
-transform = Transform3D(-1, 1.50787e-07, 5.63276e-07, 5.38363e-07, -8.64267e-07, 0.999998, 3.03669e-07, 1, -5.36442e-07, -0.118451, 0.0493627, 0.210134)
-bone_name = "DEF-toe.R"
-bone_idx = 91
-
-[node name="RemoteTransform3D" type="RemoteTransform3D" parent="Model/rig/Skeleton3D/FootR"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.067, 0)
-remote_path = NodePath("../../../../../FootRCollider")
-update_scale = false
-
-[node name="FootL" type="BoneAttachment3D" parent="Model/rig/Skeleton3D" index="2"]
+[node name="FootL" type="BoneAttachment3D" parent="Model/rig/Skeleton3D" index="1"]
 transform = Transform3D(-1, 1.02152e-06, -6.47793e-07, -6.29923e-07, -2.26498e-06, 0.999997, 9.88046e-07, 1, 1.19209e-07, 0.118451, 0.0493625, 0.210134)
 bone_name = "DEF-toe.L"
 bone_idx = 72
 
 [node name="RemoteTransform3D" type="RemoteTransform3D" parent="Model/rig/Skeleton3D/FootL"]
-transform = Transform3D(1, 4.54747e-13, -4.87563e-14, -2.27374e-13, 1, -2.13163e-14, 7.78574e-14, 9.09495e-13, 1, -6.70552e-08, -0.0667045, -1.52737e-07)
-remote_path = NodePath("../../../../../FootLCollider")
+transform = Transform3D(1, 7.95808e-13, -1.056e-13, -3.41061e-13, 1, -3.55271e-14, 1.347e-13, 1.59162e-12, 1, 0, -0.067, 0.05)
+remote_path = NodePath("../../../../../FootColliderL")
+update_scale = false
+
+[node name="FootR" type="BoneAttachment3D" parent="Model/rig/Skeleton3D" index="2"]
+transform = Transform3D(-1, 1.50787e-07, 5.63276e-07, 5.38363e-07, -8.64267e-07, 0.999998, 3.03669e-07, 1, -5.36442e-07, -0.118451, 0.0493627, 0.210134)
+bone_name = "DEF-toe.R"
+bone_idx = 91
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="Model/rig/Skeleton3D/FootR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.002, -0.067, 0.05)
+remote_path = NodePath("../../../../../FootColliderR")
+update_scale = false
+
+[node name="HandL" type="BoneAttachment3D" parent="Model/rig/Skeleton3D" index="3"]
+transform = Transform3D(-0.559866, 0.815617, -0.146, -0.814081, -0.574283, -0.0864287, -0.154339, 0.070468, 0.985501, 0.646243, 1.18174, 0.00614866)
+bone_name = "DEF-hand.L"
+bone_idx = 144
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="Model/rig/Skeleton3D/HandL"]
+transform = Transform3D(1, 7.45058e-09, 7.45058e-08, -1.59256e-07, 1, 7.45058e-09, 0, -2.98023e-08, 1, 0.00191045, 0.0254101, -0.015388)
+remote_path = NodePath("../../../../../HandColliderL")
+update_scale = false
+
+[node name="HandR" type="BoneAttachment3D" parent="Model/rig/Skeleton3D" index="4"]
+transform = Transform3D(-0.559867, -0.815617, 0.146002, 0.814082, -0.574283, -0.0864294, 0.15434, 0.0704686, 0.985501, -0.646243, 1.18174, 0.00614944)
+bone_name = "DEF-hand.R"
+bone_idx = 174
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="Model/rig/Skeleton3D/HandR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.002, 0.025, -0.015)
+remote_path = NodePath("../../../../../HandColliderR")
 update_scale = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
