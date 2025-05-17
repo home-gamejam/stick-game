@@ -1,10 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://b37sk1idnypwa"]
 
 [ext_resource type="Script" uid="uid://dfwst3uqd1dxs" path="res://controls/scripts/button.gd" id="1_i2xx6"]
-[ext_resource type="Texture2D" uid="uid://bt5ft0w3mvibs" path="res://assets/circle-128.svg" id="2_i2xx6"]
+[ext_resource type="Texture2D" uid="uid://fwevy16uku65" path="res://assets/circle-220.svg" id="2_i2xx6"]
 
 [node name="button" type="Control"]
-custom_minimum_size = Vector2(128, 128)
+custom_minimum_size = Vector2(220, 220)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

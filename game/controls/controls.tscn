@@ -25,12 +25,13 @@ size_flags_vertical = 0
 
 [node name="LeftStick" parent="." instance=ExtResource("1_sue6t")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 220)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 8
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-custom_minimum_size = Vector2(0, 256)
+custom_minimum_size = Vector2(0, 220)
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
