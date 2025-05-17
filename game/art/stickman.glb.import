@@ -30,7 +30,7 @@ animation/import=true
 animation/fps=24.0
 animation/trimming=false
 animation/remove_immutable_tracks=true
-animation/import_rest_as_RESET=false
+animation/import_rest_as_RESET=true
 import_script/path="uid://dy54wgon7d1i3"
 _subresources={
 "animations": {
