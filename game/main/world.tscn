@@ -1,8 +1,22 @@
-[gd_scene load_steps=12 format=3 uid="uid://bmjdkwxlrynbu"]
+[gd_scene load_steps=15 format=3 uid="uid://bmjdkwxlrynbu"]
 
 [ext_resource type="Script" uid="uid://bt1vionbruolc" path="res://main/scripts/world.gd" id="1_ch0rr"]
+[ext_resource type="Script" uid="uid://dvvotixyqce38" path="res://main/terrain.gd" id="2_b3acj"]
 [ext_resource type="PackedScene" uid="uid://cqil5euk3imr3" path="res://main/Box.tscn" id="2_cadw0"]
 [ext_resource type="Shader" uid="uid://y26ovivinbqr" path="res://shaders/ground.gdshader" id="2_sdvrk"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mnuad"]
+render_priority = 0
+shader = ExtResource("2_sdvrk")
+shader_parameter/dirt_color = Color(0.35, 0.25, 0.15, 1)
+shader_parameter/roughness = 0.9
+shader_parameter/noise_scale = 2.0
+shader_parameter/noise_strength = 0.2
+shader_parameter/normal_strength = 0.5
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_b3acj"]
+noise_type = 0
+frequency = 0.001
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b3acj"]
 render_priority = 0
@@ -41,16 +55,28 @@ size = Vector3(3, 5, 3)
 [node name="World" type="Node3D"]
 script = ExtResource("1_ch0rr")
 
+[node name="Terrain" type="Node" parent="."]
+script = ExtResource("2_b3acj")
+depth = 64
+width = 64
+resolution = 2
+material = SubResource("ShaderMaterial_mnuad")
+noise = SubResource("FastNoiseLite_b3acj")
+
 [node name="Ground" type="StaticBody3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+visible = false
 collision_layer = 3
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+visible = false
 mesh = SubResource("BoxMesh_vf3d0")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+visible = false
 shape = SubResource("BoxShape3D_ch0rr")
+disabled = true
 
 [node name="Players" type="Node" parent="."]
 unique_name_in_owner = true
