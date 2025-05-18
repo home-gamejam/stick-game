@@ -1,5 +1,7 @@
 # Stick World
 
+https://home-gamejam.github.io/stick-game/
+
 ## Dev
 
 In world.gd, set `IS_WEB_RTC` to determine client / server or WebRTC
