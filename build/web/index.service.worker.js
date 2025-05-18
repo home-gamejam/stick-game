@@ -4,7 +4,7 @@
 // Incrementing CACHE_VERSION will kick off the install event and force
 // previously cached resources to be updated from the network.
 /** @type {string} */
-const CACHE_VERSION = '1747524427|7808267';
+const CACHE_VERSION = '1747527793|7388262';
 /** @type {string} */
 const CACHE_PREFIX = 'stick-world-sw-cache-';
 const CACHE_NAME = CACHE_PREFIX + CACHE_VERSION;
