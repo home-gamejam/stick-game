@@ -16,6 +16,6 @@ func add_player(pid: int):
 	player.name = str(pid)
 	var x = randi() % 10
 	var z = randi() % 10
-	player.position = Vector3(x, 0, z)
+	player.position = Vector3(x, 1, z)
 
 	%Players.add_child(player)
