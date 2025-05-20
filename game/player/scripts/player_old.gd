@@ -8,7 +8,8 @@ extends Character
 @export var rotation_speed = TAU * 2
 @export var max_floor_distance: float = .2
 
-@onready var _player_model = %PlayerModel as PlayerModel
+@onready var _animation_player = %AnimationPlayer as AnimationPlayer
+@onready var _animation_tree = %AnimationTree as AnimationTree
 @onready var _state_machine = %CharacterStateMachine as CharacterStateMachine
 @onready var _foot_collider_l = %FootColliderL as CollisionShape3D
 @onready var _foot_collider_r = %FootColliderR as CollisionShape3D
@@ -105,17 +106,27 @@ func move_based_on_input(delta: float, input_dir: Vector2 = Vector2.ZERO, rot_in
 		last_rotation_dir = rotation_direction
 
 	var target_angle := Vector3.BACK.signed_angle_to(last_rotation_dir, Vector3.UP)
-	_player_model.global_rotation.y = lerp_angle(_player_model.rotation.y, target_angle, rotation_speed * delta)
-	%PlayerView.global_rotation.y = _player_model.global_rotation.y
+	model.global_rotation.y = lerp_angle(model.rotation.y, target_angle, rotation_speed * delta)
+
+
+func get_model() -> Node3D:
+	return %Model
 
 func get_animation_length(animation: String) -> float:
-	return _player_model._animation_player.get_animation(animation).length
+	return _animation_player.get_animation(animation).length
 
 func set_animation_blend_position(blend_position: Variant) -> void:
-	_player_model._animation_tree.set("parameters/Movement/blend_position", blend_position)
+	_animation_tree.set("parameters/Movement/blend_position", blend_position)
 
 func is_animation_playing() -> bool:
-	return _player_model._animation_player.is_playing()
+	return _animation_player.is_playing()
 
 func play_animation(animation: String) -> void:
-	_player_model.play_animation(animation)
+	match animation:
+		"stickman_animations/Idle", "stickman_animations/Walk", "stickman_animations/Run":
+			_animation_tree.active = true
+			_animation_tree.set("parameters/Movement/blend_position", 0)
+
+		_:
+			_animation_tree.active = false
+			_animation_player.play(animation)
