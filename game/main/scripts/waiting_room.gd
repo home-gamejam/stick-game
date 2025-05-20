@@ -4,7 +4,7 @@ class_name WaitingRoom
 
 @onready var ground_mesh: MeshInstance3D = %GroundMesh
 
-const PLAYER_SCENE = preload("res://main/player.tscn")
+const PLAYER_SCENE = preload("res://player/player.tscn")
 
 
 func add_player(pid: int):

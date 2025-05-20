@@ -14,7 +14,7 @@ extends Character
 @onready var _foot_collider_l = %FootColliderL as CollisionShape3D
 @onready var _foot_collider_r = %FootColliderR as CollisionShape3D
 
-const PLAYER_CAMERA = preload("res://main/player_camera.tscn")
+const PLAYER_CAMERA = preload("res://player/player_camera.tscn")
 
 var _player_camera: PlayerCamera
 

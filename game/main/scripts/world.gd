@@ -2,7 +2,7 @@ extends Node3D
 
 class_name World
 
-const PLAYER_SCENE = preload("res://main/player.tscn")
+const PLAYER_SCENE = preload("res://player/player.tscn")
 
 func _ready():
 	# If we start this as the main scene, add the player to start

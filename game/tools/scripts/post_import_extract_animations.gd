@@ -9,7 +9,7 @@ func _post_import(scene):
 			ResourceSaver.save(anim_lib, "res://resources/" + scene.name + "_animations.tres")
 
 			# Remove the AnimationPlayer from the scene
-			node.get_parent().remove_child(node)
-			node.queue_free()
+			# node.get_parent().remove_child(node)
+			# node.queue_free()
 
 	return scene
