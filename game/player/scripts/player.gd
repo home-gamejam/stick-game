@@ -1,6 +1,7 @@
 #@tool
 extends Character
 
+@export var player_model: PlayerModel
 @export_range(0.0, 1.0) var mouse_sensitivity = 0.01
 @export var tilt_limit = deg_to_rad(75)
 @export var acceleration: float = 20.0
@@ -8,8 +9,6 @@ extends Character
 @export var rotation_speed = TAU * 2
 @export var max_floor_distance: float = .2
 
-@onready var _player_model = %PlayerModel as PlayerModel
-@onready var _state_machine = %CharacterStateMachine as CharacterStateMachine
 @onready var _foot_collider_l = %FootColliderL as CollisionShape3D
 @onready var _foot_collider_r = %FootColliderR as CollisionShape3D
 
@@ -27,15 +26,13 @@ func _ready():
 		_player_camera = PLAYER_CAMERA.instantiate()
 		add_child(_player_camera)
 
-	_state_machine.init()
-
 func _physics_process(delta: float) -> void:
 	#if Engine.is_editor_hint():
 		#return
 	if !is_multiplayer_authority():
 		return
 
-	_state_machine.physics_process(delta)
+	player_model.physics_process(delta)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion && _player_camera:
@@ -105,17 +102,17 @@ func move_based_on_input(delta: float, input_dir: Vector2 = Vector2.ZERO, rot_in
 		last_rotation_dir = rotation_direction
 
 	var target_angle := Vector3.BACK.signed_angle_to(last_rotation_dir, Vector3.UP)
-	_player_model.global_rotation.y = lerp_angle(_player_model.rotation.y, target_angle, rotation_speed * delta)
-	%PlayerView.global_rotation.y = _player_model.global_rotation.y
+	player_model.global_rotation.y = lerp_angle(player_model.rotation.y, target_angle, rotation_speed * delta)
+	%PlayerView.global_rotation.y = player_model.global_rotation.y
 
 func get_animation_length(animation: String) -> float:
-	return _player_model._animation_player.get_animation(animation).length
+	return player_model._animation_player.get_animation(animation).length
 
 func set_animation_blend_position(blend_position: Variant) -> void:
-	_player_model._animation_tree.set("parameters/Movement/blend_position", blend_position)
+	player_model._animation_tree.set("parameters/Movement/blend_position", blend_position)
 
 func is_animation_playing() -> bool:
-	return _player_model._animation_player.is_playing()
+	return player_model._animation_player.is_playing()
 
 func play_animation(animation: String) -> void:
-	_player_model.play_animation(animation)
+	player_model.play_animation(animation)
