@@ -82,7 +82,7 @@ disabled = true
 unique_name_in_owner = true
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://cylmulnexilu1")
+_spawnable_scenes = PackedStringArray("uid://tmda5xa2to7g")
 spawn_path = NodePath("../Players")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
