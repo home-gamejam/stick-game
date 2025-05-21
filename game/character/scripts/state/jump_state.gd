@@ -4,9 +4,12 @@ class_name JumpState
 
 const JUMP_VELOCITY = 4.5 * 1.2
 
+func _init(character_: Character) -> void:
+	animation = "stickman_animations/Jump"
+	character = character_
+
 func enter() -> void:
 	character.velocity.y = JUMP_VELOCITY
-	character.play_animation("stickman_animations/Jump")
 
 func physics_process(delta: float) -> CharacterState.Type:
 	character.velocity += character.get_gravity() * delta

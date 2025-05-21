@@ -113,6 +113,3 @@ func set_animation_blend_position(blend_position: Variant) -> void:
 
 func is_animation_playing() -> bool:
 	return player_model._animation_player.is_playing()
-
-func play_animation(animation: String) -> void:
-	player_model.play_animation(animation)

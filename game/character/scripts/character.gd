@@ -33,6 +33,3 @@ func set_animation_blend_position(_blend_position: Variant) -> void:
 
 func is_animation_playing() -> bool:
 	return false
-
-func play_animation(_animation: String) -> void:
-	pass

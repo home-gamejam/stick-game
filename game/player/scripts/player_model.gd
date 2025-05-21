@@ -9,16 +9,16 @@ class_name PlayerModel
 var initial_state_type: CharacterState.Type = CharacterState.Type.Idle
 var current_state: CharacterState = null
 
-var states: Dictionary[int, CharacterState] = {
-	CharacterState.Type.Fall: FallState.new(),
-	CharacterState.Type.FightIdle: FightIdleState.new(),
-	CharacterState.Type.Idle: IdleState.new(),
-	CharacterState.Type.Jump: JumpState.new(),
-	CharacterState.Type.Land: LandState.new(),
-	CharacterState.Type.Move: MoveState.new(),
-	CharacterState.Type.Punch1Start: Punch1StartState.new(),
-	CharacterState.Type.Punch1End: Punch1EndState.new(),
-	CharacterState.Type.Punch2Start: Punch2StartState.new(),
+@onready var states: Dictionary[int, CharacterState] = {
+	CharacterState.Type.Fall: FallState.new(character),
+	CharacterState.Type.FightIdle: FightIdleState.new(character),
+	CharacterState.Type.Idle: IdleState.new(character),
+	CharacterState.Type.Jump: JumpState.new(character),
+	CharacterState.Type.Land: LandState.new(character),
+	CharacterState.Type.Move: MoveState.new(character),
+	CharacterState.Type.Punch1Start: Punch1StartState.new(character),
+	CharacterState.Type.Punch1End: Punch1EndState.new(character),
+	CharacterState.Type.Punch2Start: Punch2StartState.new(character),
 }
 
 var skeleton: Skeleton3D:
@@ -26,10 +26,6 @@ var skeleton: Skeleton3D:
 		return $rig/Skeleton3D
 
 func _ready() -> void:
-	for child in states.values():
-		if child is CharacterState:
-			child.character = character
-
 	update_state(initial_state_type)
 
 func play_animation(animation: String) -> void:
@@ -65,3 +61,4 @@ func update_state(new_state_type: int) -> void:
 	current_state = new_state
 	print("Transitioning to state: ", new_state_type)
 	current_state.enter()
+	play_animation(current_state.animation)

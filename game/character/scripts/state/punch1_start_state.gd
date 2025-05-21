@@ -7,12 +7,14 @@ var combo_timer: float = 0.0
 var max_combo: float
 var min_combo: float
 
+func _init(character_: Character) -> void:
+	animation = "stickman_animations/Punch1Start"
+	character = character_
+
 func enter():
 	animation_length = character.get_animation_length("stickman_animations/Punch1Start")
 	min_combo = animation_length - 0.1
 	max_combo = animation_length + 0.1
-
-	character.play_animation("stickman_animations/Punch1Start")
 	combo_timer = 0.0
 
 func physics_process(delta: float) -> CharacterState.Type:

@@ -15,6 +15,7 @@ enum Type {
 	Punch2Start,
 }
 
+var animation: String
 var character: Character
 
 func get_input_dir() -> Vector2:

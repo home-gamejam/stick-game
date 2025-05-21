@@ -2,8 +2,9 @@ extends CharacterState
 
 class_name LandState
 
-func enter() -> void:
-	character.play_animation("stickman_animations/Land")
+func _init(character_: Character) -> void:
+	animation = "stickman_animations/Land"
+	character = character_
 
 func physics_process(delta: float) -> CharacterState.Type:
 	character.velocity += character.get_gravity() * delta

@@ -2,8 +2,9 @@ extends CharacterState
 
 class_name IdleState
 
-func enter():
-	character.play_animation("stickman_animations/Idle")
+func _init(character_: Character) -> void:
+	animation = "stickman_animations/Idle"
+	character = character_
 
 func physics_process(delta: float) -> CharacterState.Type:
 	if character.is_in_air():

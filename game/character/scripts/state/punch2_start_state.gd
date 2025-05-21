@@ -4,8 +4,11 @@ class_name Punch2StartState
 
 var combo_window: int = 0
 
+func _init(character_: Character) -> void:
+	animation = "stickman_animations/Punch2Start"
+	character = character_
+
 func enter():
-	character.play_animation("stickman_animations/Punch2Start")
 	combo_window = 0
 
 func physics_process(delta: float) -> CharacterState.Type:

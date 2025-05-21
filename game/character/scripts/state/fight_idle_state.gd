@@ -6,8 +6,11 @@ const DURATION = 5.0
 
 var timer: float
 
+func _init(character_: Character) -> void:
+	animation = "stickman_animations/FightIdle"
+	character = character_
+
 func enter():
-	character.play_animation("stickman_animations/FightIdle")
 	timer = 0.0
 
 func physics_process(delta: float) -> CharacterState.Type:

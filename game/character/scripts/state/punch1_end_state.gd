@@ -2,8 +2,9 @@ extends CharacterState
 
 class_name Punch1EndState
 
-func enter():
-	character.play_animation("stickman_animations/Punch1End")
+func _init(character_: Character) -> void:
+	animation = "stickman_animations/Punch1End"
+	character = character_
 
 func physics_process(delta: float) -> CharacterState.Type:
 	if not character.is_animation_playing():
