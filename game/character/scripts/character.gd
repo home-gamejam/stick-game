@@ -9,10 +9,6 @@ var last_rot_input_dir := Vector2.ZERO
 var last_move_dir := Vector3.BACK
 var last_rotation_dir := Vector3.BACK
 
-var model: Node3D: get = get_model
-func get_model() -> Node3D:
-	return null
-
 func get_forward_axis() -> Vector3:
 	return -global_basis.z
 
