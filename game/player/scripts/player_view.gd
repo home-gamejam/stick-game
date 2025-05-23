@@ -7,4 +7,4 @@ class_name PlayerView
 		model = model_
 
 func _ready() -> void:
-	$Skin.skeleton = model.skeleton.get_path()
+	$Skin.skeleton = model.get_skeleton().get_path()

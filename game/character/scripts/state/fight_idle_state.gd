@@ -6,9 +6,9 @@ const DURATION = 5.0
 
 var timer: float
 
-func _init(character_: Character) -> void:
+func _init(character_model_: CharacterModel) -> void:
 	animation = "stickman_animations/FightIdle"
-	character = character_
+	character_model = character_model_
 
 func enter():
 	timer = 0.0

@@ -1,8 +1,7 @@
-extends Node3D
+extends CharacterModel
 
 class_name PlayerModel
 
-@export var character: Character
 @onready var _animation_player = %AnimationPlayer as AnimationPlayer
 @onready var _animation_tree = %AnimationTree as AnimationTree
 
@@ -13,23 +12,28 @@ var current_state: CharacterState:
 		return states[current_state_type]
 
 @onready var states: Dictionary[CharacterState.Type, CharacterState] = {
-	CharacterState.Type.Fall: FallState.new(character),
-	CharacterState.Type.FightIdle: FightIdleState.new(character),
-	CharacterState.Type.Idle: IdleState.new(character),
-	CharacterState.Type.Jump: JumpState.new(character),
-	CharacterState.Type.Land: LandState.new(character),
-	CharacterState.Type.Move: MoveState.new(character),
-	CharacterState.Type.Punch1Start: Punch1StartState.new(character),
-	CharacterState.Type.Punch1End: Punch1EndState.new(character),
-	CharacterState.Type.Punch2Start: Punch2StartState.new(character),
+	CharacterState.Type.Fall: FallState.new(self),
+	CharacterState.Type.FightIdle: FightIdleState.new(self),
+	CharacterState.Type.Idle: IdleState.new(self),
+	CharacterState.Type.Jump: JumpState.new(self),
+	CharacterState.Type.Land: LandState.new(self),
+	CharacterState.Type.Move: MoveState.new(self),
+	CharacterState.Type.Punch1Start: Punch1StartState.new(self),
+	CharacterState.Type.Punch1End: Punch1EndState.new(self),
+	CharacterState.Type.Punch2Start: Punch2StartState.new(self),
 }
-
-var skeleton: Skeleton3D:
-	get:
-		return $rig/Skeleton3D
 
 func _ready() -> void:
 	update_state(current_state_type)
+
+func get_animation_length(animation: String) -> float:
+	return _animation_player.get_animation(animation).length
+
+func get_skeleton() -> Skeleton3D:
+	return $rig/Skeleton3D
+
+func is_animation_playing() -> bool:
+	return _animation_player.is_playing()
 
 func play_animation(animation: String) -> void:
 	match animation:
@@ -45,6 +49,9 @@ func play_animation(animation: String) -> void:
 # state
 func physics_process(delta: float) -> void:
 	update_state(states[current_state_type].physics_process(delta))
+
+func set_animation_blend_position(blend_position: Variant) -> void:
+	_animation_tree.set("parameters/Movement/blend_position", blend_position)
 
 # Corresponds to _unhandled_input on the character but delegates to the current
 # state

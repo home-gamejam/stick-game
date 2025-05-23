@@ -104,12 +104,3 @@ func move_based_on_input(delta: float, input_dir: Vector2 = Vector2.ZERO, rot_in
 	var target_angle := Vector3.BACK.signed_angle_to(last_rotation_dir, Vector3.UP)
 	player_model.global_rotation.y = lerp_angle(player_model.rotation.y, target_angle, rotation_speed * delta)
 	%PlayerView.global_rotation.y = player_model.global_rotation.y
-
-func get_animation_length(animation: String) -> float:
-	return player_model._animation_player.get_animation(animation).length
-
-func set_animation_blend_position(blend_position: Variant) -> void:
-	player_model._animation_tree.set("parameters/Movement/blend_position", blend_position)
-
-func is_animation_playing() -> bool:
-	return player_model._animation_player.is_playing()
