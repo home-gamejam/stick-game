@@ -13,9 +13,9 @@ func _init(character_model_: CharacterModel) -> void:
 func enter():
 	timer = 0.0
 
-func physics_process(delta: float) -> CharacterState.Type:
+func update(input_data: InputData, delta: float) -> CharacterState.Type:
 	timer += delta
 	if timer > DURATION:
 		return CharacterState.Type.Idle
 
-	return super.physics_process(delta)
+	return super.update(input_data, delta)

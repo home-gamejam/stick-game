@@ -24,13 +24,18 @@ func _physics_process(delta: float) -> void:
 	if !is_multiplayer_authority():
 		return
 
-	character_model.physics_process(delta)
+	character_model.update(get_input_data(), delta)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion && _player_camera:
 		_player_camera.rotation.x -= event.relative.y * mouse_sensitivity
 		_player_camera.rotation.x = clampf(_player_camera.rotation.x, -tilt_limit, tilt_limit)
 		_player_camera.rotation.y += -event.relative.x * mouse_sensitivity
+
+func get_input_data() -> InputData:
+	var input_data = InputData.new()
+	input_data.input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down", .1)
+	return input_data
 
 func get_forward_axis() -> Vector3:
 	return _player_camera.camera.global_basis.z

@@ -11,7 +11,7 @@ func _init(character_model_: CharacterModel) -> void:
 func enter():
 	combo_window = 0
 
-func physics_process(delta: float) -> CharacterState.Type:
+func update(_input_data: InputData, delta: float) -> CharacterState.Type:
 	# if Input.is_action_just_pressed("punch"):
 	# 	combo_window = 5
 	if not character_model.is_animation_playing():

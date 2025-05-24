@@ -6,7 +6,7 @@ func _init(character_model_: CharacterModel) -> void:
 	animation = "stickman_animations/Walk"
 	character_model = character_model_
 
-func physics_process(delta: float) -> CharacterState.Type:
+func update(input_data: InputData, delta: float) -> CharacterState.Type:
 	if character_body.is_in_air():
 		return CharacterState.Type.Fall
 
@@ -23,8 +23,7 @@ func physics_process(delta: float) -> CharacterState.Type:
 	else:
 		character_body.move_speed = character_body.MOVE_SPEED
 
-	var input_dir = get_input_dir()
-	character_body.move_based_on_input(delta, input_dir)
+	character_body.move_based_on_input(delta, input_data.input_dir)
 
 	if character_body.velocity.length() == 0:
 		return CharacterState.Type.Idle
@@ -32,7 +31,7 @@ func physics_process(delta: float) -> CharacterState.Type:
 	# blend_position is 0, 1, 2 for idle, walk, run respectively. Multiplying
 	# walk or run by the input_dir magnitude should hit the values exactly when
 	# value is 1 and a blend when it is < 1
-	var blend_position = (2 if is_running else 1) * input_dir.normalized().length()
+	var blend_position = (2 if is_running else 1) * input_data.input_dir.normalized().length()
 	character_model.set_animation_blend_position(blend_position)
 
 	return CharacterState.Type.None

@@ -25,7 +25,19 @@ var current_state: CharacterState:
 }
 
 func _ready() -> void:
-	update_state(current_state_type)
+	_update_state(current_state_type)
+
+func _update_state(new_state_type: CharacterState.Type) -> void:
+	# Only update if we have a new state
+	if new_state_type == CharacterState.Type.None:
+		return
+
+	current_state.exit()
+
+	current_state_type = new_state_type
+	print("Transitioning to state: ", new_state_type)
+	current_state.enter()
+	play_animation(current_state.animation)
 
 func get_animation_length(animation: String) -> float:
 	return animation_player.get_animation(animation).length
@@ -46,27 +58,9 @@ func play_animation(animation: String) -> void:
 			animation_tree.active = false
 			animation_player.play(animation)
 
-# Corresponds to _physics_process on the character but delegates to the current
-# state
-func physics_process(delta: float) -> void:
-	update_state(states[current_state_type].physics_process(delta))
-
 func set_animation_blend_position(blend_position: Variant) -> void:
 	animation_tree.set("parameters/Movement/blend_position", blend_position)
 
-# Corresponds to _unhandled_input on the character but delegates to the current
-# state
-func unhandled_input(event: InputEvent) -> void:
-	update_state(states[current_state_type].unhandled_input(event))
-
-func update_state(new_state_type: CharacterState.Type) -> void:
-	# Only update if we have a new state
-	if new_state_type == CharacterState.Type.None:
-		return
-
-	current_state.exit()
-
-	current_state_type = new_state_type
-	print("Transitioning to state: ", new_state_type)
-	current_state.enter()
-	play_animation(current_state.animation)
+# Update the character state based on input data and delta time
+func update(input_data: InputData, delta: float) -> void:
+	_update_state(current_state.update(input_data, delta))

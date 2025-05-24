@@ -6,13 +6,12 @@ func _init(character_model_: CharacterModel) -> void:
 	animation = "stickman_animations/Fall"
 	character_model = character_model_
 
-func physics_process(delta: float) -> CharacterState.Type:
+func update(input_data: InputData, delta: float) -> CharacterState.Type:
 	character_body.velocity += character_body.get_gravity() * delta
 
-	var input_dir = get_input_dir()
 	character_body.move_based_on_input(
 		delta,
-		input_dir * .1,
+		input_data.input_dir * .1,
 		character_body.last_input_dir)
 
 	if character_body.is_on_floor():

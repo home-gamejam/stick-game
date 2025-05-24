@@ -11,16 +11,15 @@ func _init(character_model_: CharacterModel) -> void:
 func enter() -> void:
 	character_body.velocity.y = JUMP_VELOCITY
 
-func physics_process(delta: float) -> CharacterState.Type:
+func update(input_data: InputData, delta: float) -> CharacterState.Type:
 	character_body.velocity += character_body.get_gravity() * delta
 
 	if character_body.velocity.y > 0:
 		return CharacterState.Type.Fall
 
-	var input_dir = get_input_dir()
 	character_body.move_based_on_input(
 		delta,
-		input_dir * .1,
+		input_data.input_dir * .1,
 		character_body.last_input_dir)
 
 	if character_body.is_on_floor():

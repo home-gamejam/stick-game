@@ -6,7 +6,7 @@ func _init(character_model_: CharacterModel) -> void:
 	animation = "stickman_animations/Idle"
 	character_model = character_model_
 
-func physics_process(delta: float) -> CharacterState.Type:
+func update(input_data: InputData, delta: float) -> CharacterState.Type:
 	if character_body.is_in_air():
 		return CharacterState.Type.Fall
 
@@ -16,8 +16,7 @@ func physics_process(delta: float) -> CharacterState.Type:
 	if Input.is_action_just_pressed("punch"):
 		return CharacterState.Type.Punch1Start
 
-	var input_dir := get_input_dir()
-	if input_dir.length() > 0:
+	if input_data.input_dir.length() > 0:
 		return CharacterState.Type.Move
 
 	character_body.move_based_on_input(delta)
