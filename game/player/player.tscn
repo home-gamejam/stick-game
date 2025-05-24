@@ -34,16 +34,16 @@ height = 0.4
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/replication_mode = 1
-properties/1/path = NodePath("PlayerModel/AnimationTree:parameters/Movement/blend_position")
+properties/1/path = NodePath("Model:global_rotation")
 properties/1/spawn = true
 properties/1/replication_mode = 1
-properties/2/path = NodePath("PlayerModel:rotation")
+properties/2/path = NodePath("Model:current_state_type")
 properties/2/spawn = true
 properties/2/replication_mode = 1
-properties/3/path = NodePath("PlayerView:rotation")
+properties/3/path = NodePath("View:global_rotation")
 properties/3/spawn = true
 properties/3/replication_mode = 1
-properties/4/path = NodePath("PlayerModel:current_state_type")
+properties/4/path = NodePath("Model/AnimationTree:parameters/Movement/blend_position")
 properties/4/spawn = true
 properties/4/replication_mode = 1
 
@@ -60,7 +60,7 @@ model = NodePath("../Model")
 
 [node name="HandColliderL" type="CollisionShape3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(-0.970829, 0.174414, -0.164513, -0.214957, -0.937099, 0.275023, -0.106197, 0.302364, 0.947258, 0.276278, 0.895355, 0.0294907)
+transform = Transform3D(-0.970829, 0.174414, -0.164513, -0.214957, -0.937099, 0.275023, -0.106197, 0.302364, 0.947258, 0.276278, 0.889163, 0.0481577)
 shape = SubResource("SphereShape3D_g1dw6")
 debug_color = Color(0, 0.6, 0.701961, 1)
 
@@ -70,7 +70,7 @@ mesh = SubResource("SphereMesh_yw30f")
 
 [node name="HandColliderR" type="CollisionShape3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(-0.970829, -0.174413, 0.164514, 0.214957, -0.937099, 0.275022, 0.106199, 0.302364, 0.947257, -0.276055, 0.895826, 0.0297248)
+transform = Transform3D(-0.970829, -0.174413, 0.164514, 0.214957, -0.937099, 0.275022, 0.106199, 0.302364, 0.947257, -0.276055, 0.889634, 0.0483913)
 shape = SubResource("SphereShape3D_qjkh3")
 debug_color = Color(0, 0.6, 0.701961, 1)
 
@@ -80,7 +80,7 @@ mesh = SubResource("SphereMesh_g6k8r")
 
 [node name="FootColliderL" type="CollisionShape3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(-0.999823, -0.0031489, -0.000496056, -0.000509578, 0.00429536, 0.999826, -0.0031467, 0.999828, -0.00429692, 0.117604, 0.100275, 0.142598)
+transform = Transform3D(-0.999828, -0.000294877, -0.00118969, -0.00119132, 0.00561003, 0.999819, -0.000288199, 0.999826, -0.00561034, 0.117806, 0.1004, 0.14225)
 shape = SubResource("CapsuleShape3D_boad6")
 debug_color = Color(0, 0.6, 0.701961, 1)
 
@@ -89,7 +89,7 @@ mesh = SubResource("CapsuleMesh_rgyib")
 
 [node name="FootColliderR" type="CollisionShape3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(-0.999823, 0.00313624, 0.000477122, 0.00049064, 0.00431136, 0.999826, 0.0031341, 0.999828, -0.00431285, -0.115604, 0.100274, 0.142591)
+transform = Transform3D(-0.999828, 0.00031277, 0.00120697, 0.00120869, 0.00557423, 0.999819, 0.000306032, 0.999824, -0.00557458, -0.11582, 0.100395, 0.142241)
 shape = SubResource("CapsuleShape3D_hg6s5")
 
 [node name="Debug" type="MeshInstance3D" parent="FootColliderR"]

@@ -19,11 +19,6 @@ func _ready():
 		add_child(_player_camera)
 
 func _physics_process(delta: float) -> void:
-	#if Engine.is_editor_hint():
-		#return
-	if !is_multiplayer_authority():
-		return
-
 	character_model.update(get_input_data(), delta)
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -34,11 +29,20 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func get_input_data() -> InputData:
 	var input_data = InputData.new()
-	input_data.input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down", .1)
+
+	if is_multiplayer_authority():
+		input_data.input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down", .1)
+
 	return input_data
 
 func get_forward_axis() -> Vector3:
+	if not _player_camera:
+		return super.get_forward_axis()
+
 	return _player_camera.camera.global_basis.z
 
 func get_right_axis() -> Vector3:
+	if not _player_camera:
+		return super.get_right_axis()
+
 	return _player_camera.camera.global_basis.x
