@@ -10,13 +10,13 @@ func update(input_data: InputData, delta: float) -> CharacterState.Type:
 	if character_body.is_in_air():
 		return CharacterState.Type.Fall
 
-	if Input.is_action_just_pressed("jump"):
+	if input_data.action == "jump":
 		return CharacterState.Type.Jump
 
-	if Input.is_action_just_pressed("punch"):
+	if input_data.action == "punch":
 		return CharacterState.Type.Punch1Start
 
-	var is_running = Input.is_action_pressed("run")
+	var is_running = input_data.action == "run"
 
 	if is_running:
 		character_body.move_speed = character_body.MOVE_SPEED * 2

@@ -30,7 +30,17 @@ func _unhandled_input(event: InputEvent) -> void:
 func get_input_data() -> InputData:
 	var input_data = InputData.new()
 
+	# TODO: If I remove update call for non-authority, may not need this check
 	if is_multiplayer_authority():
+		if Input.is_action_just_pressed("jump"):
+			input_data.actions.append("jump")
+
+		if Input.is_action_just_pressed("punch"):
+			input_data.actions.append("punch")
+
+		if Input.is_action_pressed("run"):
+			input_data.actions.append("run")
+
 		input_data.input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down", .1)
 
 	return input_data

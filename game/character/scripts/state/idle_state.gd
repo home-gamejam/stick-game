@@ -10,10 +10,10 @@ func update(input_data: InputData, delta: float) -> CharacterState.Type:
 	if character_body.is_in_air():
 		return CharacterState.Type.Fall
 
-	if Input.is_action_just_pressed("jump") and character_body.is_on_floor():
+	if input_data.action == "jump" and character_body.is_on_floor():
 		return CharacterState.Type.Jump
 
-	if Input.is_action_just_pressed("punch"):
+	if input_data.action == "punch":
 		return CharacterState.Type.Punch1Start
 
 	if input_data.input_dir.length() > 0:

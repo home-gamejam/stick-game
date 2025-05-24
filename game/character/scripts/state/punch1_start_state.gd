@@ -17,8 +17,8 @@ func enter():
 	max_combo = animation_length + 0.1
 	combo_timer = 0.0
 
-func update(_input_data: InputData, delta: float) -> CharacterState.Type:
-	if Input.is_action_just_pressed("punch") and combo_timer >= min_combo and combo_timer <= max_combo:
+func update(input_data: InputData, delta: float) -> CharacterState.Type:
+	if input_data.action == "punch" and combo_timer >= min_combo and combo_timer <= max_combo:
 		return CharacterState.Type.Punch2Start
 
 	if not character_model.is_animation_playing() and combo_timer > max_combo:

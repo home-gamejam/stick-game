@@ -34,8 +34,8 @@ func _update_state(new_state_type: CharacterState.Type) -> void:
 
 	current_state.exit()
 
+	print("Transitioning state from ", current_state_type, " to ", new_state_type)
 	current_state_type = new_state_type
-	print("Transitioning to state: ", new_state_type)
 	current_state.enter()
 	play_animation(current_state.animation)
 
