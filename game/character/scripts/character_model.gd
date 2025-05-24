@@ -3,8 +3,8 @@ extends Node3D
 class_name CharacterModel
 
 @export var character_body: Character
-@export var animation_player: AnimationPlayer
-@export var animation_tree: AnimationTree
+@onready var animation_player = %AnimationPlayer as AnimationPlayer
+@onready var animation_tree = %AnimationTree as AnimationTree
 
 var current_state_type: CharacterState.Type = CharacterState.Type.Idle
 
