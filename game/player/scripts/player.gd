@@ -1,7 +1,7 @@
 #@tool
 extends Character
 
-@export var player_model: PlayerModel
+@export var player_model: CharacterModel
 @export_range(0.0, 1.0) var mouse_sensitivity = 0.01
 @export var tilt_limit = deg_to_rad(75)
 @export var acceleration: float = 20.0
