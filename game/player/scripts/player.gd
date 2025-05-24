@@ -14,12 +14,11 @@ func _enter_tree():
 	set_multiplayer_authority(id)
 
 func _ready():
-	if is_multiplayer_authority():
-		_player_camera = PLAYER_CAMERA.instantiate()
-		add_child(_player_camera)
+	if not is_multiplayer_authority():
+		return
 
-func _physics_process(delta: float) -> void:
-	character_model.update(get_input_data(), delta)
+	_player_camera = PLAYER_CAMERA.instantiate()
+	add_child(_player_camera)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion && _player_camera:
@@ -27,23 +26,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		_player_camera.rotation.x = clampf(_player_camera.rotation.x, -tilt_limit, tilt_limit)
 		_player_camera.rotation.y += -event.relative.x * mouse_sensitivity
 
-func get_input_data() -> InputData:
-	var input_data = InputData.new()
-
-	# TODO: If I remove update call for non-authority, may not need this check
-	if is_multiplayer_authority():
-		if Input.is_action_just_pressed("jump"):
-			input_data.actions.append("jump")
-
-		if Input.is_action_just_pressed("punch"):
-			input_data.actions.append("punch")
-
-		if Input.is_action_pressed("run"):
-			input_data.actions.append("run")
-
-		input_data.input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down", .1)
-
-	return input_data
+func get_input() -> InputData:
+	return InputData.get_current()
 
 func get_forward_axis() -> Vector3:
 	if not _player_camera:

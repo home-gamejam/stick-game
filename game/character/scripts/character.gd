@@ -20,6 +20,19 @@ var last_rot_input_dir := Vector2.ZERO
 var last_move_dir := Vector3.BACK
 var last_rotation_dir := Vector3.BACK
 
+func _physics_process(delta: float) -> void:
+	# If this is not the authority, we don't process physics. The multiplayer
+	# synchronizer will handle the movement and state updates.
+	if not is_multiplayer_authority():
+		return
+
+	character_model.update(get_input(), delta)
+
+# Override this for specific character types. E.g. player will use input from
+# user inputs. Npcs will use AI inputs.
+func get_input() -> InputData:
+	return InputData.new()
+
 func get_forward_axis() -> Vector3:
 	return -global_basis.z
 
