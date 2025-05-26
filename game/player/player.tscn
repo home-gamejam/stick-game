@@ -1,34 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://tmda5xa2to7g"]
+[gd_scene load_steps=5 format=3 uid="uid://tmda5xa2to7g"]
 
 [ext_resource type="PackedScene" uid="uid://c2jrxrxfi6r7d" path="res://player/player_model.tscn" id="1_rkbax"]
 [ext_resource type="Script" uid="uid://ctvgtn3h2l316" path="res://player/scripts/player.gd" id="1_yw30f"]
 [ext_resource type="PackedScene" uid="uid://djyegqvr57iv2" path="res://player/player_view.tscn" id="2_g1dw6"]
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_g1dw6"]
-radius = 0.1
-
-[sub_resource type="SphereMesh" id="SphereMesh_yw30f"]
-radius = 0.1
-height = 0.2
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_qjkh3"]
-radius = 0.1
-
-[sub_resource type="SphereMesh" id="SphereMesh_g6k8r"]
-radius = 0.1
-height = 0.2
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_boad6"]
-radius = 0.1
-height = 0.4
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_rgyib"]
-radius = 0.07
-height = 0.4
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hg6s5"]
-radius = 0.1
-height = 0.4
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_g1dw6"]
 properties/0/path = NodePath(".:position")
@@ -47,53 +21,17 @@ properties/4/path = NodePath("Model/AnimationTree:parameters/Movement/blend_posi
 properties/4/spawn = true
 properties/4/replication_mode = 1
 
-[node name="Player" type="CharacterBody3D"]
+[node name="Player" type="Node" node_paths=PackedStringArray("character_model", "character_view")]
 script = ExtResource("1_yw30f")
+character_model = NodePath("Model")
+character_view = NodePath("View")
 
-[node name="Model" parent="." node_paths=PackedStringArray("character_body") instance=ExtResource("1_rkbax")]
+[node name="Model" parent="." instance=ExtResource("1_rkbax")]
 unique_name_in_owner = true
-character_body = NodePath("..")
 
 [node name="View" parent="." node_paths=PackedStringArray("model") instance=ExtResource("2_g1dw6")]
 unique_name_in_owner = true
 model = NodePath("../Model")
-
-[node name="HandColliderL" type="CollisionShape3D" parent="."]
-unique_name_in_owner = true
-transform = Transform3D(-0.970829, 0.174414, -0.164513, -0.214957, -0.937099, 0.275023, -0.106197, 0.302364, 0.947258, 0.276278, 0.891973, 0.0396806)
-shape = SubResource("SphereShape3D_g1dw6")
-debug_color = Color(0, 0.6, 0.701961, 1)
-
-[node name="Debug" type="MeshInstance3D" parent="HandColliderL"]
-visible = false
-mesh = SubResource("SphereMesh_yw30f")
-
-[node name="HandColliderR" type="CollisionShape3D" parent="."]
-unique_name_in_owner = true
-transform = Transform3D(-0.970829, -0.174413, 0.164514, 0.214957, -0.937099, 0.275022, 0.106199, 0.302364, 0.947257, -0.276055, 0.892444, 0.0399148)
-shape = SubResource("SphereShape3D_qjkh3")
-debug_color = Color(0, 0.6, 0.701961, 1)
-
-[node name="Debug" type="MeshInstance3D" parent="HandColliderR"]
-visible = false
-mesh = SubResource("SphereMesh_g6k8r")
-
-[node name="FootColliderL" type="CollisionShape3D" parent="."]
-unique_name_in_owner = true
-transform = Transform3D(-0.999827, -0.000321218, -0.00106838, -0.00106995, 0.00495941, 0.999822, -0.00031591, 0.999829, -0.00495972, 0.117915, 0.100352, 0.142439)
-shape = SubResource("CapsuleShape3D_boad6")
-debug_color = Color(0, 0.6, 0.701961, 1)
-
-[node name="Debug" type="MeshInstance3D" parent="FootColliderL"]
-mesh = SubResource("CapsuleMesh_rgyib")
-
-[node name="FootColliderR" type="CollisionShape3D" parent="."]
-unique_name_in_owner = true
-transform = Transform3D(-0.999828, 0.000281975, 0.00103647, 0.00103785, 0.00496622, 0.999822, 0.000276831, 0.999829, -0.00496648, -0.115914, 0.10035, 0.142441)
-shape = SubResource("CapsuleShape3D_hg6s5")
-
-[node name="Debug" type="MeshInstance3D" parent="FootColliderR"]
-mesh = SubResource("CapsuleMesh_rgyib")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_g1dw6")

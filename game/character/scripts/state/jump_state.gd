@@ -9,20 +9,20 @@ func _init(character_model_: CharacterModel) -> void:
 	character_model = character_model_
 
 func enter() -> void:
-	character_body.velocity.y = JUMP_VELOCITY
+	character_model.velocity.y = JUMP_VELOCITY
 
 func update(input_data: InputData, delta: float) -> CharacterState.Type:
-	character_body.velocity += character_body.get_gravity() * delta
+	character_model.velocity += character_model.get_gravity() * delta
 
-	if character_body.velocity.y > 0:
+	if character_model.velocity.y > 0:
 		return CharacterState.Type.Fall
 
-	character_body.move_based_on_input(
+	character_model.move_based_on_input(
 		delta,
 		input_data.input_dir * .1,
-		character_body.last_input_dir)
+		character_model.last_input_dir)
 
-	if character_body.is_on_floor():
+	if character_model.is_on_floor():
 		return CharacterState.Type.Idle
 
 	return CharacterState.Type.None

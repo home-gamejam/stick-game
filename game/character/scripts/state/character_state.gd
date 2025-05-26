@@ -17,9 +17,6 @@ enum Type {
 
 var animation: String
 var character_model: CharacterModel
-var character_body: Character:
-	get:
-		return character_model.character_body
 
 func enter() -> void:
 	pass

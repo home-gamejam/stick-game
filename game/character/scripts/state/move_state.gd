@@ -7,7 +7,7 @@ func _init(character_model_: CharacterModel) -> void:
 	character_model = character_model_
 
 func update(input_data: InputData, delta: float) -> CharacterState.Type:
-	if character_body.is_in_air():
+	if character_model.is_in_air():
 		return CharacterState.Type.Fall
 
 	if input_data.action == "jump":
@@ -19,13 +19,13 @@ func update(input_data: InputData, delta: float) -> CharacterState.Type:
 	var is_running = input_data.action == "run"
 
 	if is_running:
-		character_body.move_speed = character_body.MOVE_SPEED * 2
+		character_model.move_speed = character_model.walk_speed * 2
 	else:
-		character_body.move_speed = character_body.MOVE_SPEED
+		character_model.move_speed = character_model.walk_speed
 
-	character_body.move_based_on_input(delta, input_data.input_dir)
+	character_model.move_based_on_input(delta, input_data.input_dir)
 
-	if character_body.velocity.length() == 0:
+	if character_model.velocity.length() == 0:
 		return CharacterState.Type.Idle
 
 	# blend_position is 0, 1, 2 for idle, walk, run respectively. Multiplying

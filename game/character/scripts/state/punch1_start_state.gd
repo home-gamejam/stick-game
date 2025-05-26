@@ -26,6 +26,6 @@ func update(input_data: InputData, delta: float) -> CharacterState.Type:
 
 	combo_timer += delta
 
-	character_body.move_based_on_input(delta, Vector2.ZERO)
+	character_model.move_based_on_input(delta, Vector2.ZERO)
 
 	return CharacterState.Type.None
