@@ -7,14 +7,6 @@ class_name PlayerCamera
 
 @onready var camera := %Camera as Camera3D
 
-var model: CharacterModel:
-	set(model_):
-		model = model_
-
-func _physics_process(_delta: float) -> void:
-	# global_position = model.global_position
-	model.adjusted_basis = camera.global_basis
-
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		rotation.x -= event.relative.y * mouse_sensitivity
