@@ -3,7 +3,7 @@ extends CharacterState
 class_name FallState
 
 func _init(character_model_: CharacterModel) -> void:
-	animation = "stickman_animations/Fall"
+	animation = "Fall"
 	character_model = character_model_
 
 func update(input_data: InputData, delta: float) -> CharacterState.Type:

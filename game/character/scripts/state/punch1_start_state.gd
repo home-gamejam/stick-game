@@ -8,11 +8,11 @@ var max_combo: float
 var min_combo: float
 
 func _init(character_model_: CharacterModel) -> void:
-	animation = "stickman_animations/Punch1Start"
+	animation = "Punch1Start"
 	character_model = character_model_
 
 func enter():
-	animation_length = character_model.get_animation_length("stickman_animations/Punch1Start")
+	animation_length = character_model.get_animation_length("Punch1Start")
 	min_combo = animation_length - 0.1
 	max_combo = animation_length + 0.1
 	combo_timer = 0.0

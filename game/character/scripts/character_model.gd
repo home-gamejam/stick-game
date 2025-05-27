@@ -146,7 +146,7 @@ func move_based_on_input(delta: float, input_dir: Vector2 = Vector2.ZERO, rot_in
 
 func play_animation(animation: String) -> void:
 	match animation:
-		"stickman_animations/Idle", "stickman_animations/Walk", "stickman_animations/Run":
+		"Idle", "Walk", "Run":
 			animation_tree.active = true
 			animation_tree.set("parameters/Movement/blend_position", 0)
 

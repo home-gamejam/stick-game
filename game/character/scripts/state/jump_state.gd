@@ -5,7 +5,7 @@ class_name JumpState
 const JUMP_VELOCITY = 4.5 * 1.2
 
 func _init(character_model_: CharacterModel) -> void:
-	animation = "stickman_animations/Jump"
+	animation = "Jump"
 	character_model = character_model_
 
 func enter() -> void:

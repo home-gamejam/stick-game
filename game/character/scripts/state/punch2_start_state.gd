@@ -5,7 +5,7 @@ class_name Punch2StartState
 var combo_window: int = 0
 
 func _init(character_model_: CharacterModel) -> void:
-	animation = "stickman_animations/Punch2Start"
+	animation = "Punch2Start"
 	character_model = character_model_
 
 func enter():
