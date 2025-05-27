@@ -1,6 +1,6 @@
 extends Node
 
-class_name Character
+class_name CharacterController
 
 @export var character_model: CharacterModel
 @export var character_view: CharacterView

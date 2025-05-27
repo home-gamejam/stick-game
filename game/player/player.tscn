@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://tmda5xa2to7g"]
 
 [ext_resource type="PackedScene" uid="uid://c2jrxrxfi6r7d" path="res://player/player_model.tscn" id="1_rkbax"]
-[ext_resource type="Script" uid="uid://ctvgtn3h2l316" path="res://player/scripts/player.gd" id="1_yw30f"]
+[ext_resource type="Script" uid="uid://ctvgtn3h2l316" path="res://player/scripts/player_controller.gd" id="1_yw30f"]
 [ext_resource type="PackedScene" uid="uid://djyegqvr57iv2" path="res://player/player_view.tscn" id="2_g1dw6"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_g1dw6"]
@@ -21,7 +21,7 @@ properties/4/path = NodePath("Model/AnimationTree:parameters/Movement/blend_posi
 properties/4/spawn = true
 properties/4/replication_mode = 1
 
-[node name="Player" type="Node" node_paths=PackedStringArray("character_model", "character_view")]
+[node name="Controller" type="Node" node_paths=PackedStringArray("character_model", "character_view")]
 script = ExtResource("1_yw30f")
 character_model = NodePath("Model")
 character_view = NodePath("View")

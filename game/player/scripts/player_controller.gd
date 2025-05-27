@@ -1,5 +1,5 @@
 #@tool
-extends Character
+extends CharacterController
 
 @export_range(0.0, 1.0) var mouse_sensitivity = 0.01
 @export var tilt_limit = deg_to_rad(75)
