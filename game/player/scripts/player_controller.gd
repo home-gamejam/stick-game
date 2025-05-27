@@ -17,7 +17,7 @@ func _ready():
 	# Only create camera if this is multiplayer authority
 	_player_camera = PLAYER_CAMERA.instantiate()
 	_player_camera.model = character_model
-	add_child(_player_camera)
+	character_model.add_child(_player_camera)
 
 func get_input() -> InputData:
 	return InputData.get_current()

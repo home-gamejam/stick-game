@@ -12,7 +12,7 @@ var model: CharacterModel:
 		model = model_
 
 func _physics_process(_delta: float) -> void:
-	position = model.position
+	# global_position = model.global_position
 	model.adjusted_basis = camera.global_basis
 
 func _unhandled_input(event: InputEvent) -> void:
