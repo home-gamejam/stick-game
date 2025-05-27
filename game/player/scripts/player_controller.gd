@@ -1,4 +1,3 @@
-#@tool
 extends CharacterController
 
 const PLAYER_CAMERA = preload("res://player/player_camera.tscn")
