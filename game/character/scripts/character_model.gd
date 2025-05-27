@@ -107,8 +107,8 @@ func get_right_axis() -> Vector3:
 
 	return -global_basis.x
 
-func get_skeleton() -> Skeleton3D:
-	return $rig/Skeleton3D
+func get_skeleton_path() -> NodePath:
+	return $rig/Skeleton3D.get_path()
 
 func is_animation_playing() -> bool:
 	return animation_player.is_playing()
