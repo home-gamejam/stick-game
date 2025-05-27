@@ -2,13 +2,14 @@ extends Node3D
 
 class_name PlayerCamera
 
-@export var model: CharacterModel:
-	set(model_):
-		model = model_
 @export_range(0.0, 1.0) var mouse_sensitivity = 0.01
-@export var tilt_limit = deg_to_rad(75)
+@export var tilt_limit = 0.5 # deg_to_rad(75)
 
 @onready var camera := %Camera as Camera3D
+
+var model: CharacterModel:
+	set(model_):
+		model = model_
 
 func _physics_process(_delta: float) -> void:
 	position = model.position
