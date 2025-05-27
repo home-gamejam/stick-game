@@ -57,6 +57,7 @@ script = ExtResource("1_ch0rr")
 
 [node name="Terrain" type="Node" parent="."]
 script = ExtResource("2_b3acj")
+is_enabled = false
 depth = 64
 width = 64
 resolution = 2
