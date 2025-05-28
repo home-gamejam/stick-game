@@ -40,6 +40,12 @@ var adjusted_basis: Basis:
 	set(value):
 		adjusted_basis = value
 
+var adjusted_rotation: float:
+	get:
+		return adjusted_rotation if adjusted_rotation else 0.0
+	set(value):
+		adjusted_rotation = value
+
 var current_state_type: CharacterState.Type = CharacterState.Type.Idle:
 	set(current_state_type_):
 		if current_state_type_ == current_state_type:
@@ -96,6 +102,13 @@ func is_in_air() -> bool:
 
 	return true
 
+func get_adjusted_move_direction(input_dir: Vector2) -> Vector3:
+	return Vector3(
+		input_dir.x * cos(adjusted_rotation) + input_dir.y * sin(adjusted_rotation),
+		0,
+		- input_dir.x * sin(adjusted_rotation) + input_dir.y * cos(adjusted_rotation)
+	).normalized()
+
 func get_animation_length(animation: String) -> float:
 	return animation_player.get_animation(animation).length
 
@@ -121,13 +134,11 @@ func move_based_on_input(delta: float, input_dir: Vector2 = Vector2.ZERO, rot_in
 	last_input_dir = input_dir
 	last_rot_input_dir = rot_input_dir
 
-	var move_direction: Vector3 = adjusted_basis * Vector3(input_dir.x, 0, input_dir.y)
-	move_direction = move_direction.normalized()
+	var move_direction: Vector3 = get_adjusted_move_direction(input_dir)
 
 	var rotation_direction := move_direction
 	if input_dir != rot_input_dir:
-		rotation_direction = adjusted_basis * Vector3(rotation_direction.x, 0, rotation_direction.y)
-		rotation_direction = rotation_direction.normalized()
+		rotation_direction = get_adjusted_move_direction(rot_input_dir)
 
 	var rate = acceleration if is_on_floor() else air_deceleration
 	# temporarily zero the y velocity while we call move_toward, then restore it

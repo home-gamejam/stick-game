@@ -19,4 +19,5 @@ unique_name_in_owner = true
 
 [node name="Debug" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.90769, 0.419642, 0, -0.419642, 0.90769, 0, -0.860902, -3.09677)
+visible = false
 mesh = SubResource("BoxMesh_itl3e")
