@@ -34,7 +34,11 @@ var last_rot_input_dir := Vector2.ZERO
 var last_move_dir := Vector3.BACK
 var last_rotation_dir := Vector3.BACK
 
-var adjusted_basis: Basis
+var adjusted_basis: Basis:
+	get:
+		return adjusted_basis if adjusted_basis else global_basis.inverse()
+	set(value):
+		adjusted_basis = value
 
 var current_state_type: CharacterState.Type = CharacterState.Type.Idle:
 	set(current_state_type_):
@@ -117,12 +121,12 @@ func move_based_on_input(delta: float, input_dir: Vector2 = Vector2.ZERO, rot_in
 	last_input_dir = input_dir
 	last_rot_input_dir = rot_input_dir
 
-	var move_direction := get_forward_axis() * input_dir.y + get_right_axis() * input_dir.x
+	var move_direction: Vector3 = adjusted_basis * Vector3(input_dir.x, 0, input_dir.y)
 	move_direction = move_direction.normalized()
 
 	var rotation_direction := move_direction
 	if input_dir != rot_input_dir:
-		rotation_direction = get_forward_axis() * rot_input_dir.y + get_right_axis() * rot_input_dir.x
+		rotation_direction = adjusted_basis * Vector3(rotation_direction.x, 0, rotation_direction.y)
 		rotation_direction = rotation_direction.normalized()
 
 	var rate = acceleration if is_on_floor() else air_deceleration

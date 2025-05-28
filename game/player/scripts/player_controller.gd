@@ -23,7 +23,7 @@ func _physics_process(delta: float) -> void:
 	if _player_camera:
 		# sync player model and camera (Note _player_camera vs _player_camera.camera)
 		_player_camera.position = character_model.position
-		character_model.adjusted_basis = _player_camera.camera.global_basis
+		character_model.adjusted_basis = _player_camera.camera.global_transform.basis
 
 	character_view.position = character_model.position
 	character_view.global_rotation.y = character_model.rig.global_rotation.y
