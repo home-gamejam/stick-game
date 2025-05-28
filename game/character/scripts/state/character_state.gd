@@ -1,4 +1,4 @@
-extends State
+extends Node
 
 class_name CharacterState
 
@@ -15,7 +15,14 @@ enum Type {
 	Punch2Start,
 }
 
-var character: Character
+var animation: String
+var character_model: CharacterModel
 
-func get_input_dir() -> Vector2:
-	return Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down", .1)
+func enter() -> void:
+	pass
+
+func exit() -> void:
+	pass
+
+func update(_input_data: InputData, _delta: float) -> CharacterState.Type:
+	return CharacterState.Type.None

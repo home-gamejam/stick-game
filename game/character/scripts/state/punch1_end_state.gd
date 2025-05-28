@@ -2,13 +2,14 @@ extends CharacterState
 
 class_name Punch1EndState
 
-func enter():
-	character.play_animation("stickman_animations/Punch1End")
+func _init(character_model_: CharacterModel) -> void:
+	animation = "Punch1End"
+	character_model = character_model_
 
-func physics_process(delta: float) -> CharacterState.Type:
-	if not character.is_animation_playing():
+func update(_input_data: InputData, delta: float) -> CharacterState.Type:
+	if not character_model.is_animation_playing():
 		return CharacterState.Type.FightIdle
 
-	character.move_based_on_input(delta, Vector2.ZERO)
+	character_model.move_based_on_input(delta, Vector2.ZERO)
 
 	return CharacterState.Type.None

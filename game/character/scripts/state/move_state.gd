@@ -2,36 +2,36 @@ extends CharacterState
 
 class_name MoveState
 
-func enter() -> void:
-	character.play_animation("stickman_animations/Walk")
+func _init(character_model_: CharacterModel) -> void:
+	animation = "Walk"
+	character_model = character_model_
 
-func physics_process(delta: float) -> CharacterState.Type:
-	if character.is_in_air():
+func update(input_data: InputData, delta: float) -> CharacterState.Type:
+	if character_model.is_in_air():
 		return CharacterState.Type.Fall
 
-	if Input.is_action_just_pressed("jump"):
+	if input_data.action == "jump":
 		return CharacterState.Type.Jump
 
-	if Input.is_action_just_pressed("punch"):
+	if input_data.action == "punch":
 		return CharacterState.Type.Punch1Start
 
-	var is_running = Input.is_action_pressed("run")
+	var is_running = input_data.action == "run"
 
 	if is_running:
-		character.move_speed = character.MOVE_SPEED * 2
+		character_model.move_speed = character_model.walk_speed * 2
 	else:
-		character.move_speed = character.MOVE_SPEED
+		character_model.move_speed = character_model.walk_speed
 
-	var input_dir = get_input_dir()
-	character.move_based_on_input(delta, input_dir)
+	character_model.move_based_on_input(delta, input_data.input_dir)
 
-	if character.velocity.length() == 0:
+	if character_model.velocity.length() == 0:
 		return CharacterState.Type.Idle
 
 	# blend_position is 0, 1, 2 for idle, walk, run respectively. Multiplying
 	# walk or run by the input_dir magnitude should hit the values exactly when
 	# value is 1 and a blend when it is < 1
-	var blend_position = (2 if is_running else 1) * input_dir.normalized().length()
-	character.set_animation_blend_position(blend_position)
+	var blend_position = (2 if is_running else 1) * input_data.input_dir.normalized().length()
+	character_model.set_animation_blend_position(blend_position)
 
 	return CharacterState.Type.None

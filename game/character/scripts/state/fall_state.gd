@@ -2,19 +2,19 @@ extends CharacterState
 
 class_name FallState
 
-func enter() -> void:
-	character.play_animation("stickman_animations/Fall")
+func _init(character_model_: CharacterModel) -> void:
+	animation = "Fall"
+	character_model = character_model_
 
-func physics_process(delta: float) -> CharacterState.Type:
-	character.velocity += character.get_gravity() * delta
+func update(input_data: InputData, delta: float) -> CharacterState.Type:
+	character_model.velocity += character_model.get_gravity() * delta
 
-	var input_dir = get_input_dir()
-	character.move_based_on_input(
+	character_model.move_based_on_input(
 		delta,
-		input_dir * .1,
-		character.last_input_dir)
+		input_data.input_dir * .1,
+		character_model.last_input_dir)
 
-	if character.is_on_floor():
+	if character_model.is_on_floor():
 		return CharacterState.Type.Land
 
 	return CharacterState.Type.None

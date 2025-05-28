@@ -57,6 +57,7 @@ script = ExtResource("1_ch0rr")
 
 [node name="Terrain" type="Node" parent="."]
 script = ExtResource("2_b3acj")
+is_enabled = false
 depth = 64
 width = 64
 resolution = 2
@@ -82,7 +83,7 @@ disabled = true
 unique_name_in_owner = true
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://cylmulnexilu1")
+_spawnable_scenes = PackedStringArray("uid://tmda5xa2to7g")
 spawn_path = NodePath("../Players")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -93,12 +94,13 @@ transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75
 shadow_enabled = true
 
 [node name="Box" parent="." instance=ExtResource("2_cadw0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.9791, 0, 0)
 
 [node name="Box2" parent="." instance=ExtResource("2_cadw0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.75454)
 
 [node name="Box3" parent="." instance=ExtResource("2_cadw0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.91064, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.91064, 0, -4.90704)
 
 [node name="Box4" parent="." instance=ExtResource("2_cadw0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.91064, 0, 2.04969)

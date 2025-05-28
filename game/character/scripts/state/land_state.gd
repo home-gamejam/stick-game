@@ -2,15 +2,16 @@ extends CharacterState
 
 class_name LandState
 
-func enter() -> void:
-	character.play_animation("stickman_animations/Land")
+func _init(character_model_: CharacterModel) -> void:
+	animation = "Land"
+	character_model = character_model_
 
-func physics_process(delta: float) -> CharacterState.Type:
-	character.velocity += character.get_gravity() * delta
+func update(_input_data: InputData, delta: float) -> CharacterState.Type:
+	character_model.velocity += character_model.get_gravity() * delta
 
-	character.move_based_on_input(delta)
+	character_model.move_based_on_input(delta)
 
-	if character.is_on_floor():
+	if character_model.is_on_floor():
 		return CharacterState.Type.Idle
 
 	return CharacterState.Type.None
