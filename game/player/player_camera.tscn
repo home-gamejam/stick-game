@@ -1,9 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://cefi4xatbdx3p"]
+[gd_scene load_steps=3 format=3 uid="uid://cefi4xatbdx3p"]
 
 [ext_resource type="Script" uid="uid://ccveaipkog4e4" path="res://player/scripts/player_camera.gd" id="1_l7h0v"]
 
+[sub_resource type="BoxMesh" id="BoxMesh_itl3e"]
+size = Vector3(0.1, 0.1, 1)
+
 [node name="PlayerCamera" type="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("1_l7h0v")
 
 [node name="CameraArm" type="SpringArm3D" parent="."]
@@ -14,3 +16,7 @@ spring_length = 6.0
 
 [node name="Camera" type="Camera3D" parent="CameraArm"]
 unique_name_in_owner = true
+
+[node name="Debug" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.90769, 0.419642, 0, -0.419642, 0.90769, 0, -0.860902, -3.09677)
+mesh = SubResource("BoxMesh_itl3e")
