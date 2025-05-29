@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bmjdkwxlrynbu"]
+[gd_scene load_steps=17 format=3 uid="uid://bmjdkwxlrynbu"]
 
 [ext_resource type="Script" uid="uid://bt1vionbruolc" path="res://main/scripts/world.gd" id="1_ch0rr"]
 [ext_resource type="Script" uid="uid://dvvotixyqce38" path="res://main/terrain.gd" id="2_b3acj"]
@@ -51,6 +51,12 @@ size = Vector3(3, 5, 3)
 
 [sub_resource type="BoxMesh" id="BoxMesh_b3acj"]
 size = Vector3(3, 5, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_mnuad"]
+size = Vector3(4, 4, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_40bfn"]
+size = Vector3(4, 4, 4)
 
 [node name="World" type="Node3D"]
 script = ExtResource("1_ch0rr")
@@ -113,3 +119,13 @@ shape = SubResource("BoxShape3D_sdvrk")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Wall"]
 mesh = SubResource("BoxMesh_b3acj")
+
+[node name="Ramp" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.864722, -0.50225, 0, 0.50225, 0.864722, -6.56952, -0.709556, 6.10819)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ramp"]
+mesh = SubResource("BoxMesh_mnuad")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ramp"]
+shape = SubResource("BoxShape3D_40bfn")
