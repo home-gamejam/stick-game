@@ -15,8 +15,8 @@ func add_player(pid: int):
 	var size = ground_mesh.get_aabb().size / 2
 	var x = randf_range(-size.x, size.x)
 	var z = randf_range(-size.z, size.z)
-	player.position = Vector3(x, 0, z)
-	print("[waiting_room] position: ", player.position)
+	player.character_model.position = Vector3(x, 0, z)
+	print("[waiting_room] position: ", player.character_model.position)
 
 	%Players.add_child(player)
 
