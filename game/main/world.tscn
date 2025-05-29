@@ -55,7 +55,7 @@ size = Vector3(3, 5, 3)
 [node name="World" type="Node3D"]
 script = ExtResource("1_ch0rr")
 
-[node name="Terrain" type="Node" parent="."]
+[node name="Terrain" type="Node3D" parent="."]
 script = ExtResource("2_b3acj")
 is_enabled = false
 depth = 64

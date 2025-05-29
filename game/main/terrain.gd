@@ -1,5 +1,5 @@
 @tool
-extends Node
+extends Node3D
 
 class_name Terrain
 
@@ -52,5 +52,5 @@ func generate():
 func get_noise_y(x: int, z: int) -> float:
 	if not is_enabled:
 		return 0
-		
+
 	return noise.get_noise_2d(x, z) * 50
