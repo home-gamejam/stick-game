@@ -10,7 +10,7 @@ out_file=$1
 montage \
  -background transparent \
  -tile 8x8 \
- -geometry 128x128 \
+ -geometry 64x64 \
  $(ls ./sprites/out/*.png | head -n 64) \
  "./sprites/$out_file.png"
 
@@ -19,7 +19,7 @@ convert \
  -delay 10 \
  -dispose Background \
  "./sprites/$out_file.png" \
- -crop 128x128 \
+ -crop 64x64 \
  -loop 0 \
  +repage \
  "./sprites/$out_file.gif"

@@ -2,6 +2,18 @@
 
 https://home-gamejam.github.io/stick-game/
 
+## Pixel Art Render
+
+### 64x64
+
+![Stickman idle](art/blender/sprites/idle64.gif)
+![Stickman walk](art/blender/sprites/walk64.gif)
+![Stickman run](art/blender/sprites/run64.gif)
+
+### 128x128
+
+![Stickman run](art/blender/sprites/walk128.gif)
+
 ## Dev
 
 In world.gd, set `IS_WEB_RTC` to determine client / server or WebRTC
