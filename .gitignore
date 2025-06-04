@@ -12,3 +12,5 @@ build/pi
 build/*.webserver
 build/*.crt
 build/*.key
+
+art/blender/sprites/out/
