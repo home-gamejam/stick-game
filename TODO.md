@@ -1,8 +1,12 @@
 # TODO
 
-- [x] Handle input events
-- [x] Fix multiplayer sync
-- [x] Get rid of stickman prefix on animations
-- [x] Limit camera ot not go through floor
 - [ ] Keypad
-- [ ] Is there a way to rotate the character body instead of the rig node
+  - [ ] Hide until user clicks on code input
+  - [ ] colors for go and back buttons
+  - [ ] disable back button when empty
+  - [ ] get rid of flicker when clicking buttons / focusing text box
+- [ ] Disable physics tick for non authority
+- [ ] Allow drift while jumping
+- [ ] Throw ball
+- [ ] Map to Godot skeleton
+- [ ] Filter out unused bones
