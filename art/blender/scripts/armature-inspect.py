@@ -4,6 +4,13 @@
 import bpy
 import re
 
+def is_mixamo_bone(bone) -> bool:
+    return bone.name.startswith("mixamorig:")
+
+def is_rigify_control_bone(bone) -> bool:
+    exclude = ["DEF-", "MCH-", "ORG-", "tweak_", "_tweak.", "_ik.", "ik_target.", "VIS_"]
+    return not any(ex in bone.name for ex in exclude)
+
 # Print bone name for any bone that starts with a filter in the give filters list.
 # If no filters are provided, it will list all bones.
 def list_bones(armature, filters=None):
@@ -11,7 +18,7 @@ def list_bones(armature, filters=None):
     print("Bones:")
 
     for bone in armature.data.bones:
-        if filters is None or any(bone.name.startswith(prefix) for prefix in filters):
+        if filters is None or any(filter(bone) for filter in filters):
             print(bone.name)
 
 
@@ -23,6 +30,6 @@ def main():
         print("Active object is not an armature.")
         return
 
-    list_bones(armature, filters=["DEF-", "mixamorig:"])
+    list_bones(armature, filters=[is_mixamo_bone, is_rigify_control_bone])
 
 main()

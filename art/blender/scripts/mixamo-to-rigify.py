@@ -1,78 +1,89 @@
-# Rename Mixamo bones, action groups and curves to Rigify format. Strips the
-# "mixamorig:" prefix from the bone name and replaces "Left" / "Right" prefix
-# with ".L" / ".R" suffixes.
+# Rename Mixamo action groups and curves to Rigify deform bones (DEF-xxx) format.
 import bpy
 import re
 
-# Regular expression to extract the bone name from the "mixamorig:xxxx" format
-EXTRACT_MIXAMO_BONE_NAME_REGEX = r'"mixamorig:(\w+)"'
+BONE_NAME_MAP = {
+    "mixamorig:Hips": "DEF-spine",
+    "mixamorig:Spine": "DEF-spine.001",
+    "mixamorig:Spine1": "DEF-spine.002",
+    "mixamorig:Spine2": "DEF-spine.003",
+    # Rigify has 2 "neck" bones DEF-spine.004 and DEF-spine.005. We map Mixomo's
+    # single "Neck" to the first DEF-spine.004. This should usually work since
+    # it would apply to the base of the neck.
+    "mixamorig:Neck": "DEF-spine.004",
+    # Skip Rigify "DEF-spine.005"
+    "mixamorig:Head": "DEF-spine.006",
+    "mixamorig:HeadTop_End": "DEF-spine.006",
+    "mixamorig:LeftShoulder": "DEF-shoulder.L",
+    "mixamorig:LeftArm": "DEF-upper_arm.L",
+    "mixamorig:LeftForeArm": "DEF-forearm.L",
+    "mixamorig:LeftHand": "DEF-hand.L",
+    "mixamorig:RightShoulder": "DEF-shoulder.R",
+    "mixamorig:RightArm": "DEF-upper_arm.R",
+    "mixamorig:RightForeArm": "DEF-forearm.R",
+    "mixamorig:RightHand": "DEF-hand.R",
+    "mixamorig:LeftUpLeg": "DEF-thigh.L",
+    "mixamorig:LeftLeg": "DEF-shin.L",
+    "mixamorig:LeftFoot": "DEF-foot.L",
+    "mixamorig:LeftToeBase": "DEF-toe.L",
+    "mixamorig:RightUpLeg": "DEF-thigh.R",
+    "mixamorig:RightLeg": "DEF-shin.R",
+    "mixamorig:RightFoot": "DEF-foot.R",
+    "mixamorig:RightToeBase": "DEF-toe.R",
+    # Skip fingers for now since target rig does not have them.
+    # "mixamorig:LeftHandIndex1": None,
+    # "mixamorig:LeftHandIndex2": None,
+    # "mixamorig:LeftHandIndex3": None,
+    # "mixamorig:LeftHandIndex4": None,
+    # "mixamorig:RightHandIndex1": None,
+    # "mixamorig:RightHandIndex2": None,
+    # "mixamorig:RightHandIndex3": None,
+    # "mixamorig:RightHandIndex4": None,
+    # Rigify doesn't have comparable toe end bone
+    # "mixamorig:LeftToe_End": None,
+    # "mixamorig:RightToe_End": None,
+}
 
-MIXAMO_PREFIX = "mixamorig:"
-MIXAMO_CURVE_PREFIX = "pose.bones[\"mixamorig:"
+EXTRACT_MIXAMO_BONE_NAME_REGEX = r'"(mixamorig:\w+)"'
 
-# Strip the "mixamorig:" prefix from the bone name and replace "Left" prefix
-# with ".L" suffix and "Right" prefix with ".R" suffix
-def new_name(name):
-    name = name.replace(MIXAMO_PREFIX, "")
-    if 'Left' in name:
-        name = name[4:] + '.L'
-    elif 'Right' in name:
-        name = name[5:] + '.R'
-    return name
+# Extract a Mixamo bone from inside double quotes.
+# e.g. pose.bones["mixamorig:Hips"].scale -> mixamorig:Hips
+def extract_mixamo_bone_name(s):
+    match = re.search(EXTRACT_MIXAMO_BONE_NAME_REGEX, s)
+    if match:
+        return match.group(1)
+    return None
 
-# replace the "mixamorig:xxxx" part of the name with the new name
-def new_curve_name(name):
-    return re.sub(
-        EXTRACT_MIXAMO_BONE_NAME_REGEX,
-        lambda match: f'"{new_name(match.group(1))}"',
-        name
-    )
+def is_mapped_group(group) -> bool:
+    return group.name in BONE_NAME_MAP
 
-# Returns a predicate function that can be used to filter an iterable based on
-# whether the attribute `attr_name` of the object starts with the given `prefix`.
-def starts_with(prefix, attr_name="name"):
-    return lambda s: getattr(s, attr_name).startswith(prefix)
+# Predicate function for filtering iterable containing curves. Extracts the name
+# after `pose.bones[\"mixamorig:"` and checks if it is in the BONE_NAME_MAP.
+def is_mapped_curve(curve) -> bool:
+    return extract_mixamo_bone_name(curve.data_path) in BONE_NAME_MAP
 
-def rename_actions_and_curves():
+def rename_actions_and_curves() -> None:
     # Actions
     for action in bpy.data.actions:
+
         # Mixamo action groups
-        for group in filter(starts_with(MIXAMO_PREFIX), action.groups):
-            print("group: ", group.name)
-#            group.name = new_name(group.name)
+        for group in filter(is_mapped_group, action.groups):
+            new_group_name = BONE_NAME_MAP[group.name]
+            print("group: ", group.name, " -> ", new_group_name)
+#           group.name = new_group_name
 
-        # Mixamo action curves
-        for curve in filter(starts_with(MIXAMO_CURVE_PREFIX, "data_path"), action.fcurves):
-            print("curve: ", curve.data_path)
-#            curve.data_path = new_curve_name(curve.data_path)
+        # Mixamo action fcurves
+        for fcurve in filter(is_mapped_curve, action.fcurves):
+            bone_name = extract_mixamo_bone_name(fcurve.data_path)
+            new_data_path = fcurve.data_path.replace(
+                f'"{bone_name}"',
+                f'"{BONE_NAME_MAP[bone_name]}"')
 
-def rename_bones(armature):
-    # Mixamo bones
-    for bone in filter(starts_with(MIXAMO_PREFIX), armature.data.bones):
-        print("bone: ", bone.name)
-#        bone.name = new_name(bone.name)
+            print("curve: ", fcurve.data_path, " -> ",  new_data_path)
+#           fcurve.data_path = new_data_path
 
 def main():
     print("Retargetting Mixamo to Rigify")
-    # get selected armature
-    armature = bpy.context.active_object
-
-    if armature:
-        rename_bones(armature)
-
-    # Note: action names and curves are not restricted to armature.
-    # This will target any found in the blend file
     rename_actions_and_curves()
 
 main()
-
-# def test():
-#     bone_name = "mixamorig:LeftArm"
-#     group_name = "mixamorig:RightUpLeg"
-#     curve_name = "pose.bones[\"mixamorig:RightUpLeg\"].location"
-
-#     print(bone_name, new_name(bone_name))
-#     print(group_name, new_name(group_name))
-#     print(curve_name, new_curve_name(curve_name))
-
-# test()
