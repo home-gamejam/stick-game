@@ -2,45 +2,81 @@
 import bpy
 import re
 
+# BONE_NAME_MAP = {
+#     "mixamorig:Hips": "DEF-spine",
+#     "mixamorig:Spine": "DEF-spine.001",
+#     "mixamorig:Spine1": "DEF-spine.002",
+#     "mixamorig:Spine2": "DEF-spine.003",
+#     # Rigify has 2 "neck" bones DEF-spine.004 and DEF-spine.005. We map Mixomo's
+#     # single "Neck" to the first DEF-spine.004. This should usually work since
+#     # it would apply to the base of the neck.
+#     "mixamorig:Neck": "DEF-spine.004",
+#     # Skip Rigify "DEF-spine.005"
+#     "mixamorig:Head": "DEF-spine.006",
+#     "mixamorig:HeadTop_End": "DEF-spine.006",
+#     "mixamorig:LeftShoulder": "DEF-shoulder.L",
+#     "mixamorig:LeftArm": "DEF-upper_arm.L",
+#     "mixamorig:LeftForeArm": "DEF-forearm.L",
+#     "mixamorig:LeftHand": "DEF-hand.L",
+#     "mixamorig:RightShoulder": "DEF-shoulder.R",
+#     "mixamorig:RightArm": "DEF-upper_arm.R",
+#     "mixamorig:RightForeArm": "DEF-forearm.R",
+#     "mixamorig:RightHand": "DEF-hand.R",
+#     "mixamorig:LeftUpLeg": "DEF-thigh.L",
+#     "mixamorig:LeftLeg": "DEF-shin.L",
+#     "mixamorig:LeftFoot": "DEF-foot.L",
+#     "mixamorig:LeftToeBase": "DEF-toe.L",
+#     "mixamorig:RightUpLeg": "DEF-thigh.R",
+#     "mixamorig:RightLeg": "DEF-shin.R",
+#     "mixamorig:RightFoot": "DEF-foot.R",
+#     "mixamorig:RightToeBase": "DEF-toe.R",
+#     # Skip fingers for now since target rig does not have them.
+#     # "mixamorig:LeftHandIndex1": None,
+#     # "mixamorig:LeftHandIndex2": None,
+#     # "mixamorig:LeftHandIndex3": None,
+#     # "mixamorig:LeftHandIndex4": None,
+#     # "mixamorig:RightHandIndex1": None,
+#     # "mixamorig:RightHandIndex2": None,
+#     # "mixamorig:RightHandIndex3": None,
+#     # "mixamorig:RightHandIndex4": None,
+#     # Rigify doesn't have comparable toe end bone
+#     # "mixamorig:LeftToe_End": None,
+#     # "mixamorig:RightToe_End": None,
+# }
+
 BONE_NAME_MAP = {
-    "mixamorig:Hips": "DEF-spine",
-    "mixamorig:Spine": "DEF-spine.001",
-    "mixamorig:Spine1": "DEF-spine.002",
-    "mixamorig:Spine2": "DEF-spine.003",
-    # Rigify has 2 "neck" bones DEF-spine.004 and DEF-spine.005. We map Mixomo's
-    # single "Neck" to the first DEF-spine.004. This should usually work since
-    # it would apply to the base of the neck.
-    "mixamorig:Neck": "DEF-spine.004",
-    # Skip Rigify "DEF-spine.005"
-    "mixamorig:Head": "DEF-spine.006",
-    "mixamorig:HeadTop_End": "DEF-spine.006",
-    "mixamorig:LeftShoulder": "DEF-shoulder.L",
-    "mixamorig:LeftArm": "DEF-upper_arm.L",
-    "mixamorig:LeftForeArm": "DEF-forearm.L",
-    "mixamorig:LeftHand": "DEF-hand.L",
-    "mixamorig:RightShoulder": "DEF-shoulder.R",
-    "mixamorig:RightArm": "DEF-upper_arm.R",
-    "mixamorig:RightForeArm": "DEF-forearm.R",
-    "mixamorig:RightHand": "DEF-hand.R",
-    "mixamorig:LeftUpLeg": "DEF-thigh.L",
-    "mixamorig:LeftLeg": "DEF-shin.L",
-    "mixamorig:LeftFoot": "DEF-foot.L",
-    "mixamorig:LeftToeBase": "DEF-toe.L",
-    "mixamorig:RightUpLeg": "DEF-thigh.R",
-    "mixamorig:RightLeg": "DEF-shin.R",
-    "mixamorig:RightFoot": "DEF-foot.R",
-    "mixamorig:RightToeBase": "DEF-toe.R",
-    # Skip fingers for now since target rig does not have them.
-    # "mixamorig:LeftHandIndex1": None,
+    "mixamorig:Hips": "hips",
+    "mixamorig:Spine": "torso",           # or "chest" if you prefer
+    "mixamorig:Spine1": "spine_fk.001",
+    "mixamorig:Spine2": "spine_fk.002",
+    "mixamorig:Neck": "neck",
+    "mixamorig:Head": "head",
+    # "mixamorig:HeadTop_End": None,        # No direct match
+    "mixamorig:LeftShoulder": "shoulder.L",
+    "mixamorig:LeftArm": "upper_arm_fk.L",
+    "mixamorig:LeftForeArm": "forearm_fk.L",
+    "mixamorig:LeftHand": "hand_fk.L",
+    # "mixamorig:LeftHandIndex1": None,     # No finger bones in Rigify list
     # "mixamorig:LeftHandIndex2": None,
     # "mixamorig:LeftHandIndex3": None,
     # "mixamorig:LeftHandIndex4": None,
+    "mixamorig:RightShoulder": "shoulder.R",
+    "mixamorig:RightArm": "upper_arm_fk.R",
+    "mixamorig:RightForeArm": "forearm_fk.R",
+    "mixamorig:RightHand": "hand_fk.R",
     # "mixamorig:RightHandIndex1": None,
     # "mixamorig:RightHandIndex2": None,
     # "mixamorig:RightHandIndex3": None,
     # "mixamorig:RightHandIndex4": None,
-    # Rigify doesn't have comparable toe end bone
+    "mixamorig:LeftUpLeg": "thigh_fk.L",
+    "mixamorig:LeftLeg": "shin_fk.L",
+    "mixamorig:LeftFoot": "foot_fk.L",
+    "mixamorig:LeftToeBase": "toe_fk.L",
     # "mixamorig:LeftToe_End": None,
+    "mixamorig:RightUpLeg": "thigh_fk.R",
+    "mixamorig:RightLeg": "shin_fk.R",
+    "mixamorig:RightFoot": "foot_fk.R",
+    "mixamorig:RightToeBase": "toe_fk.R",
     # "mixamorig:RightToe_End": None,
 }
 
