@@ -1,5 +1,22 @@
 # Rig Notes
 
+## Bone Maps for Rigify
+
+- Blender - Mark root as a deform bone (this was not actually needed to match Mixamo)
+- Blender - Fix parenting on Rigify DEF- bones
+  - DEF-shoulder.L -> DEF-spine.003
+  - DEF-shoulder.R -> DEF-spine.003
+  - DEF-upper_arm.L -> DEF-shoulder.L
+  - DEF-upper_arm.R -> DEF-shoulder.R
+  - DEF-pelvis.L -> DEF-spine
+  - DEF-pelvis.R -> DEF-spine
+  - DEF-thigh.L -> DEF-spine
+  - DEF-thigh.R -> DEF-spine
+  - DEF-breast.L -> DEF-spine.003
+  - DEF-breast.R -> DEF-spine.003
+- Post import script reparent bones to have a proper hierarchy
+- Don't remove unimportant tracks. This seems to mess up hips
+
 ## Mixamo
 
 - 25 body bones (no fingers or face)
