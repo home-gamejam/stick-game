@@ -1,7 +1,7 @@
 # Rename Mixamo action groups and curves to Rigify deform bones (DEF-xxx) format.
 import bpy
 import re
-from bpy.types import Armature, BoneCollection
+from bpy.types import Armature, BoneCollection, Pose
 
 REPARENT_BONE_MAP = {
     "TGT-breast.L": "TGT-spine.003",
@@ -94,71 +94,98 @@ def deselect_all_bones(armature_data: Armature) -> None:
         edit_bone.select_head = False
         edit_bone.select_tail = False
 
-def prepare_groups(armature_data: Armature) -> tuple[BoneCollection, BoneCollection]:
+# Select all bones in a specific bone collection
+def select_bones(armature_data: Armature, bone_collection_name: str) -> None:
+    bpy.ops.object.mode_set(mode="OBJECT")
+
+    if armature_data.collections[bone_collection_name] is None:
+        return
+
+    for bone in armature_data.collections[bone_collection_name].bones:
+        bone.select = True
+
+# Delete all bones in a specific bone collection
+def delete_bones(armature_data: Armature, bone_collection_name: str) -> None:
     deselect_all_bones(armature_data)
 
-    bpy.ops.object.mode_set(mode="OBJECT")
-
-    def_group = None
-    tgt_group = None
-
-    # Find existing DEF and TGT groups
-    for group in armature_data.collections:
-        if group.name == "DEF":
-            def_group = group
-        elif group.name == "TGT":
-            tgt_group = group
-
-    if def_group is None:
-        assert isinstance(def_group, BoneCollection), "No DEF bone collection found"
-
-    if tgt_group is None:
-        print("Creating TGT group.")
-        tgt_group = armature_data.collections.new("TGT")
-
-    for bone in tgt_group.bones:
-        print(f"Removing bone from TGT group: {bone.name}")
-        bone.select = True
+    select_bones(armature_data, bone_collection_name)
 
     bpy.ops.object.mode_set(mode="EDIT")
-
-    # Remove any existing TGT bones
     bpy.ops.armature.delete()
 
-    return def_group, tgt_group
-
-def create_tgt_bones(armature_data: Armature, def_group: BoneCollection, tgt_group: BoneCollection) -> None:
+def get_edit_bones(armature_data: Armature, bone_collection_name: str):
+    # Iterate bones from collection in OBJECT mode since they won't be accessible in edit mode.
     bpy.ops.object.mode_set(mode="OBJECT")
-
-    # Copy bones since we can't access group.bones once we switch to edit mode
-    def_bones = [b for b in def_group.bones]
-    for bone in def_bones:
-        print(f"Bone: {bone.name}")
-        bone.select = True
+    bones = [b for b in armature_data.collections[bone_collection_name].bones]
 
     bpy.ops.object.mode_set(mode="EDIT")
+    return bones
 
+# Ensures DEF exists and TGT is an empty collection.
+def prepare_groups(armature_data: Armature) -> None:
+    def_group = armature_data.collections["DEF"]
+    assert isinstance(def_group, BoneCollection), "No DEF bone collection found"
+
+    if armature_data.collections["TGT"]:
+        delete_bones(armature_data, "TGT")
+    else:
+        armature_data.collections.new("TGT")
+
+def copy_bone_collection(armature_data: Armature, source_name: str, target_name: str) -> None:
+    if not armature_data.collections[target_name]:
+        armature_data.collections.new(target_name)
+
+    select_bones(armature_data, source_name)
+
+    bpy.ops.object.mode_set(mode="EDIT")
     bpy.ops.armature.duplicate()
 
-    edit_bones = armature_data.edit_bones
+    # Only the new bones should be selected after duplication.
+    for edit_bone in armature_data.edit_bones:
+        if edit_bone.select:
+            armature_data.collections[target_name].assign(edit_bone)
 
-    # Only new bones should remain selected after duplication.
+def create_tgt_bones(armature_data: Armature, pose: Pose) -> None:
+    copy_bone_collection(armature_data, "DEF", "TGT")
+
+    # Should still be TGT bones after copying
+    tgt_edit_bones = get_edit_bones(armature_data, "TGT")
+
     # Adjust names to match the TGT naming convention.
-    for bone in [b for b in edit_bones if b.select and b.name in COPY_BONE_MAP]:
-        bone.name = COPY_BONE_MAP[bone.name]
-        tgt_group.assign(bone)
-        print("Created TGT bone: ", bone.name)
+    for edit_bone in tgt_edit_bones:
+        edit_bone.name = COPY_BONE_MAP[edit_bone.name]
+        print("Created TGT bone: ", edit_bone.name)
 
     # Not all of the original DEF- bones are properly parented in Rigify, so fix
     # the TGT versions.
     for bone_name, parent_name in REPARENT_BONE_MAP.items():
-        if bone_name in edit_bones and parent_name in edit_bones:
+        if bone_name in tgt_edit_bones and parent_name in tgt_edit_bones:
             print(f"Set parent: {bone_name} -> {parent_name}")
-            edit_bones[bone_name].parent = edit_bones[parent_name]
+            tgt_edit_bones[bone_name].parent = tgt_edit_bones[parent_name]
+
+    return
+    bpy.ops.object.mode_set(mode='OBJECT')
+    bpy.ops.object.mode_set(mode='POSE')
+
+    for pose_bone in pose.bones:
+        print("Pose bone: ", pose_bone.name)
+
+    # for bone in selected_edit_bones:
+    #     # Add Copy Location constraint
+    #     loc_constraint = bone.constraints.new(type='COPY_LOCATION')
+    #     loc_constraint.target = rigify_armature
+    #     loc_constraint.subtarget = rigify_bone_name
+    #     loc_constraint.name = f"CopyLoc_{rigify_bone_name}"
+
+    #     # Add Copy Rotation constraint
+    #     rot_constraint = bone.constraints.new(type='COPY_ROTATION')
+    #     rot_constraint.target = rigify_armature
+    #     rot_constraint.subtarget = rigify_bone_name
+    #     rot_constraint.name = f"CopyRot_{rigify_bone_name}"
 
 def adjust_bones(armature) -> None:
-    def_group, tgt_group = prepare_groups(armature.data)
-    create_tgt_bones(armature.data, def_group, tgt_group)
+    prepare_groups(armature.data)
+    create_tgt_bones(armature.data, armature.pose)
 
     # Rename bones (TBD if I want to do this for Godot)
     # for bone_name, new_name in RENAME_BONE_MAP.items():
