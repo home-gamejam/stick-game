@@ -1,207 +1,177 @@
-# Rename Mixamo action groups and curves to Rigify deform bones (DEF-xxx) format.
 import bpy
 import re
-from bpy.types import Armature, BoneCollection, Pose
-
-REPARENT_BONE_MAP = {
-    "TGT-breast.L": "TGT-spine.003",
-    "TGT-breast.R": "TGT-spine.003",
-    "TGT-shoulder.L": "TGT-spine.003",
-    "TGT-shoulder.R": "TGT-spine.003",
-    "TGT-upper_arm.L": "TGT-shoulder.L",
-    "TGT-upper_arm.R": "TGT-shoulder.R",
-    "TGT-pelvis.L": "TGT-spine",
-    "TGT-pelvis.R": "TGT-spine",
-    "TGT-thigh.L": "TGT-spine",
-    "TGT-thigh.R": "TGT-spine",
-}
-
-COPY_BONE_MAP = {
-    "DEF-spine.007": "TGT-spine",
-    "DEF-spine.008": "TGT-spine.001",
-    "DEF-spine.009": "TGT-spine.002",
-    "DEF-spine.010": "TGT-spine.003",
-    "DEF-spine.011": "TGT-spine.004",
-    "DEF-spine.012": "TGT-spine.005",
-    "DEF-spine.013": "TGT-spine.006",
-    "DEF-pelvis.L.001": "TGT-pelvis.L",
-    "DEF-pelvis.R.001": "TGT-pelvis.R",
-    "DEF-thigh.L.002": "TGT-thigh.L",
-    "DEF-thigh.L.003": "TGT-thigh.L.001",
-    "DEF-shin.L.002": "TGT-shin.L",
-    "DEF-shin.L.003": "TGT-shin.L.001",
-    "DEF-foot.L.001": "TGT-foot.L",
-    "DEF-toe.L.001": "TGT-toe.L",
-    "DEF-thigh.R.002": "TGT-thigh.R",
-    "DEF-thigh.R.003": "TGT-thigh.R.001",
-    "DEF-shin.R.002": "TGT-shin.R",
-    "DEF-shin.R.003": "TGT-shin.R.001",
-    "DEF-foot.R.001": "TGT-foot.R",
-    "DEF-toe.R.001": "TGT-toe.R",
-    "DEF-shoulder.L.001": "TGT-shoulder.L01",
-    "DEF-upper_arm.L.002": "TGT-upper_arm.L",
-    "DEF-upper_arm.L.003": "TGT-upper_arm.L.001",
-    "DEF-forearm.L.002": "TGT-forearm.L",
-    "DEF-forearm.L.003": "TGT-forearm.L.001",
-    "DEF-hand.L.001": "TGT-hand.L",
-    "DEF-shoulder.R.001": "TGT-shoulder.R",
-    "DEF-upper_arm.R.002": "TGT-upper_arm.R",
-    "DEF-upper_arm.R.003": "TGT-upper_arm.R.001",
-    "DEF-forearm.R.002": "TGT-forearm.R",
-    "DEF-forearm.R.003": "TGT-forearm.R.001",
-    "DEF-hand.R.001": "TGT-hand.R",
-    "DEF-breast.L.001": "TGT-breast.L",
-    "DEF-breast.R.001": "TGT-breast.R"
-}
+from bpy.types import Armature, CopyLocationConstraint, CopyRotationConstraint
+from typing import cast
 
 RENAME_BONE_MAP = {
-    "TGT-spine": "Hips",
-    "TGT-spine.001": "Spine",
-    "TGT-spine.002": "Chest",
-    "TGT-spine.003": "UpperChest",
-    "TGT-spine.004": "Neck",
-    "TGT-spine.006": "Head",
-    "TGT-shoulder.L": "LeftShoulder",
-    "TGT-upper_arm.L": "LeftUpperArm",
-    "TGT-forearm.L": "LeftLowerArm",
-    "TGT-hand.L": "LeftHand",
-    "TGT-shoulder.R": "RightShoulder",
-    "TGT-upper_arm.R": "RightUpperArm",
-    "TGT-forearm.R": "RightLowerArm",
-    "TGT-hand.R": "RightHand",
-    "TGT-thigh.L": "LeftUpperLeg",
-    "TGT-shin.L": "LeftLowerLeg",
-    "TGT-foot.L": "LeftFoot",
-    "TGT-toe.L": "LeftToes",
-    "TGT-thigh.R": "RightUpperLeg",
-    "TGT-shin.R": "RightLowerLeg",
-    "TGT-foot.R": "RightFoot",
-    "TGT-toe.R": "RightToes",
+    "root": "Root",
+
+    # Spine
+    "DEF-spine": "Hips",
+    "DEF-spine.001": "Spine",
+    "DEF-spine.002": "Chest",
+    "DEF-spine.003": "UpperChest",
+    "DEF-spine.004": "Neck",
+    "DEF-spine.005": "Neck2",
+    "DEF-spine.006": "Head",
+
+    # Breasts
+    "DEF-breast.L": "LeftBreast",
+    "DEF-breast.R": "RightBreast",
+
+    # Left arm
+    "DEF-shoulder.L": "LeftShoulder",
+    "DEF-upper_arm.L": "LeftUpperArm",
+    "DEF-upper_arm.L.001": "LeftUpperArm2",
+    "DEF-forearm.L": "LeftLowerArm",
+    "DEF-forearm.L.001": "LeftLowerArm2",
+    "DEF-hand.L": "LeftHand",
+
+    # Right arm
+    "DEF-shoulder.R": "RightShoulder",
+    "DEF-upper_arm.R": "RightUpperArm",
+    "DEF-upper_arm.R.001": "RightUpperArm2",
+    "DEF-forearm.R": "RightLowerArm",
+    "DEF-forearm.R.001": "RightLowerArm2",
+    "DEF-hand.R": "RightHand",
+
+    # Pelvis
+    "DEF-pelvis.L": "LeftPelvis",
+    "DEF-pelvis.R": "RightPelvis",
+
+    # Left leg
+    "DEF-thigh.L": "LeftUpperLeg",
+    "DEF-thigh.L.001": "LeftUpperLeg2",
+    "DEF-shin.L": "LeftLowerLeg",
+    "DEF-shin.L.001": "LeftLowerLeg2",
+    "DEF-foot.L": "LeftFoot",
+    "DEF-toe.L": "LeftToes",
+
+    # Right leg
+    "DEF-thigh.R": "RightUpperLeg",
+    "DEF-thigh.R.001": "RightUpperLeg2",
+    "DEF-shin.R": "RightLowerLeg",
+    "DEF-shin.R.001": "RightLowerLeg2",
+    "DEF-foot.R": "RightFoot",
+    "DEF-toe.R": "RightToes",
 }
 
-def deselect_all_bones(armature_data: Armature) -> None:
-    bpy.ops.object.mode_set(mode="OBJECT")
+PARENT_BONE_MAP = {
+    # Spine chain
+    "Hips": "Root",
+    "Spine": "Hips",
+    "Chest": "Spine",
+    "UpperChest": "Chest",
+    "Neck": "UpperChest",
+    "Neck2": "Neck",
+    "Head": "Neck2",
 
-    for bone in armature_data.bones:
-        bone.select = False
-        bone.select_head = False
-        bone.select_tail = False
+    # Breasts
+    "LeftBreast": "UpperChest",
+    "RightBreast": "UpperChest",
 
-    bpy.ops.object.mode_set(mode="EDIT")
+    # Arms
+    "LeftShoulder": "UpperChest",
+    "LeftUpperArm": "LeftShoulder",
+    "LeftUpperArm2": "LeftUpperArm",
+    "LeftLowerArm": "LeftUpperArm2",
+    "LeftLowerArm2": "LeftLowerArm",
+    "LeftHand": "LeftLowerArm2",
 
-    for edit_bone in armature_data.edit_bones:
-        edit_bone.select = False
-        edit_bone.select_head = False
-        edit_bone.select_tail = False
+    "RightShoulder": "UpperChest",
+    "RightUpperArm": "RightShoulder",
+    "RightUpperArm2": "RightUpperArm",
+    "RightLowerArm": "RightUpperArm2",
+    "RightLowerArm2": "RightLowerArm",
+    "RightHand": "RightLowerArm2",
 
-# Select all bones in a specific bone collection
-def select_bones(armature_data: Armature, bone_collection_name: str) -> None:
-    bpy.ops.object.mode_set(mode="OBJECT")
+    # Pelvis
+    "LeftPelvis": "Hips",
+    "RightPelvis": "Hips",
 
-    if armature_data.collections[bone_collection_name] is None:
-        return
+    # Legs
+    "LeftUpperLeg": "Hips",
+    "LeftUpperLeg2": "LeftUpperLeg",
+    "LeftLowerLeg": "LeftUpperLeg2",
+    "LeftLowerLeg2": "LeftLowerLeg",
+    "LeftFoot": "LeftLowerLeg2",
+    "LeftToes": "LeftFoot",
 
-    for bone in armature_data.collections[bone_collection_name].bones:
-        bone.select = True
-
-# Delete all bones in a specific bone collection
-def delete_bones(armature_data: Armature, bone_collection_name: str) -> None:
-    deselect_all_bones(armature_data)
-
-    select_bones(armature_data, bone_collection_name)
-
-    bpy.ops.object.mode_set(mode="EDIT")
-    bpy.ops.armature.delete()
-
-def get_edit_bones(armature_data: Armature, bone_collection_name: str):
-    # Iterate bones from collection in OBJECT mode since they won't be accessible in edit mode.
-    bpy.ops.object.mode_set(mode="OBJECT")
-    bones = [b for b in armature_data.collections[bone_collection_name].bones]
-
-    bpy.ops.object.mode_set(mode="EDIT")
-    return bones
-
-# Ensures DEF exists and TGT is an empty collection.
-def prepare_groups(armature_data: Armature) -> None:
-    def_group = armature_data.collections["DEF"]
-    assert isinstance(def_group, BoneCollection), "No DEF bone collection found"
-
-    if armature_data.collections["TGT"]:
-        delete_bones(armature_data, "TGT")
-    else:
-        armature_data.collections.new("TGT")
-
-def copy_bone_collection(armature_data: Armature, source_name: str, target_name: str) -> None:
-    if not armature_data.collections[target_name]:
-        armature_data.collections.new(target_name)
-
-    select_bones(armature_data, source_name)
-
-    bpy.ops.object.mode_set(mode="EDIT")
-    bpy.ops.armature.duplicate()
-
-    # Only the new bones should be selected after duplication.
-    for edit_bone in armature_data.edit_bones:
-        if edit_bone.select:
-            armature_data.collections[target_name].assign(edit_bone)
-
-def create_tgt_bones(armature_data: Armature, pose: Pose) -> None:
-    copy_bone_collection(armature_data, "DEF", "TGT")
-
-    # Should still be TGT bones after copying
-    tgt_edit_bones = get_edit_bones(armature_data, "TGT")
-
-    # Adjust names to match the TGT naming convention.
-    for edit_bone in tgt_edit_bones:
-        edit_bone.name = COPY_BONE_MAP[edit_bone.name]
-        print("Created TGT bone: ", edit_bone.name)
-
-    # Not all of the original DEF- bones are properly parented in Rigify, so fix
-    # the TGT versions.
-    for bone_name, parent_name in REPARENT_BONE_MAP.items():
-        if bone_name in tgt_edit_bones and parent_name in tgt_edit_bones:
-            print(f"Set parent: {bone_name} -> {parent_name}")
-            tgt_edit_bones[bone_name].parent = tgt_edit_bones[parent_name]
-
-    return
-    bpy.ops.object.mode_set(mode='OBJECT')
-    bpy.ops.object.mode_set(mode='POSE')
-
-    for pose_bone in pose.bones:
-        print("Pose bone: ", pose_bone.name)
-
-    # for bone in selected_edit_bones:
-    #     # Add Copy Location constraint
-    #     loc_constraint = bone.constraints.new(type='COPY_LOCATION')
-    #     loc_constraint.target = rigify_armature
-    #     loc_constraint.subtarget = rigify_bone_name
-    #     loc_constraint.name = f"CopyLoc_{rigify_bone_name}"
-
-    #     # Add Copy Rotation constraint
-    #     rot_constraint = bone.constraints.new(type='COPY_ROTATION')
-    #     rot_constraint.target = rigify_armature
-    #     rot_constraint.subtarget = rigify_bone_name
-    #     rot_constraint.name = f"CopyRot_{rigify_bone_name}"
-
-def adjust_bones(armature) -> None:
-    prepare_groups(armature.data)
-    create_tgt_bones(armature.data, armature.pose)
-
-    # Rename bones (TBD if I want to do this for Godot)
-    # for bone_name, new_name in RENAME_BONE_MAP.items():
-    #     if bone_name in edit_bones:
-    #         print(f"Renamed: {bone_name} -> {new_name}")
-    #         # edit_bones[bone_name].name = new_name
+    "RightUpperLeg": "Hips",
+    "RightUpperLeg2": "RightUpperLeg",
+    "RightLowerLeg": "RightUpperLeg2",
+    "RightLowerLeg2": "RightLowerLeg",
+    "RightFoot": "RightLowerLeg2",
+    "RightToes": "RightFoot",
+}
 
 def main():
     print("Rigify to Godot")
 
     armature = bpy.context.active_object
 
-    if not armature or armature.type != "ARMATURE":
-        print("No armature selected or active object is not an armature.")
-        return
+    assert armature is not None, "No active object found."
+    assert armature.type == "ARMATURE", "Active object is not an armature."
+    assert isinstance(armature.data, Armature), "Active object data is not an Armature."
+    assert bpy.context.view_layer is not None, "No active view layer found."
+    assert bpy.context.collection is not None, "No active collection found."
 
-    adjust_bones(armature)
+    bpy.ops.object.mode_set(mode="OBJECT")
+
+    # Create a new target armature
+    target_armature_data = bpy.data.armatures.new(f"{armature.data.name}.target")
+    target_armature = bpy.data.objects.new(f"{armature.name}.target", target_armature_data)
+    bpy.context.collection.objects.link(target_armature)
+
+    bpy.ops.object.mode_set(mode="EDIT")
+    source_bones = [b for b in armature.data.edit_bones if b.name in RENAME_BONE_MAP.keys()]
+    bpy.ops.object.mode_set(mode="OBJECT")
+
+    # Deselect the source armature
+    bpy.ops.object.select_all(action='DESELECT')
+    bpy.context.view_layer.objects.active = None
+
+    # Select the target armature
+    target_armature.select_set(True)
+    bpy.context.view_layer.objects.active = target_armature
+
+    bpy.ops.object.mode_set(mode="EDIT")
+    tgt_edit_bones = target_armature_data.edit_bones
+
+    # Copy bones to target armature
+    for source_bone in source_bones:
+        new_name = RENAME_BONE_MAP[source_bone.name] if source_bone.name in RENAME_BONE_MAP else source_bone.name
+        print("TGT bone: ", new_name)
+        tgt_bone = tgt_edit_bones.new(new_name)
+        tgt_bone.head = source_bone.head
+        tgt_bone.tail = source_bone.tail
+        tgt_bone.roll = source_bone.roll
+
+    # Set target bone parents
+    for bone_name, parent_name in PARENT_BONE_MAP.items():
+        if bone_name in tgt_edit_bones and parent_name in tgt_edit_bones:
+            print(f"Set parent: {bone_name} -> {parent_name}")
+            tgt_edit_bones[bone_name].parent = tgt_edit_bones[parent_name]
+
+    bpy.ops.object.mode_set(mode="OBJECT")
+    bpy.ops.object.mode_set(mode="POSE")
+
+    assert target_armature.pose is not None, "Target armature has no pose."
+    for source_name, target_name in RENAME_BONE_MAP.items():
+        target_bone = target_armature.pose.bones[target_name]
+
+        # Add Copy Location constraint
+        loc_constraint = cast(CopyLocationConstraint, target_bone.constraints.new(type='COPY_LOCATION'))
+        loc_constraint.target = armature
+        loc_constraint.subtarget = source_name
+        loc_constraint.name = f"CopyLoc_{source_name}"
+
+        # Add Copy Rotation constraint
+        rot_constraint = cast(CopyRotationConstraint, target_bone.constraints.new(type='COPY_ROTATION'))
+        rot_constraint.target = armature
+        rot_constraint.subtarget = source_name
+        rot_constraint.name = f"CopyRot_{source_name}"
+
+    bpy.ops.object.mode_set(mode="OBJECT")
 
 main()
