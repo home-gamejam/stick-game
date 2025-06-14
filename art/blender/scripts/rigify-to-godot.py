@@ -121,6 +121,7 @@ def main():
     # Create a new target armature
     target_armature_data = bpy.data.armatures.new(f"{armature.data.name}.target")
     target_armature = bpy.data.objects.new(f"{armature.name}.target", target_armature_data)
+    target_armature.show_in_front = True
     bpy.context.collection.objects.link(target_armature)
 
     bpy.ops.object.mode_set(mode="EDIT")
@@ -146,6 +147,7 @@ def main():
         tgt_bone.head = source_bone.head
         tgt_bone.tail = source_bone.tail
         tgt_bone.roll = source_bone.roll
+        tgt_bone.use_deform = True
 
     # Set target bone parents
     for bone_name, parent_name in PARENT_BONE_MAP.items():
