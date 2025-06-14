@@ -1,9 +1,11 @@
 import bpy
 import re
 from bpy.types import Armature, CopyLocationConstraint, CopyRotationConstraint
+from dataclasses import dataclass
+from mathutils import Vector
 from typing import cast
 
-RENAME_BONE_MAP = {
+RIGIFY_RENAME_BONE_MAP = {
     "root": "Root",
 
     # Spine
@@ -19,7 +21,7 @@ RENAME_BONE_MAP = {
     "DEF-breast.L": "LeftBreast",
     "DEF-breast.R": "RightBreast",
 
-    # Left arm
+    # Arms
     "DEF-shoulder.L": "LeftShoulder",
     "DEF-upper_arm.L": "LeftUpperArm",
     "DEF-upper_arm.L.001": "LeftUpperArm2",
@@ -27,7 +29,6 @@ RENAME_BONE_MAP = {
     "DEF-forearm.L.001": "LeftLowerArm2",
     "DEF-hand.L": "LeftHand",
 
-    # Right arm
     "DEF-shoulder.R": "RightShoulder",
     "DEF-upper_arm.R": "RightUpperArm",
     "DEF-upper_arm.R.001": "RightUpperArm2",
@@ -39,7 +40,7 @@ RENAME_BONE_MAP = {
     "DEF-pelvis.L": "LeftPelvis",
     "DEF-pelvis.R": "RightPelvis",
 
-    # Left leg
+    # Legs
     "DEF-thigh.L": "LeftUpperLeg",
     "DEF-thigh.L.001": "LeftUpperLeg2",
     "DEF-shin.L": "LeftLowerLeg",
@@ -47,13 +48,46 @@ RENAME_BONE_MAP = {
     "DEF-foot.L": "LeftFoot",
     "DEF-toe.L": "LeftToes",
 
-    # Right leg
     "DEF-thigh.R": "RightUpperLeg",
     "DEF-thigh.R.001": "RightUpperLeg2",
     "DEF-shin.R": "RightLowerLeg",
     "DEF-shin.R.001": "RightLowerLeg2",
     "DEF-foot.R": "RightFoot",
     "DEF-toe.R": "RightToes",
+}
+
+MIXAMO_RENAME_BONE_MAP = {
+    # Spine chain
+    "mixamorig:Hips": "Hips",
+    "mixamorig:Spine": "Spine",
+    "mixamorig:Spine1": "Chest",
+    "mixamorig:Spine2": "UpperChest",
+    "mixamorig:Neck": "Neck",
+    "mixamorig:Head": "Head",
+
+    # Left arm chain
+    "mixamorig:LeftShoulder": "LeftShoulder",
+    "mixamorig:LeftArm": "LeftUpperArm",
+    "mixamorig:LeftForeArm": "LeftLowerArm",
+    "mixamorig:LeftHand": "LeftHand",
+
+    # Right arm chain
+    "mixamorig:RightShoulder": "RightShoulder",
+    "mixamorig:RightArm": "RightUpperArm",
+    "mixamorig:RightForeArm": "RightLowerArm",
+    "mixamorig:RightHand": "RightHand",
+
+    # Left leg chain
+    "mixamorig:LeftUpLeg": "LeftUpperLeg",
+    "mixamorig:LeftLeg": "LeftLowerLeg",
+    "mixamorig:LeftFoot": "LeftFoot",
+    "mixamorig:LeftToeBase": "LeftToes",
+
+    # Right leg chain
+    "mixamorig:RightUpLeg": "RightUpperLeg",
+    "mixamorig:RightLeg": "RightLowerLeg",
+    "mixamorig:RightFoot": "RightFoot",
+    "mixamorig:RightToeBase": "RightToes",
 }
 
 PARENT_BONE_MAP = {
@@ -105,8 +139,16 @@ PARENT_BONE_MAP = {
     "RightToes": "RightFoot",
 }
 
+@dataclass
+class BoneData:
+    name: str
+    head: Vector
+    tail: Vector
+    roll: float
+
 def main():
     print("Rigify to Godot")
+    rename_bone_map = MIXAMO_RENAME_BONE_MAP
 
     armature = bpy.context.active_object
 
@@ -125,7 +167,12 @@ def main():
     bpy.context.collection.objects.link(target_armature)
 
     bpy.ops.object.mode_set(mode="EDIT")
-    source_bones = [b for b in armature.data.edit_bones if b.name in RENAME_BONE_MAP.keys()]
+    source_bone_data = [BoneData(
+        name=b.name,
+        head=b.head.copy(),
+        tail=b.tail.copy(),
+        roll=b.roll
+    ) for b in armature.data.edit_bones if b.name in rename_bone_map.keys()]
     bpy.ops.object.mode_set(mode="OBJECT")
 
     # Deselect the source armature
@@ -140,14 +187,15 @@ def main():
     tgt_edit_bones = target_armature_data.edit_bones
 
     # Copy bones to target armature
-    for source_bone in source_bones:
-        new_name = RENAME_BONE_MAP[source_bone.name] if source_bone.name in RENAME_BONE_MAP else source_bone.name
+    for source_bone in source_bone_data:
+        new_name = rename_bone_map[source_bone.name] if source_bone.name in rename_bone_map else source_bone.name
         print("TGT bone: ", new_name)
         tgt_bone = tgt_edit_bones.new(new_name)
         tgt_bone.head = source_bone.head
         tgt_bone.tail = source_bone.tail
         tgt_bone.roll = source_bone.roll
         tgt_bone.use_deform = True
+        tgt_bone.use_connect = False
 
     # Set target bone parents
     for bone_name, parent_name in PARENT_BONE_MAP.items():
@@ -159,7 +207,7 @@ def main():
     bpy.ops.object.mode_set(mode="POSE")
 
     assert target_armature.pose is not None, "Target armature has no pose."
-    for source_name, target_name in RENAME_BONE_MAP.items():
+    for source_name, target_name in rename_bone_map.items():
         target_bone = target_armature.pose.bones[target_name]
 
         # Add Copy Location constraint
