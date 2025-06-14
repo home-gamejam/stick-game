@@ -186,26 +186,51 @@ def main():
     bpy.ops.object.mode_set(mode="EDIT")
     tgt_edit_bones = target_armature_data.edit_bones
 
+    # Mixamo doesn't have a root bone, so create one
+    if not "root" in rename_bone_map:
+        # create new bone at origin pointing backwards
+        root_bone = tgt_edit_bones.new("Root")
+        root_bone.head = Vector((0.0, 0.0, 0.0))
+        root_bone.tail = Vector((0.0, 0.5, 0.0))
+        root_bone.roll = 0.0
+        root_bone.use_deform = False
+
+    # Assume a uniform scale for the armature. e.g. Mixamo scales to 0.01
+    source_scale = armature.scale.x
+
     # Copy bones to target armature
     for source_bone in source_bone_data:
         new_name = rename_bone_map[source_bone.name] if source_bone.name in rename_bone_map else source_bone.name
         print("TGT bone: ", new_name)
         tgt_bone = tgt_edit_bones.new(new_name)
-        tgt_bone.head = source_bone.head
-        tgt_bone.tail = source_bone.tail
+        tgt_bone.head = source_bone.head * source_scale
+        tgt_bone.tail = source_bone.tail * source_scale
         tgt_bone.roll = source_bone.roll
         tgt_bone.use_deform = True
         tgt_bone.use_connect = False
 
     # Set target bone parents
     for bone_name, parent_name in PARENT_BONE_MAP.items():
-        if bone_name in tgt_edit_bones and parent_name in tgt_edit_bones:
-            print(f"Set parent: {bone_name} -> {parent_name}")
-            tgt_edit_bones[bone_name].parent = tgt_edit_bones[parent_name]
+        if bone_name not in tgt_edit_bones:
+            print("Bone not found in target armature:", bone_name)
+            continue
+
+        # If assigne parent isn't in target armature, check if it is 1 level
+        # up in the hierarchy (e.g. Mixamo doesn't have as many bones as Rigify)
+        if parent_name not in tgt_edit_bones:
+            parent_name = PARENT_BONE_MAP.get(parent_name, None)
+
+        if parent_name is None or parent_name not in tgt_edit_bones:
+            print("Parent not found for", bone_name)
+            continue
+
+        print(f"Set parent: {bone_name} -> {parent_name}")
+        tgt_edit_bones[bone_name].parent = tgt_edit_bones[parent_name]
 
     bpy.ops.object.mode_set(mode="OBJECT")
     bpy.ops.object.mode_set(mode="POSE")
 
+    # Add copy location and rotation constraints to match target bones to source bones
     assert target_armature.pose is not None, "Target armature has no pose."
     for source_name, target_name in rename_bone_map.items():
         target_bone = target_armature.pose.bones[target_name]
