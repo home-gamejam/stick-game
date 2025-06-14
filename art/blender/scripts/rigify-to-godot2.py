@@ -1,7 +1,7 @@
-# Rename Mixamo action groups and curves to Rigify deform bones (DEF-xxx) format.
 import bpy
 import re
-from bpy.types import Armature, BoneCollection, Pose
+from bpy.types import Armature, CopyLocationConstraint, CopyRotationConstraint
+from typing import cast
 
 RENAME_BONE_MAP = {
     "root": "Root",
@@ -139,19 +139,38 @@ def main():
     tgt_edit_bones = target_armature_data.edit_bones
 
     # Copy bones to target armature
-    for def_bone in source_bones:
-        new_name = RENAME_BONE_MAP[def_bone.name] if def_bone.name in RENAME_BONE_MAP else def_bone.name
+    for source_bone in source_bones:
+        new_name = RENAME_BONE_MAP[source_bone.name] if source_bone.name in RENAME_BONE_MAP else source_bone.name
         print("TGT bone: ", new_name)
         tgt_bone = tgt_edit_bones.new(new_name)
-        tgt_bone.head = def_bone.head
-        tgt_bone.tail = def_bone.tail
-        tgt_bone.roll = def_bone.roll
+        tgt_bone.head = source_bone.head
+        tgt_bone.tail = source_bone.tail
+        tgt_bone.roll = source_bone.roll
 
     # Set target bone parents
     for bone_name, parent_name in PARENT_BONE_MAP.items():
         if bone_name in tgt_edit_bones and parent_name in tgt_edit_bones:
             print(f"Set parent: {bone_name} -> {parent_name}")
             tgt_edit_bones[bone_name].parent = tgt_edit_bones[parent_name]
+
+    bpy.ops.object.mode_set(mode="OBJECT")
+    bpy.ops.object.mode_set(mode="POSE")
+
+    assert target_armature.pose is not None, "Target armature has no pose."
+    for source_name, target_name in RENAME_BONE_MAP.items():
+        target_bone = target_armature.pose.bones[target_name]
+
+        # Add Copy Location constraint
+        loc_constraint = cast(CopyLocationConstraint, target_bone.constraints.new(type='COPY_LOCATION'))
+        loc_constraint.target = armature
+        loc_constraint.subtarget = source_name
+        loc_constraint.name = f"CopyLoc_{source_name}"
+
+        # Add Copy Rotation constraint
+        rot_constraint = cast(CopyRotationConstraint, target_bone.constraints.new(type='COPY_ROTATION'))
+        rot_constraint.target = armature
+        rot_constraint.subtarget = source_name
+        rot_constraint.name = f"CopyRot_{source_name}"
 
     bpy.ops.object.mode_set(mode="OBJECT")
 
