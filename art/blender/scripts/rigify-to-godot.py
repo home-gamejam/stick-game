@@ -1,8 +1,6 @@
 import bpy
 import re
-from bpy.types import Armature, CopyLocationConstraint, CopyRotationConstraint
-from dataclasses import dataclass
-from mathutils import Vector
+from bpy.types import Armature, BoneCollection, CopyLocationConstraint, CopyRotationConstraint
 from typing import cast
 
 RIGIFY_RENAME_BONE_MAP = {
@@ -56,40 +54,6 @@ RIGIFY_RENAME_BONE_MAP = {
     "DEF-toe.R": "RightToes",
 }
 
-MIXAMO_RENAME_BONE_MAP = {
-    # Spine chain
-    "mixamorig:Hips": "Hips",
-    "mixamorig:Spine": "Spine",
-    "mixamorig:Spine1": "Chest",
-    "mixamorig:Spine2": "UpperChest",
-    "mixamorig:Neck": "Neck",
-    "mixamorig:Head": "Head",
-
-    # Left arm chain
-    "mixamorig:LeftShoulder": "LeftShoulder",
-    "mixamorig:LeftArm": "LeftUpperArm",
-    "mixamorig:LeftForeArm": "LeftLowerArm",
-    "mixamorig:LeftHand": "LeftHand",
-
-    # Right arm chain
-    "mixamorig:RightShoulder": "RightShoulder",
-    "mixamorig:RightArm": "RightUpperArm",
-    "mixamorig:RightForeArm": "RightLowerArm",
-    "mixamorig:RightHand": "RightHand",
-
-    # Left leg chain
-    "mixamorig:LeftUpLeg": "LeftUpperLeg",
-    "mixamorig:LeftLeg": "LeftLowerLeg",
-    "mixamorig:LeftFoot": "LeftFoot",
-    "mixamorig:LeftToeBase": "LeftToes",
-
-    # Right leg chain
-    "mixamorig:RightUpLeg": "RightUpperLeg",
-    "mixamorig:RightLeg": "RightLowerLeg",
-    "mixamorig:RightFoot": "RightFoot",
-    "mixamorig:RightToeBase": "RightToes",
-}
-
 PARENT_BONE_MAP = {
     # Spine chain
     "Hips": "Root",
@@ -139,16 +103,9 @@ PARENT_BONE_MAP = {
     "RightToes": "RightFoot",
 }
 
-@dataclass
-class BoneData:
-    name: str
-    head: Vector
-    tail: Vector
-    roll: float
-
 def main():
     print("Rigify to Godot")
-    rename_bone_map = MIXAMO_RENAME_BONE_MAP
+    rename_bone_map = RIGIFY_RENAME_BONE_MAP
 
     armature = bpy.context.active_object
 
@@ -158,82 +115,53 @@ def main():
     assert bpy.context.view_layer is not None, "No active view layer found."
     assert bpy.context.collection is not None, "No active collection found."
 
-    bpy.ops.object.mode_set(mode="OBJECT")
-
-    # Create a new target armature
-    target_armature_data = bpy.data.armatures.new(f"{armature.data.name}.target")
-    target_armature = bpy.data.objects.new(f"{armature.name}.target", target_armature_data)
-    target_armature.show_in_front = True
-    bpy.context.collection.objects.link(target_armature)
-
     bpy.ops.object.mode_set(mode="EDIT")
-    source_bone_data = [BoneData(
-        name=b.name,
-        head=b.head.copy(),
-        tail=b.tail.copy(),
-        roll=b.roll
-    ) for b in armature.data.edit_bones if b.name in rename_bone_map.keys()]
-    bpy.ops.object.mode_set(mode="OBJECT")
+    edit_bones = armature.data.edit_bones
 
-    # Deselect the source armature
-    bpy.ops.object.select_all(action='DESELECT')
-    bpy.context.view_layer.objects.active = None
+    tgt_collection = armature.data.collections.get("TGT")
 
-    # Select the target armature
-    target_armature.select_set(True)
-    bpy.context.view_layer.objects.active = target_armature
+    # If TGT collection exists, we assume the script has run before, so remove any bones from previous run.
+    if tgt_collection:
+        for bone_name_names in [n for n in rename_bone_map.values() if n in edit_bones]:
+            edit_bones.remove(edit_bones[bone_name_names])
+    else:
+        print("Creating TGT collection.")
+        tgt_collection = armature.data.collections.new("TGT")
 
-    bpy.ops.object.mode_set(mode="EDIT")
-    tgt_edit_bones = target_armature_data.edit_bones
+    source_bone_data = [b for b in edit_bones if b.name in rename_bone_map.keys()]
 
-    # Mixamo doesn't have a root bone, so create one
-    if not "root" in rename_bone_map:
-        # create new bone at origin pointing backwards
-        root_bone = tgt_edit_bones.new("Root")
-        root_bone.head = Vector((0.0, 0.0, 0.0))
-        root_bone.tail = Vector((0.0, 0.5, 0.0))
-        root_bone.roll = 0.0
-        root_bone.use_deform = False
-
-    # Assume a uniform scale for the armature. e.g. Mixamo scales to 0.01
-    source_scale = armature.scale.x
-
-    # Copy bones to target armature
+    # Copy bones to TGT bone collection
     for source_bone in source_bone_data:
+        # Disable deform for source bones (DEF-) since our TGT bones will be the
+        # the transform bones.
+        source_bone.use_deform = False
+
         new_name = rename_bone_map[source_bone.name] if source_bone.name in rename_bone_map else source_bone.name
         print("TGT bone: ", new_name)
-        tgt_bone = tgt_edit_bones.new(new_name)
-        tgt_bone.head = source_bone.head * source_scale
-        tgt_bone.tail = source_bone.tail * source_scale
+        tgt_bone = edit_bones.new(new_name)
+        tgt_bone.head = source_bone.head
+        tgt_bone.tail = source_bone.tail
         tgt_bone.roll = source_bone.roll
         tgt_bone.use_deform = True
         tgt_bone.use_connect = False
+        tgt_collection.assign(tgt_bone)
 
-    # Set target bone parents
-    for bone_name, parent_name in PARENT_BONE_MAP.items():
-        if bone_name not in tgt_edit_bones:
-            print("Bone not found in target armature:", bone_name)
+    # Set TGT bone parents
+    for bone_name_names, parent_name in PARENT_BONE_MAP.items():
+        if bone_name_names not in edit_bones or parent_name not in edit_bones:
+            print("Bone not found in target armature:", bone_name_names)
             continue
 
-        # If assigned parent isn't in target armature, check if it is 1 level
-        # up in the hierarchy (e.g. Mixamo doesn't have as many bones as Rigify)
-        if parent_name not in tgt_edit_bones:
-            parent_name = PARENT_BONE_MAP.get(parent_name, None)
-
-        if parent_name is None or parent_name not in tgt_edit_bones:
-            print("Parent not found for", bone_name)
-            continue
-
-        print(f"Set parent: {bone_name} -> {parent_name}")
-        tgt_edit_bones[bone_name].parent = tgt_edit_bones[parent_name]
+        print(f"Set parent: {bone_name_names} -> {parent_name}")
+        edit_bones[bone_name_names].parent = edit_bones[parent_name]
 
     bpy.ops.object.mode_set(mode="OBJECT")
     bpy.ops.object.mode_set(mode="POSE")
 
     # Add copy location and rotation constraints to match target bones to source bones
-    assert target_armature.pose is not None, "Target armature has no pose."
+    assert armature.pose is not None, "Target armature has no pose."
     for source_name, target_name in rename_bone_map.items():
-        target_bone = target_armature.pose.bones[target_name]
+        target_bone = armature.pose.bones[target_name]
 
         # Add Copy Location constraint
         loc_constraint = cast(CopyLocationConstraint, target_bone.constraints.new(type='COPY_LOCATION'))
