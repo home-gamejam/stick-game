@@ -2,6 +2,19 @@ extends CharacterBody3D
 
 class_name CharacterModel
 
+enum CharacterStateType {
+	None = 0,
+	Idle,
+	Fall,
+	FightIdle,
+	Jump,
+	Land,
+	Move,
+	Punch1Start,
+	Punch1End,
+	Punch2Start,
+}
+
 @export var acceleration: float = 20.0
 @export var air_deceleration: float = 3
 @export var rotation_speed = TAU * 2
@@ -16,17 +29,6 @@ class_name CharacterModel
 
 @onready var animation_player = %AnimationPlayer as AnimationPlayer
 @onready var animation_tree = %AnimationTree as AnimationTree
-@onready var states: Dictionary[CharacterState.Type, CharacterState] = {
-	CharacterState.Type.Fall: FallState.new(self),
-	CharacterState.Type.FightIdle: FightIdleState.new(self),
-	CharacterState.Type.Idle: IdleState.new(self),
-	CharacterState.Type.Jump: JumpState.new(self),
-	CharacterState.Type.Land: LandState.new(self),
-	CharacterState.Type.Move: MoveState.new(self),
-	CharacterState.Type.Punch1Start: Punch1StartState.new(self),
-	CharacterState.Type.Punch1End: Punch1EndState.new(self),
-	CharacterState.Type.Punch2Start: Punch2StartState.new(self),
-}
 
 var move_speed = walk_speed
 var last_input_dir := Vector2.ZERO
@@ -46,33 +48,192 @@ var adjusted_rotation: float:
 	set(value):
 		adjusted_rotation = value
 
-var current_state_type: CharacterState.Type = CharacterState.Type.Idle:
-	set(current_state_type_):
-		if current_state_type_ == current_state_type:
+var is_transition: bool = false
+var state_type: CharacterStateType = CharacterStateType.Idle:
+	set(state_type_):
+		if state_type_ == state_type:
 			return
 
-		current_state_type = current_state_type_
+		state_type = state_type_
 
 		# playing animation in the setter since multiplayer synchronizer sets
 		# the state type without going through the state lifecylce managed by
-		# _transition_state
-		play_animation(current_state.animation)
+		play_animation()
 
-var current_state: CharacterState:
-	get:
-		return states[current_state_type]
+func update(input: InputData, delta: float) -> void:
+	var prev_state_type: CharacterStateType = state_type
 
-func _ready() -> void:
-	_transition_state(current_state_type)
+	match state_type:
+		CharacterStateType.Idle:
+			_update_idle(input, delta)
+		CharacterStateType.Fall:
+			_update_fall(input, delta)
+		CharacterStateType.FightIdle:
+			_update_fight_idle(input, delta)
+		CharacterStateType.Jump:
+			_update_jump(input, delta)
+		CharacterStateType.Land:
+			_update_land(input, delta)
+		CharacterStateType.Move:
+			_update_move(input, delta)
+		CharacterStateType.Punch1Start:
+			_update_punch1_start(input, delta)
+		CharacterStateType.Punch1End:
+			_update_punch1_end(input, delta)
+		CharacterStateType.Punch2Start:
+			_update_punch2_start(input, delta)
 
-func _transition_state(new_state_type: CharacterState.Type) -> void:
-	# Only update if we have a new state
-	if new_state_type == CharacterState.Type.None:
+	is_transition = state_type != prev_state_type
+	if is_transition:
+		print("transition", state_type)
+
+func _update_idle(input: InputData, delta: float) -> void:
+	if is_in_air():
+		state_type = CharacterStateType.Fall
 		return
 
-	current_state.exit()
-	current_state_type = new_state_type
-	current_state.enter()
+	if input.action == "jump" and is_on_floor():
+		state_type = CharacterStateType.Jump
+		return
+
+	if input.action == "punch":
+		state_type = CharacterStateType.Punch1Start
+		return
+
+	if input.input_dir.length() > 0:
+		state_type = CharacterStateType.Move
+		return
+
+	move_based_on_input(delta)
+
+func _update_fall(input: InputData, delta: float) -> void:
+	velocity += get_gravity() * delta
+
+	move_based_on_input(
+		delta,
+		input.input_dir * .1,
+		last_input_dir)
+
+	if is_on_floor():
+		state_type = CharacterStateType.Land
+
+const FIGHT_IDLE_DURATION = 5.0
+var fight_idle_timer: float
+func _update_fight_idle(input: InputData, delta: float) -> void:
+	if is_transition:
+		fight_idle_timer = 0.0
+
+	fight_idle_timer += delta
+	if fight_idle_timer > FIGHT_IDLE_DURATION:
+		state_type = CharacterStateType.Idle
+		return
+
+	_update_idle(input, delta)
+
+const JUMP_VELOCITY = 4.5 * 1.2
+func _update_jump(input: InputData, delta: float) -> void:
+	if is_transition:
+		velocity.y = JUMP_VELOCITY
+
+	velocity += get_gravity() * delta
+
+	if velocity.y > 0:
+		state_type = CharacterStateType.Fall
+		return
+
+	move_based_on_input(
+		delta,
+		input.input_dir * .1,
+		last_input_dir)
+
+	if is_on_floor():
+		state_type = CharacterStateType.Idle
+		return
+
+func _update_land(_input: InputData, delta: float) -> void:
+	velocity += get_gravity() * delta
+
+	move_based_on_input(delta)
+
+	if is_on_floor():
+		state_type = CharacterStateType.Idle
+
+func _update_move(input_data: InputData, delta: float) -> void:
+	if is_in_air():
+		state_type = CharacterStateType.Fall
+		return
+
+	if input_data.action == "jump":
+		state_type = CharacterStateType.Jump
+		return
+
+	if input_data.action == "punch":
+		state_type = CharacterStateType.Punch1Start
+		return
+
+	var is_running = input_data.action == "run"
+
+	if is_running:
+		move_speed = walk_speed * 2
+	else:
+		move_speed = walk_speed
+
+	move_based_on_input(delta, input_data.input_dir)
+
+	if velocity.length() == 0:
+		state_type = CharacterStateType.Idle
+		return
+
+	# blend_position is 0, 1, 2 for idle, walk, run respectively. Multiplying
+	# walk or run by the input_dir magnitude should hit the values exactly when
+	# value is 1 and a blend when it is < 1
+	var blend_position = (2 if is_running else 1) * input_data.input_dir.normalized().length()
+	set_animation_blend_position(blend_position)
+
+var animation_length: float
+var combo_timer: float = 0.0
+var max_combo: float
+var min_combo: float
+func _update_punch1_start(input: InputData, delta: float) -> void:
+	if is_transition:
+		animation_length = get_animation_length("Punch1Start")
+		min_combo = animation_length - 0.1
+		max_combo = animation_length + 0.1
+		combo_timer = 0.0
+
+	if input.action == "punch" and combo_timer >= min_combo and combo_timer <= max_combo:
+		state_type = CharacterStateType.Punch2Start
+		return
+
+	if not is_animation_playing() and combo_timer > max_combo:
+		state_type = CharacterStateType.Punch1End
+		return
+
+	combo_timer += delta
+
+	move_based_on_input(delta, Vector2.ZERO)
+
+func _update_punch1_end(_input: InputData, delta: float) -> void:
+	if not is_animation_playing():
+		state_type = CharacterStateType.FightIdle
+		return
+
+	move_based_on_input(delta, Vector2.ZERO)
+
+var combo_window: int = 0
+func _update_punch2_start(_input: InputData, delta: float) -> void:
+	if is_transition:
+		combo_window = 0
+
+	# if Input.is_action_just_pressed("punch"):
+	# 	combo_window = 5
+	if not is_animation_playing():
+	# 	if combo_window > 0:
+	# 		return punch2_start_state
+		state_type = CharacterStateType.FightIdle
+		return
+
+	move_based_on_input(delta, Vector2.ZERO)
 
 # is_on_floor() has some issues with the foot colliders where it thinks we are
 # in the air sometimes while colliding against walls. This method uses ray
@@ -109,8 +270,8 @@ func get_adjusted_move_direction(input_dir: Vector2) -> Vector3:
 		- input_dir.x * sin(adjusted_rotation) + input_dir.y * cos(adjusted_rotation)
 	).normalized()
 
-func get_animation_length(animation: String) -> float:
-	return animation_player.get_animation(animation).length
+func get_animation_length(animation_: String) -> float:
+	return animation_player.get_animation(animation_).length
 
 func get_forward_axis() -> Vector3:
 	if adjusted_basis:
@@ -159,20 +320,15 @@ func move_based_on_input(delta: float, input_dir: Vector2 = Vector2.ZERO, rot_in
 
 	rig.global_rotation.y = lerp_angle(rig.rotation.y, target_angle, rotation_speed * delta)
 
-func play_animation(animation: String) -> void:
-	match animation:
-		"Idle", "Walk", "Run":
+func play_animation() -> void:
+	match state_type:
+		CharacterStateType.Idle, CharacterStateType.Move:
 			animation_tree.active = true
 			animation_tree.set("parameters/Movement/blend_position", 0)
 
 		_:
 			animation_tree.active = false
-			animation_player.play(animation)
+			animation_player.play(CharacterStateType.keys()[state_type])
 
 func set_animation_blend_position(blend_position: Variant) -> void:
 	animation_tree.set("parameters/Movement/blend_position", blend_position)
-
-# Update the character state based on input data and delta time
-func update(input_data: InputData, delta: float) -> void:
-	var new_state_type = current_state.update(input_data, delta)
-	_transition_state(new_state_type)
