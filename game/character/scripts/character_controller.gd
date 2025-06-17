@@ -1,6 +1,4 @@
-extends Node
-
-class_name CharacterController
+class_name CharacterController extends Node
 
 @export var input_source: InputSource
 @export var character_model: CharacterModel

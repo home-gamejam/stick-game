@@ -1,6 +1,4 @@
-extends InputSource
-
-class_name PlayerInputSource
+class_name PlayerInputSource extends InputSource
 
 func get_input() -> InputData:
 	var input_data = InputData.new()

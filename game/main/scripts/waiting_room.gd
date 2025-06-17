@@ -1,6 +1,4 @@
-extends Node3D
-
-class_name WaitingRoom
+class_name WaitingRoom extends Node3D
 
 @onready var ground_mesh: MeshInstance3D = %GroundMesh
 

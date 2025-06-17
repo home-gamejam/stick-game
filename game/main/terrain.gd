@@ -1,7 +1,5 @@
 @tool
-extends Node3D
-
-class_name Terrain
+class_name Terrain extends Node3D
 
 @export var is_enabled = true
 @export var depth: int = 100

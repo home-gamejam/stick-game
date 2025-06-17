@@ -1,6 +1,4 @@
-extends CharacterBody3D
-
-class_name CharacterModel
+class_name CharacterModel extends CharacterBody3D
 
 enum CharacterStateType {
 	None = 0,

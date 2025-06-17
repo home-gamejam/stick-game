@@ -1,6 +1,4 @@
-extends Control
-
-class_name JoystickControl
+class_name JoystickControl extends Control
 
 @export var auto_center = true
 signal stick_position_set(position: Vector2)

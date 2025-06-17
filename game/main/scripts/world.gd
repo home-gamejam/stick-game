@@ -1,6 +1,4 @@
-extends Node3D
-
-class_name World
+class_name World extends Node3D
 
 const PLAYER_SCENE = preload("res://player/player.tscn")
 

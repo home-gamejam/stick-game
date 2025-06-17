@@ -1,6 +1,4 @@
-extends Node3D
-
-class_name CharacterView
+class_name CharacterView extends Node3D
 
 func _ready() -> void:
 	$Skin.skeleton = model.get_skeleton_path()
