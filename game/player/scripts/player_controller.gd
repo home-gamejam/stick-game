@@ -28,3 +28,6 @@ func _physics_process(delta: float) -> void:
 
 	character_view.position = character_model.position
 	character_view.global_rotation.y = character_model.rig.global_rotation.y
+
+	if input.action == InputData.Action.Punch:
+		print("Punching.....")

@@ -92,11 +92,11 @@ func _update_idle(input: InputData, delta: float) -> void:
 		state_type = CharacterStateType.Fall
 		return
 
-	if input.action == "jump" and is_on_floor():
+	if input.action == InputData.Action.Jump and is_on_floor():
 		state_type = CharacterStateType.Jump
 		return
 
-	if input.action == "punch":
+	if input.action == InputData.Action.Punch:
 		state_type = CharacterStateType.Punch1Start
 		return
 
@@ -163,15 +163,15 @@ func _update_move(input_data: InputData, delta: float) -> void:
 		state_type = CharacterStateType.Fall
 		return
 
-	if input_data.action == "jump":
+	if input_data.action == InputData.Action.Jump:
 		state_type = CharacterStateType.Jump
 		return
 
-	if input_data.action == "punch":
+	if input_data.action == InputData.Action.Punch:
 		state_type = CharacterStateType.Punch1Start
 		return
 
-	var is_running = input_data.action == "run"
+	var is_running = input_data.action == InputData.Action.Run
 
 	if is_running:
 		move_speed = walk_speed * 2
@@ -201,7 +201,7 @@ func _update_punch1_start(input: InputData, delta: float) -> void:
 		max_combo = animation_length + 0.1
 		combo_timer = 0.0
 
-	if input.action == "punch" and combo_timer >= min_combo and combo_timer <= max_combo:
+	if input.action == InputData.Action.Punch and combo_timer >= min_combo and combo_timer <= max_combo:
 		state_type = CharacterStateType.Punch2Start
 		return
 
