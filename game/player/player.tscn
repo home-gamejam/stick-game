@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://tmda5xa2to7g"]
+[gd_scene load_steps=6 format=3 uid="uid://tmda5xa2to7g"]
 
 [ext_resource type="PackedScene" uid="uid://c2jrxrxfi6r7d" path="res://player/player_model.tscn" id="1_rkbax"]
 [ext_resource type="Script" uid="uid://ctvgtn3h2l316" path="res://player/scripts/player_controller.gd" id="1_yw30f"]
 [ext_resource type="PackedScene" uid="uid://djyegqvr57iv2" path="res://player/player_view.tscn" id="2_g1dw6"]
+[ext_resource type="Script" uid="uid://dhbr65ur0fvfo" path="res://input/scripts/player_input_source.gd" id="2_yw30f"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_g1dw6"]
 properties/0/path = NodePath("Model:position")
@@ -21,10 +22,15 @@ properties/4/path = NodePath("Model/AnimationTree:parameters/Movement/blend_posi
 properties/4/spawn = true
 properties/4/replication_mode = 1
 
-[node name="Controller" type="Node" node_paths=PackedStringArray("character_model", "character_view")]
+[node name="Controller" type="Node" node_paths=PackedStringArray("input_source", "character_model", "character_view")]
 script = ExtResource("1_yw30f")
+input_source = NodePath("Input")
 character_model = NodePath("Model")
 character_view = NodePath("View")
+
+[node name="Input" type="Node" parent="."]
+script = ExtResource("2_yw30f")
+metadata/_custom_type_script = "uid://dhbr65ur0fvfo"
 
 [node name="Model" parent="." instance=ExtResource("1_rkbax")]
 unique_name_in_owner = true
