@@ -38,11 +38,15 @@ Run the server
 
 #### Web localhost
 
-e.g. For local dev
+e.g. For local dev, build and start local web server:
 
 ```sh
 ./scripts/build-web.sh localhost
-./build/localhost.webserver
+```
+
+```sh
+pushd build
+./localhost.webserver
 ```
 
 #### Build Web and Deploy to Pi
