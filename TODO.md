@@ -8,5 +8,5 @@
 - [ ] Disable physics tick for non authority
 - [ ] Allow drift while jumping
 - [ ] Throw ball
-- [ ] Map to Godot skeleton
-- [ ] Filter out unused bones
+- [x] Map to Godot skeleton
+- [x] Filter out unused bones
