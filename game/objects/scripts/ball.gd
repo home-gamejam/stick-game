@@ -2,7 +2,7 @@ class_name Ball extends RigidBody3D
 
 const BALL = preload("res://objects/ball.tscn")
 const SPAWN_HEIGHT = 1.5
-const SPAWN_OFFSET = 1.0
+const SPAWN_OFFSET = .5
 
 static func spawn(source: Node3D) -> Ball:
 	var ball: Ball = BALL.instantiate()
