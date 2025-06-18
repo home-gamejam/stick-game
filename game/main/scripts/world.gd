@@ -10,10 +10,15 @@ func _ready():
 
 func add_player(pid: int):
 	print("[world] add_player: ", pid)
-	var player = PLAYER_SCENE.instantiate()
+	var player: PlayerController = PLAYER_SCENE.instantiate()
 	player.name = str(pid)
 	var x = randi() % 10
 	var z = randi() % 10
 	player.character_model.position = Vector3(x, 1, z)
+	player.throw_ball.connect(_on_throw.bind(player))
 
 	%Players.add_child(player)
+
+func _on_throw(player: PlayerController) -> void:
+	var ball: Ball = Ball.spawn(player.character_model.rig)
+	%Objects.add_child(ball)
