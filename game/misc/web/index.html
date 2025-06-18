@@ -100,6 +100,10 @@
     </style>
     $GODOT_HEAD_INCLUDE
     <script>
+      function reloadPage() {
+        window.location.reload()
+      }
+
       // Service Worker update function that can be called from Godot
       function updateServiceWorker() {
         if (

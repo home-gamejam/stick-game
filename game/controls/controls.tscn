@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://bwkse6fquphh2"]
+[gd_scene load_steps=5 format=3 uid="uid://bwkse6fquphh2"]
 
 [ext_resource type="Script" uid="uid://dlctkcl34adc3" path="res://controls/scripts/controls.gd" id="1_aw0yh"]
+[ext_resource type="Theme" uid="uid://cy7xmbneexw85" path="res://resources/theme.tres" id="1_gf7os"]
 [ext_resource type="PackedScene" uid="uid://c3dpgo3a87bc" path="res://controls/joystick_control.tscn" id="1_sue6t"]
 [ext_resource type="PackedScene" uid="uid://b37sk1idnypwa" path="res://controls/button.tscn" id="2_sblnt"]
 
@@ -10,17 +11,25 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_gf7os")
 theme_override_constants/margin_left = 64
 theme_override_constants/margin_top = 64
 theme_override_constants/margin_right = 64
 theme_override_constants/margin_bottom = 64
 script = ExtResource("1_aw0yh")
 
+[node name="Restart" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "O"
+
 [node name="Debug" type="Label" parent="."]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 8
 size_flags_vertical = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
