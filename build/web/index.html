@@ -103,6 +103,10 @@
 <link rel="manifest" href="index.manifest.json">
 
     <script>
+      function reloadPage() {
+        window.location.reload()
+      }
+
       // Service Worker update function that can be called from Godot
       function updateServiceWorker() {
         if (
@@ -133,7 +137,7 @@
 
     <script src="index.js"></script>
     <script>
-      const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":true,"fileSizes":{"index.pck":2384592,"index.wasm":52106500},"focusCanvas":true,"gdextensionLibs":[],"serviceWorker":"index.service.worker.js"}
+      const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":true,"fileSizes":{"index.pck":2389504,"index.wasm":52106500},"focusCanvas":true,"gdextensionLibs":[],"serviceWorker":"index.service.worker.js"}
       const GODOT_THREADS_ENABLED = false
       const engine = new Engine(GODOT_CONFIG)
 
