@@ -15,10 +15,5 @@ func add_player(pid: int):
 	var x = randi() % 10
 	var z = randi() % 10
 	player.character_model.position = Vector3(x, 1, z)
-	player.throw_ball.connect(_on_throw.bind(player))
-
+	
 	%Players.add_child(player)
-
-func _on_throw(player: PlayerController) -> void:
-	var ball: Ball = Ball.spawn(player.character_model.rig)
-	%Objects.add_child(ball)

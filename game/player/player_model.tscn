@@ -429,7 +429,7 @@ mesh = SubResource("CapsuleMesh_b6qoi")
 
 [node name="FootColliderR" type="CollisionShape3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(-0.999827, -8.66109e-07, -3.78587e-14, 0, -4.37042e-08, 0.999831, -8.66102e-07, 0.999836, 4.3704e-08, -0.118451, 0.0993692, 0.210135)
+transform = Transform3D(-0.999828, -8.66109e-07, -3.78587e-14, 0, -4.37042e-08, 0.999831, -8.66102e-07, 0.999835, 4.3704e-08, -0.118451, 0.0993692, 0.210135)
 shape = SubResource("CapsuleShape3D_ldqqv")
 
 [node name="Debug" type="MeshInstance3D" parent="FootColliderR"]

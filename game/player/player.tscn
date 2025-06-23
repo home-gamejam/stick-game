@@ -39,5 +39,13 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 model = NodePath("../Model")
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="PlayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_g1dw6")
+
+[node name="Objects" type="Node" parent="."]
+unique_name_in_owner = true
+
+[node name="ObjectSpawner" type="MultiplayerSpawner" parent="."]
+unique_name_in_owner = true
+_spawnable_scenes = PackedStringArray("uid://dk5vcc043t2qj")
+spawn_path = NodePath("../Objects")

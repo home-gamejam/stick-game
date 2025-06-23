@@ -1,7 +1,6 @@
 class_name PlayerController extends CharacterController
 
-signal throw_ball()
-
+const BALL = preload("res://objects/ball.tscn")
 const PLAYER_CAMERA = preload("res://player/player_camera.tscn")
 
 var _player_camera: PlayerCamera
@@ -32,4 +31,10 @@ func _physics_process(delta: float) -> void:
 	character_view.global_rotation.y = character_model.rig.global_rotation.y
 
 	if input.action == InputData.Action.Punch:
-		throw_ball.emit()
+		_on_throw()
+
+func _on_throw() -> void:
+	var ball: Ball = BALL.instantiate()
+	%Objects.add_child(ball, true)
+
+	ball.launch(character_model.rig)
