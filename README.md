@@ -21,8 +21,14 @@ In world.gd, set `IS_WEB_RTC` to determine client / server or WebRTC
 ### Dev WebRTC
 
 Run signaling server
-./scripts/signal_server_ws.sh
-./scripts/signal_server_udp.sh
+
+````sh
+cd game/addons/signal_ws/server
+go run cmd/main.go -cert ssl
+```
+
+~~./scripts/signal_server_ws.sh~~
+~~./scripts/signal_server_udp.sh~~
 
 Build or run the game
 
@@ -42,7 +48,7 @@ e.g. For local dev, build and start local web server:
 
 ```sh
 ./scripts/build-web.sh localhost
-```
+````
 
 ```sh
 pushd build
