@@ -35,6 +35,6 @@ func _physics_process(delta: float) -> void:
 
 func _on_throw() -> void:
 	var ball: Ball = BALL.instantiate()
+	ball.is_physics_authority = is_multiplayer_authority()
 	%Objects.add_child(ball, true)
-
 	ball.launch(character_model.rig)
