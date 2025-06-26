@@ -18,12 +18,6 @@ var pid: int:
 	get:
 		return name.split("_")[0].to_int()
 
-# var _target_position: Vector3
-# @export var target_position: Vector3:
-# 	get:
-# 		return _target_position
-# 	set(value):
-# 		_target_position = value
 @export var target_position: Vector3
 
 func _enter_tree():
