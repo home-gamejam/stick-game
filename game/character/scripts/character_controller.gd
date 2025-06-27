@@ -9,12 +9,13 @@ class_name CharacterController extends Node
 
 var input: InputData = InputData.new()
 
-func _physics_process(delta: float) -> void:
+func _ready():
 	# If this is not the authority, we don't process physics. The multiplayer
 	# synchronizer will handle the movement and state updates.
 	if not is_multiplayer_authority():
-		return
+		set_physics_process(false)
 
+func _physics_process(delta: float) -> void:
 	input = input_source.get_input()
 	character_model.update(input, delta)
 	# character_view.global_rotation.y = character_model.global_rotation.y

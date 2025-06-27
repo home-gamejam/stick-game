@@ -12,6 +12,7 @@ func _enter_tree():
 
 func _ready():
 	if not is_multiplayer_authority():
+		set_physics_process(false)
 		return
 
 	# Only create camera if this is multiplayer authority
