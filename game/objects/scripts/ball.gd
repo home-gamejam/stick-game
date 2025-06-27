@@ -4,26 +4,16 @@ const SPAWN_HEIGHT = 1.5
 const SPAWN_OFFSET = .5
 const SPEED = 20.0
 
+var pid: int
 var is_physics_authority: bool = false
-
-# Peer id is key in order for multiplayer synchronization to work correctly.
-# We store it in the name so that it is available when the spawner creates the
-# scene. Then we parse the pid out in the getter when the scene enters the tree.
-var pid: int:
-	set(value):
-		# When this scene is added to a parent with `force_readable_name` set to
-		# true, an auto-incrementing name is generated. Using the `_` suffix so
-		# we can easily parse the pid and ignore any auto-added numeric suffixes.
-		name = str(value) + "_"
-	get:
-		return name.split("_")[0].to_int()
 
 @export var target_position: Vector3
 
 func _enter_tree():
+	set_multiplayer_authority(pid)
+	is_physics_authority = is_multiplayer_authority()
 	freeze = not is_physics_authority
 	freeze_mode = FREEZE_MODE_KINEMATIC
-	set_multiplayer_authority(pid)
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	if not is_physics_authority:
