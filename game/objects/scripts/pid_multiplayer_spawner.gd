@@ -6,6 +6,4 @@ func _enter_tree() -> void:
 	spawn_function = spawn_node
 
 func spawn_node(pid: Variant) -> Node:
-	var node: Node = packed_scene.instantiate()
-	node.pid = pid
-	return node
+	return packed_scene.instantiate().init(pid)

@@ -9,6 +9,10 @@ var is_physics_authority: bool = false
 
 @export var target_position: Vector3
 
+func init(pid_: int) -> Ball:
+	pid = pid_
+	return self
+
 func _enter_tree():
 	set_multiplayer_authority(pid)
 	is_physics_authority = is_multiplayer_authority()
