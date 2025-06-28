@@ -5,10 +5,9 @@ class_name WaitingRoom extends Node3D
 const PLAYER_SCENE = preload("res://player/player.tscn")
 
 
-func add_player(pid: int):
+func add_player(pid: int) -> void:
 	print("[waiting_room] _on_player_added: ", pid)
-	var player = PLAYER_SCENE.instantiate()
-	player.name = str(pid)
+	var player = PLAYER_SCENE.instantiate().init(pid)
 
 	var size = ground_mesh.get_aabb().size / 2
 	var x = randf_range(-size.x, size.x)
@@ -22,8 +21,8 @@ func add_player(pid: int):
 func remove_players() -> Array[int]:
 	var pids: Array[int] = []
 
-	for child in %Players.get_children():
-		pids.append(child.name.to_int())
+	for child: PlayerController in %Players.get_children():
+		pids.append(child.pid)
 		child.queue_free()
 
 	return pids

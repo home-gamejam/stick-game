@@ -36,7 +36,8 @@ func _on_multiplayer_pressed() -> void:
 
 # When players are added, add them to the waiting room. If game has started,
 # move them to the game world.
-func _on_player_added(pid: int):
+func _on_player_added(pid: int) -> void:
+	print("[game] _on_player_added: ", pid, ", is_authority: ", pid == multiplayer.get_unique_id())
 	controls.show()
 	waiting_room.add_player(pid)
 

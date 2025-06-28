@@ -3,12 +3,20 @@ class_name PlayerController extends CharacterController
 const BALL = preload("res://objects/ball.tscn")
 const PLAYER_CAMERA = preload("res://player/player_camera.tscn")
 
+var pid: int
 var _player_camera: PlayerCamera
 
+func init(pid_: int) -> PlayerController:
+	pid = pid_
+	# Encode the pid in the name so that multiplayer synchronizer can match
+	# nodes across peers. This is important since player nodes won't get added
+	# to Players node in the same order in each peer, so auto generated names
+	# won't match.
+	name = "Player (%s)" % pid
+	return self
+
 func _enter_tree():
-	# this assumes that name was set to the pid
-	var id = int(str(name))
-	set_multiplayer_authority(id)
+	set_multiplayer_authority(pid)
 
 func _ready():
 	if not is_multiplayer_authority():
@@ -35,7 +43,6 @@ func _physics_process(delta: float) -> void:
 		_on_throw()
 
 func _on_throw() -> void:
-	var pid = get_multiplayer_authority()
 	var ball: Ball = %ObjectSpawner.spawn(pid)
 
 	ball.launch(character_model.rig)

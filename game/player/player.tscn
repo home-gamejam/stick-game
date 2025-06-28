@@ -32,9 +32,6 @@ script = ExtResource("1_yw30f")
 input_source = NodePath("Input")
 character_model = NodePath("Model")
 character_view = NodePath("View")
-acceleration = null
-air_deceleration = null
-rotation_speed = null
 
 [node name="Input" type="Node" parent="."]
 script = ExtResource("2_yw30f")
