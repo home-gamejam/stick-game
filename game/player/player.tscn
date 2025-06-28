@@ -55,7 +55,6 @@ unique_name_in_owner = true
 
 [node name="ObjectSpawner" type="MultiplayerSpawner" parent="."]
 unique_name_in_owner = true
-_spawnable_scenes = PackedStringArray("uid://dk5vcc043t2qj")
 spawn_path = NodePath("../Objects")
 script = ExtResource("5_qjkh3")
 packed_scene = ExtResource("6_g6k8r")
