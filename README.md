@@ -22,7 +22,7 @@ In world.gd, set `IS_WEB_RTC` to determine client / server or WebRTC
 
 Run signaling server
 
-````sh
+```sh
 cd game/addons/signal_ws/server
 go run cmd/main.go -cert ssl
 ```
@@ -34,13 +34,17 @@ Build or run the game
 
 ### Web Build + Html Server
 
-> TODO: support for WebRTC over websockets
+Build godot project + golang static file server (this is all that's needed for CI)
 
-Build godot project + golang static file server
+```sh
 ./scripts/build-web.sh [hostname]
+```
 
 Run the server
+
+```sh
 ./build/[hostname].webserver
+```
 
 #### Web localhost
 
@@ -48,7 +52,7 @@ e.g. For local dev, build and start local web server:
 
 ```sh
 ./scripts/build-web.sh localhost
-````
+```
 
 ```sh
 pushd build
