@@ -1,9 +1,10 @@
-[gd_scene load_steps=17 format=3 uid="uid://bmjdkwxlrynbu"]
+[gd_scene load_steps=18 format=3 uid="uid://bmjdkwxlrynbu"]
 
 [ext_resource type="Script" uid="uid://bt1vionbruolc" path="res://main/scripts/world.gd" id="1_ch0rr"]
 [ext_resource type="Script" uid="uid://dvvotixyqce38" path="res://main/terrain.gd" id="2_b3acj"]
 [ext_resource type="PackedScene" uid="uid://cqil5euk3imr3" path="res://main/Box.tscn" id="2_cadw0"]
 [ext_resource type="Shader" uid="uid://y26ovivinbqr" path="res://shaders/ground.gdshader" id="2_sdvrk"]
+[ext_resource type="PackedScene" uid="uid://d21u4ai5xml5b" path="res://levels/level1.tscn" id="5_mnuad"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mnuad"]
 render_priority = 0
@@ -61,7 +62,10 @@ size = Vector3(4, 4, 4)
 [node name="World" type="Node3D"]
 script = ExtResource("1_ch0rr")
 
+[node name="Level1" parent="." instance=ExtResource("5_mnuad")]
+
 [node name="Terrain" type="Node3D" parent="."]
+visible = false
 script = ExtResource("2_b3acj")
 is_enabled = false
 depth = 64
