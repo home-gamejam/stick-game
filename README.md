@@ -65,13 +65,13 @@ NOTE: Be sure to update export file list if any files have been added
 
 On pi:
 
-```
+```sh
 sudo systemctl stop stickworldweb.service
 ```
 
 Local:
 
-```
+```sh
 GOOS=linux GOARCH=arm64 \
  ./scripts/build-web.sh pi44g.local && \
  ./scripts/cp-web.sh pi44g.local
@@ -79,7 +79,7 @@ GOOS=linux GOARCH=arm64 \
 
 On pi:
 
-```
+```sh
 sudo systemctl start stickworldweb.service
 ```
 
