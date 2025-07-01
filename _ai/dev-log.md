@@ -23,4 +23,6 @@ A running log of work sessions, problems solved, and ideas for future blog posts
 
 ## Blog Ideas
 
-- (Add ideas here as you go!)
+- Mixamo to Godot rigs - art/blender/scripts/rigify-to-godot.py
+- Hand and foot coliders for 3d rig
+- Set origin Blender script if all goes well
