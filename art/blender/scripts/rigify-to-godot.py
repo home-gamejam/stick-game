@@ -1,3 +1,18 @@
+"""
+rigify-to-godot.py
+
+This Blender script modifies a Rigify armature in-place to add a Godot-friendly TGT (Target) bone collection.
+
+- Renames and duplicates Rigify bones as TGT bones using a mapping, assigning them to a new 'TGT' bone collection.
+- Disables deform on original DEF- bones and enables deform on new TGT bones.
+- Sets up parent relationships for the new TGT bones according to a Godot/GLTF-friendly hierarchy.
+- Adds Copy Location and Copy Rotation constraints so TGT bones follow the original DEF- bones.
+- If run multiple times, removes any previously created TGT bones before recreating them.
+- Intended for use in Blender's scripting environment to prepare Rigify rigs for export to Godot Engine.
+
+Place this script in Blender's scripting editor and run it with the Rigify armature selected.
+"""
+
 import bpy
 import re
 from bpy.types import Armature, BoneCollection, CopyLocationConstraint, CopyRotationConstraint

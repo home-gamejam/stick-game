@@ -36,6 +36,14 @@
 - Art assets and animations are in `art/` and `game/art/`.
 - Mixamo and Rigify notes in README.
 
+## Blender Rig Scripts
+
+- The main script for preparing Mixamo (and Rigify) armatures for Godot is `art/blender/scripts/rigify-to-godot.py`.
+  - This script modifies a Rigify or Mixamo armature in-place, creating a Godot-friendly TGT (Target) bone collection.
+  - It renames, duplicates, and re-parents bones, sets up constraints, and disables deform on original bones.
+  - Run this script in Blender with the armature selected before exporting to Godot.
+- See the script's docstring for details on usage and features.
+
 ## Known Issues
 
 - Update export file list when adding new assets.

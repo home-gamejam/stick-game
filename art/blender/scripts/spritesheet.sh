@@ -1,4 +1,15 @@
 #!/usr/bin/env bash
+#
+# spritesheet.sh
+#
+# Generates a 64x64 spritesheet and animated GIF from up to 64 PNG images in ./sprites/out/.
+#
+# Usage: ./spritesheet.sh <output_name>
+#   - Creates ./sprites/<output_name>.png (spritesheet)
+#   - Creates ./sprites/<output_name>.gif (animated GIF)
+#
+# Requires ImageMagick (montage, convert).
+
 if [ "$#" -ne 1 ]; then
     echo "Required output filename."
     exit 1

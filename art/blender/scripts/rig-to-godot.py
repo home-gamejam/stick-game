@@ -1,3 +1,21 @@
+"""
+rig-to-godot.py
+
+> NOTE: I did not end up using this script. I believe I had issues with exporting animations targetted at the original armature when trying to only export the new armature.
+
+This Blender script creates a new armature based on a Mixamo (or Rigify) armature, converting it to a Godot-friendly TGT (Target) bone structure.
+
+- The original armature is NOT modified; a new target armature is generated in the scene.
+- Renames bones from Mixamo or Rigify conventions to Godot/GLTF-friendly names using a mapping.
+- Optionally creates a root bone if missing (Mixamo rigs lack a root).
+- Copies bone transforms and hierarchy to the new target armature.
+- Sets up parent relationships for the new bones.
+- Adds Copy Location and Copy Rotation constraints so the new bones follow the original armature.
+- Intended for use in Blender's scripting environment to prepare character rigs for export to Godot Engine.
+
+Place this script in Blender's scripting editor and run it with the source armature selected.
+"""
+
 import bpy
 import re
 from bpy.types import Armature, CopyLocationConstraint, CopyRotationConstraint
