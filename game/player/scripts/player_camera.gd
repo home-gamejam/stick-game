@@ -2,7 +2,7 @@ class_name PlayerCamera extends Node3D
 
 @export_range(0.0, 1.0) var mouse_sensitivity = 0.01
 @export var tilt_limit = deg_to_rad(75)
-var tilt_limit_min = 0.0
+var tilt_limit_min = deg_to_rad(15)
 
 @onready var camera := %Camera as Camera3D
 
