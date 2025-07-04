@@ -48,11 +48,17 @@ class OBJECT_OT_set_origin_base(bpy.types.Operator):
         original_mode = obj.mode
         original_cursor_location = scene.cursor.location.copy()
 
-        # Get selected verts using bmesh in edit mode
+        # Ensure we are in Edit mode to access mesh data
+        if obj.mode != 'EDIT':
+            bpy.ops.object.mode_set(mode='EDIT')
+
         mesh = cast(Mesh, obj.data)
         bm = bmesh.from_edit_mesh(mesh)
         target = self.get_target_point(bm)
         if target is None:
+            # Restore original mode if changed
+            if obj.mode != original_mode:
+                bpy.ops.object.mode_set(mode=original_mode)
             return {'CANCELLED'}
 
         # Switch to object mode for origin operation
@@ -63,7 +69,9 @@ class OBJECT_OT_set_origin_base(bpy.types.Operator):
         bpy.ops.object.origin_set(type='ORIGIN_CURSOR', center='MEDIAN')
         # Restore original 3D cursor position
         scene.cursor.location = original_cursor_location
-        bpy.ops.object.mode_set(mode=original_mode)
+        # Restore original mode if changed
+        if obj.mode != original_mode:
+            bpy.ops.object.mode_set(mode=original_mode)
         return {'FINISHED'}
 
 class OBJECT_OT_set_origin_to_selection(OBJECT_OT_set_origin_base):
