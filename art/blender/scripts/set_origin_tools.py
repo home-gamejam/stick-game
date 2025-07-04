@@ -15,7 +15,7 @@ Features:
 - Designed for maintainability and code reuse.
 """
 
-from typing import cast
+from typing import Callable, Tuple, cast
 import bpy
 from bpy.types import Mesh, Object
 from mathutils import Vector
@@ -26,11 +26,13 @@ bl_info = {
     "name": "Set Origin Tools",
     "author": "Emeraldwalk",
     "version": (1, 0, 0),
-    "blender": (3, 0, 0),
+    "blender": (4, 0, 0),
     "location": "View3D > Object Context Menu, Edit Mesh Context Menu",
     "description": "Set origin to centroid, bounding box corner, or bounding box bottom center for mesh objects.",
     "category": "Object",
 }
+
+bl_rna = True  # Mark this as a new-style Blender 4.x module add-on
 
 class OBJECT_OT_set_origin_base(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
@@ -99,7 +101,7 @@ class OBJECT_OT_set_origin_to_selection(OBJECT_OT_set_origin_base):
 
 class OBJECT_OT_set_origin_to_corner(OBJECT_OT_set_origin_base):
     bl_idname = "object.set_origin_to_corner"
-    bl_label = "Origin to Corner"
+    bl_label = "Origin to Corner (min(x), max(y), min(z))"
     bl_description = "Set the object's origin to the corner of all vertices (lowest Z, highest Y, lowest X)"
 
     def get_target_point(self, bm: BMesh) -> Vector | None:
@@ -130,28 +132,27 @@ class OBJECT_OT_set_origin_to_bottom_center(OBJECT_OT_set_origin_base):
         center_y = (min_y + max_y) / 2.0
         return Vector((center_x, center_y, min_z))
 
-# Add all operators to the context menus in Edit and Object mode
+# Register classes after all class definitions
+CLASSES = (
+    OBJECT_OT_set_origin_to_selection,
+    OBJECT_OT_set_origin_to_corner,
+    OBJECT_OT_set_origin_to_bottom_center,
+)
 
 def menu_func(self, context):
     self.layout.operator(OBJECT_OT_set_origin_to_selection.bl_idname)
     self.layout.operator(OBJECT_OT_set_origin_to_corner.bl_idname)
     self.layout.operator(OBJECT_OT_set_origin_to_bottom_center.bl_idname)
 
+# New-style module registration for Blender 4.1+
 def register():
-    bpy.utils.register_class(OBJECT_OT_set_origin_to_selection)
-    bpy.utils.register_class(OBJECT_OT_set_origin_to_corner)
-    bpy.utils.register_class(OBJECT_OT_set_origin_to_bottom_center)
+    for cls in CLASSES:
+        bpy.utils.register_class(cls)
     bpy.types.VIEW3D_MT_edit_mesh_context_menu.append(menu_func)
     bpy.types.VIEW3D_MT_object_context_menu.append(menu_func)
-
 
 def unregister():
     bpy.types.VIEW3D_MT_edit_mesh_context_menu.remove(menu_func)
     bpy.types.VIEW3D_MT_object_context_menu.remove(menu_func)
-    bpy.utils.unregister_class(OBJECT_OT_set_origin_to_bottom_center)
-    bpy.utils.unregister_class(OBJECT_OT_set_origin_to_corner)
-    bpy.utils.unregister_class(OBJECT_OT_set_origin_to_selection)
-
-# Only run register if loaded as an addon, not as a script
-if __name__ == "__main__":
-    register()
+    for cls in reversed(CLASSES):
+        bpy.utils.unregister_class(cls)
