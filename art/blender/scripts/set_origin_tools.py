@@ -22,6 +22,16 @@ from mathutils import Vector
 import bmesh
 from bmesh.types import BMesh
 
+bl_info = {
+    "name": "Set Origin Tools",
+    "author": "Emeraldwalk",
+    "version": (1, 0, 0),
+    "blender": (3, 0, 0),
+    "location": "View3D > Object Context Menu, Edit Mesh Context Menu",
+    "description": "Set origin to centroid, bounding box corner, or bounding box bottom center for mesh objects.",
+    "category": "Object",
+}
+
 class OBJECT_OT_set_origin_base(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -77,7 +87,7 @@ class OBJECT_OT_set_origin_base(bpy.types.Operator):
 
 class OBJECT_OT_set_origin_to_selection(OBJECT_OT_set_origin_base):
     bl_idname = "object.set_origin_to_selection"
-    bl_label = "Set Origin to Centroid"
+    bl_label = "Origin to Centroid"
     bl_description = "Set the object's origin to the centroid of selected vertices"
 
     def get_target_point(self, bm: BMesh) -> Vector | None:
@@ -89,7 +99,7 @@ class OBJECT_OT_set_origin_to_selection(OBJECT_OT_set_origin_base):
 
 class OBJECT_OT_set_origin_to_corner(OBJECT_OT_set_origin_base):
     bl_idname = "object.set_origin_to_corner"
-    bl_label = "Set Origin to Corner (Lowest Z, Highest Y, Lowest X)"
+    bl_label = "Origin to Corner"
     bl_description = "Set the object's origin to the corner of all vertices (lowest Z, highest Y, lowest X)"
 
     def get_target_point(self, bm: BMesh) -> Vector | None:
@@ -132,14 +142,16 @@ def register():
     bpy.utils.register_class(OBJECT_OT_set_origin_to_corner)
     bpy.utils.register_class(OBJECT_OT_set_origin_to_bottom_center)
     bpy.types.VIEW3D_MT_edit_mesh_context_menu.append(menu_func)
-    bpy.types.VIEW3D_MT_object_context_menu.append(menu_func)  # Add to object mode menu
+    bpy.types.VIEW3D_MT_object_context_menu.append(menu_func)
+
 
 def unregister():
     bpy.types.VIEW3D_MT_edit_mesh_context_menu.remove(menu_func)
-    bpy.types.VIEW3D_MT_object_context_menu.remove(menu_func)  # Remove from object mode menu
+    bpy.types.VIEW3D_MT_object_context_menu.remove(menu_func)
     bpy.utils.unregister_class(OBJECT_OT_set_origin_to_bottom_center)
     bpy.utils.unregister_class(OBJECT_OT_set_origin_to_corner)
     bpy.utils.unregister_class(OBJECT_OT_set_origin_to_selection)
 
+# Only run register if loaded as an addon, not as a script
 if __name__ == "__main__":
     register()
