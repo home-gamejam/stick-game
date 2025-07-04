@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://dvvotixyqce38" path="res://main/terrain.gd" id="2_b3acj"]
 [ext_resource type="PackedScene" uid="uid://cqil5euk3imr3" path="res://main/Box.tscn" id="2_cadw0"]
 [ext_resource type="Shader" uid="uid://y26ovivinbqr" path="res://shaders/ground.gdshader" id="2_sdvrk"]
-[ext_resource type="PackedScene" uid="uid://y3kdjhio0mg5" path="res://levels/level.tscn" id="5_mnuad"]
+[ext_resource type="PackedScene" uid="uid://dqt6bkv6q2qkw" path="res://levels/level.tscn" id="5_mnuad"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mnuad"]
 render_priority = 0
@@ -128,4 +128,4 @@ skeleton = NodePath("../..")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ramp"]
 shape = SubResource("BoxShape3D_40bfn")
 
-[node name="level" parent="." instance=ExtResource("5_mnuad")]
+[node name="Level" parent="." instance=ExtResource("5_mnuad")]
