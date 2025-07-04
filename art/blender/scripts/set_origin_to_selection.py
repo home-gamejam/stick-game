@@ -7,9 +7,10 @@ Features:
 - Works in Edit Mode (Mesh objects).
 - Remembers and restores the original mode and 3D cursor location.
 - Adds operators to the 3D Viewport context menu for easy access.
-- Provides two operators:
+- Provides three operators:
     1. Set origin to centroid of selected vertices.
     2. Set origin to the mesh corner (lowest Z, highest Y, lowest X) of all vertices.
+    3. Set origin to the center of the floor (lowest Z, center of min/max X and Y).
 - Robust error handling and user feedback.
 - Designed for maintainability and code reuse.
 """
@@ -98,21 +99,45 @@ class OBJECT_OT_set_origin_to_corner(OBJECT_OT_set_origin_base):
             return None
         return min(all_verts, key=lambda v: (v.z, -v.y, v.x))
 
-# Add both operators to the context menus in Edit and Object mode
+class OBJECT_OT_set_origin_to_bottom_center(OBJECT_OT_set_origin_base):
+    bl_idname = "object.set_origin_to_bottom_center"
+    bl_label = "Origin to Bounding Bottom Center"
+    bl_description = (
+        "Set the object's origin to the center of the bottom face of the mesh's bounding box (min Z, center X/Y)"
+    )
+
+    def get_target_point(self, bm: BMesh) -> Vector | None:
+        verts = [v.co for v in bm.verts]
+        if not verts:
+            self.report({'WARNING'}, 'No vertices found')
+            return None
+        min_x = min(v.x for v in verts)
+        max_x = max(v.x for v in verts)
+        min_y = min(v.y for v in verts)
+        max_y = max(v.y for v in verts)
+        min_z = min(v.z for v in verts)
+        center_x = (min_x + max_x) / 2.0
+        center_y = (min_y + max_y) / 2.0
+        return Vector((center_x, center_y, min_z))
+
+# Add all operators to the context menus in Edit and Object mode
 
 def menu_func(self, context):
     self.layout.operator(OBJECT_OT_set_origin_to_selection.bl_idname)
     self.layout.operator(OBJECT_OT_set_origin_to_corner.bl_idname)
+    self.layout.operator(OBJECT_OT_set_origin_to_bottom_center.bl_idname)
 
 def register():
     bpy.utils.register_class(OBJECT_OT_set_origin_to_selection)
     bpy.utils.register_class(OBJECT_OT_set_origin_to_corner)
+    bpy.utils.register_class(OBJECT_OT_set_origin_to_bottom_center)
     bpy.types.VIEW3D_MT_edit_mesh_context_menu.append(menu_func)
     bpy.types.VIEW3D_MT_object_context_menu.append(menu_func)  # Add to object mode menu
 
 def unregister():
     bpy.types.VIEW3D_MT_edit_mesh_context_menu.remove(menu_func)
     bpy.types.VIEW3D_MT_object_context_menu.remove(menu_func)  # Remove from object mode menu
+    bpy.utils.unregister_class(OBJECT_OT_set_origin_to_bottom_center)
     bpy.utils.unregister_class(OBJECT_OT_set_origin_to_corner)
     bpy.utils.unregister_class(OBJECT_OT_set_origin_to_selection)
 
