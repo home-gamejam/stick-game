@@ -316,7 +316,10 @@ func move_based_on_input(delta: float, input_dir: Vector2 = Vector2.ZERO, rot_in
 
 	var target_angle := Vector3.BACK.signed_angle_to(last_rotation_dir, Vector3.UP)
 
-	rig.global_rotation.y = lerp_angle(rig.rotation.y, target_angle, rotation_speed * delta)
+	if angle_difference(rig.rotation.y, target_angle) < 0.01:
+		rig.rotation.y = target_angle
+	else:
+		rig.rotation.y = lerp_angle(rig.rotation.y, target_angle, rotation_speed * delta)
 
 func play_animation() -> void:
 	match state_type:
