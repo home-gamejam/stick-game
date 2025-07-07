@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://c2jrxrxfi6r7d"]
+[gd_scene load_steps=30 format=3 uid="uid://c2jrxrxfi6r7d"]
 
 [ext_resource type="Script" uid="uid://d4jcynbprdal7" path="res://character/scripts/character_model.gd" id="1_65fbn"]
 [ext_resource type="Animation" uid="uid://ce7hynh76jyii" path="res://resources/animations/FightIdle.res" id="2_y220p"]
@@ -15,6 +15,8 @@
 
 [sub_resource type="BoxMesh" id="BoxMesh_nis8b"]
 size = Vector3(0.2, 0.2, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yq1x2"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_65fbn"]
 radius = 0.1
@@ -348,6 +350,15 @@ bones/35/position = Vector3(2.09697e-09, 0.216013, -3.21563e-08)
 bones/35/rotation = Quaternion(-0.000117178, 0.981987, -0.188948, -0.000499791)
 bones/35/scale = Vector3(1, 1, 1)
 
+[node name="Body" type="BoneAttachment3D" parent="rig/Skeleton3D"]
+transform = Transform3D(1, 0, 0, 0, 0.999086, 0.042754, 0, -0.042754, 0.999086, 0, 1.11966, -0.00037433)
+bone_name = "Chest"
+bone_idx = 3
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="rig/Skeleton3D/Body"]
+transform = Transform3D(0.272446, 0, 0, 0, 0.399249, -2.79397e-09, 0, 0, 0.277873, 0, 0, 0)
+remote_path = NodePath("../../../../BodyCollider")
+
 [node name="FootL" type="BoneAttachment3D" parent="rig/Skeleton3D"]
 transform = Transform3D(-1, 1.03342e-06, -2.40456e-07, -2.68337e-07, -1.51992e-06, 1, 9.10019e-07, 1, 1.49012e-06, 0.118451, 0.0493689, 0.210135)
 bone_name = "LeftToes"
@@ -398,6 +409,10 @@ bone_idx = 0
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 mesh = SubResource("BoxMesh_nis8b")
 
+[node name="BodyCollider" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.272446, 0, 0, 0, 0.398884, 0.0118802, 0, -0.0170695, 0.277619, 0, 1.11966, -0.00037433)
+shape = SubResource("CapsuleShape3D_yq1x2")
+
 [node name="HandColliderL" type="CollisionShape3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(-0.970774, 0.174404, -0.164507, -0.214945, -0.93705, 0.275011, -0.106192, 0.302349, 0.947217, 0.276277, 0.885336, 0.0596283)
@@ -429,7 +444,7 @@ mesh = SubResource("CapsuleMesh_b6qoi")
 
 [node name="FootColliderR" type="CollisionShape3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(-0.999828, -8.66107e-07, -3.78587e-14, 0, -4.37041e-08, 0.999831, -8.66103e-07, 0.999833, 4.3704e-08, -0.118451, 0.0993692, 0.210135)
+transform = Transform3D(-0.999828, -8.66106e-07, -3.78587e-14, 0, -4.3704e-08, 0.999831, -8.66103e-07, 0.999832, 4.3704e-08, -0.118451, 0.0993692, 0.210135)
 shape = SubResource("CapsuleShape3D_ldqqv")
 
 [node name="Debug" type="MeshInstance3D" parent="FootColliderR"]
