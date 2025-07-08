@@ -308,6 +308,14 @@ func move_based_on_input(delta: float, input_dir: Vector2 = Vector2.ZERO, rot_in
 
 	move_and_slide()
 
+	for i in get_slide_collision_count():
+		var collision = get_slide_collision(i)
+		var collider = collision.get_collider()
+		if collider.has_method("get_collision_layer"):
+			var layer = collider.get_collision_layer()
+			if layer & (1 << 3):
+				print("I collided with ", collider.name, ", ", layer)
+
 	if move_direction.length() > 0.2:
 		last_move_dir = move_direction
 

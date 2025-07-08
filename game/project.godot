@@ -81,6 +81,13 @@ punch={
 
 pointing/emulate_touch_from_mouse=true
 
+[layer_names]
+
+3d_physics/layer_1="World"
+3d_physics/layer_2="Camera"
+3d_physics/layer_3="Player"
+3d_physics/layer_4="Ball"
+
 [network]
 
 tls/certificate_bundle_override="res://certs/rootCA.crt"
