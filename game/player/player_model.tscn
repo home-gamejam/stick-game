@@ -1,6 +1,7 @@
-[gd_scene load_steps=30 format=3 uid="uid://c2jrxrxfi6r7d"]
+[gd_scene load_steps=31 format=3 uid="uid://c2jrxrxfi6r7d"]
 
 [ext_resource type="Script" uid="uid://d4jcynbprdal7" path="res://character/scripts/character_model.gd" id="1_65fbn"]
+[ext_resource type="Script" path="res://character/scripts/hit_skeleton_modifier.gd" id="2_ivyc5"]
 [ext_resource type="Animation" uid="uid://ce7hynh76jyii" path="res://resources/animations/FightIdle.res" id="2_y220p"]
 [ext_resource type="Animation" uid="uid://b61p8hej6r4my" path="res://resources/animations/Idle.res" id="3_yq1x2"]
 [ext_resource type="Animation" uid="uid://bk7ft3p218mg7" path="res://resources/animations/Jump.res" id="4_ivyc5"]
@@ -411,6 +412,27 @@ bone_idx = 0
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 mesh = SubResource("BoxMesh_nis8b")
 
+[node name="HitSkeletonModifier" type="SkeletonModifier3D" parent="rig/Skeleton3D"]
+_import_path = NodePath("")
+unique_name_in_owner = true
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+rotation_edit_mode = 0
+rotation_order = 2
+top_level = false
+visible = true
+visibility_parent = NodePath("")
+active = true
+influence = 1.0
+script = ExtResource("2_ivyc5")
+metadata/_custom_type_script = "uid://bowu2iha3geg3"
+
 [node name="BodyCollider" type="CollisionShape3D" parent="."]
 transform = Transform3D(0.272446, 0, 0, 0, 0.398884, 0.0118802, 0, -0.0170695, 0.277619, 0, 1.11966, -0.00037433)
 shape = SubResource("CapsuleShape3D_yq1x2")
@@ -446,7 +468,7 @@ mesh = SubResource("CapsuleMesh_b6qoi")
 
 [node name="FootColliderR" type="CollisionShape3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(-0.999828, -8.66105e-07, -3.78587e-14, 0, -4.3704e-08, 0.999831, -8.66103e-07, 0.999831, 4.3704e-08, -0.118451, 0.0993692, 0.210135)
+transform = Transform3D(-0.999829, -8.66104e-07, -3.78587e-14, 0, -4.3704e-08, 0.999831, -8.66103e-07, 0.99983, 4.3704e-08, -0.118451, 0.0993692, 0.210135)
 shape = SubResource("CapsuleShape3D_ldqqv")
 
 [node name="Debug" type="MeshInstance3D" parent="FootColliderR"]
