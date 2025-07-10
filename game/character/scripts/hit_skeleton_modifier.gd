@@ -32,9 +32,6 @@ func trigger(bone_name: String, force: Vector3) -> void:
 	current_transforms.set(bone_idx, rest) # TODO: figure out how to handle merging if multiple triggers happen
 	target_transforms.set(bone_idx, rest.translated(force))
 
-func damp(source: Variant, target: Variant, smoothing: float, dt: float):
-	return lerp(source, target, 1 - pow(smoothing, dt))
-
 func update_bones():
 	for bone_idx in target_transforms.keys():
 		var pose = current_transforms.get(bone_idx)
@@ -52,7 +49,7 @@ func update_transforms():
 		var current: Transform3D = current_transforms.get(bone_idx)
 		var target: Transform3D = target_transforms.get(bone_idx)
 
-		var next: Transform3D = damp(
+		var next: Transform3D = Utils.damp(
 			current,
 			target,
 			0.01,
