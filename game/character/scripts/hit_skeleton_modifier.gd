@@ -28,14 +28,14 @@ func trigger(bone_name: String, force: Vector3) -> void:
 	if bone_idx == -1:
 		return
 
-	var rest = get_bone_rest(bone_idx)
-	current_transforms.set(bone_idx, rest) # TODO: figure out how to handle merging if multiple triggers happen
-	target_transforms.set(bone_idx, rest.translated(force))
+	# If we already have a current transform, we are in the middle of handling a
+	# previous hit, so don't overwrite. If not, start with the rest transform.
+	if not current_transforms.has(bone_idx):
+		var rest = get_bone_rest(bone_idx)
+		current_transforms.set(bone_idx, rest)
 
-func update_bones():
-	for bone_idx in target_transforms.keys():
-		var pose = current_transforms.get(bone_idx)
-		get_skeleton().set_bone_pose(bone_idx, pose)
+	var current: Transform3D = current_transforms.get(bone_idx)
+	target_transforms.set(bone_idx, current.translated(force))
 
 func update_times():
 	var now = Time.get_unix_time_from_system()
@@ -43,6 +43,11 @@ func update_times():
 	elapsed += delta
 	last_time_check = now
 	# print("elapsed: ", elapsed, ", delta: ", delta)
+
+func update_bones():
+	for bone_idx in target_transforms.keys():
+		var pose = current_transforms.get(bone_idx)
+		get_skeleton().set_bone_pose(bone_idx, pose)
 
 func update_transforms():
 	for bone_idx in target_transforms.keys():
