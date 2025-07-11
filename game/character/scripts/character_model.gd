@@ -317,7 +317,7 @@ func move_based_on_input(delta: float, input_dir: Vector2 = Vector2.ZERO, rot_in
 			var layer = collider.get_collision_layer()
 			if layer & (1 << 3):
 				hit_spring_bone_simulator.activate_for(1.0)
-				# print(collision.get_local_shape().name, " collided with ", collider.name, ", ", layer)
+
 				var vel = collision.get_collider_velocity() * .01 # Vector3(0, 0, -0.2)
 				print("ball vel: ", vel)
 				hit_skeleton_modifier.trigger("Chest", vel)
