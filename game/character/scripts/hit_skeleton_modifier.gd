@@ -28,14 +28,15 @@ func trigger(bone_name: String, force: Vector3) -> void:
 	if bone_idx == -1:
 		return
 
+	var rest = get_bone_rest(bone_idx)
+
 	# If we already have a current transform, we are in the middle of handling a
 	# previous hit, so don't overwrite. If not, start with the rest transform.
 	if not current_transforms.has(bone_idx):
-		var rest = get_bone_rest(bone_idx)
 		current_transforms.set(bone_idx, rest)
 
-	var current: Transform3D = current_transforms.get(bone_idx)
-	target_transforms.set(bone_idx, current.translated(force))
+	# var current: Transform3D = current_transforms.get(bone_idx)
+	target_transforms.set(bone_idx, rest.translated(force))
 
 func update_times():
 	var now = Time.get_unix_time_from_system()
