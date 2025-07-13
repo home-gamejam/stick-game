@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://b5m57eryima4q"]
+[gd_scene load_steps=8 format=3 uid="uid://b5m57eryima4q"]
 
 [ext_resource type="Script" uid="uid://df1pkogd0jj71" path="res://main/scripts/game.gd" id="1_46yon"]
 [ext_resource type="PackedScene" uid="uid://beuul4kl5jy6v" path="res://main/landing.tscn" id="2_3qcir"]
@@ -6,9 +6,13 @@
 [ext_resource type="Script" uid="uid://bnih07xomcyq7" path="res://addons/signal_ws/client/signal_lobby_node.gd" id="3_3qcir"]
 [ext_resource type="PackedScene" uid="uid://btv137wy80boc" path="res://main/waiting_room.tscn" id="4_jc0vi"]
 [ext_resource type="PackedScene" uid="uid://bmjdkwxlrynbu" path="res://main/world.tscn" id="5_vfw6y"]
+[ext_resource type="PackedScene" uid="uid://35nxb10xrm00" path="res://utils/debug_overlay.tscn" id="7_jc0vi"]
 
 [node name="Game" type="Node3D"]
 script = ExtResource("1_46yon")
+
+[node name="DebugOverlay" parent="." instance=ExtResource("7_jc0vi")]
+text = ""
 
 [node name="Landing" parent="." instance=ExtResource("2_3qcir")]
 unique_name_in_owner = true

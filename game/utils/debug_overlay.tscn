@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://35nxb10xrm00"]
+
+[ext_resource type="Script" uid="uid://fak16pvpo8xb" path="res://utils/scripts/debug_overlay.gd" id="1_1q7iy"]
+[ext_resource type="Theme" uid="uid://cy7xmbneexw85" path="res://resources/theme.tres" id="1_glsue"]
+
+[node name="DebugOverlay" type="RichTextLabel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_glsue")
+text = "Testing"
+script = ExtResource("1_1q7iy")
