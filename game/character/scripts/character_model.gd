@@ -19,15 +19,27 @@ enum CharacterStateType {
 @export var max_floor_distance: float = .2
 @export var walk_speed: float = 5.0
 
-@onready var hand_collider_l = %HandColliderL as CollisionShape3D
-@onready var hand_collider_r = %HandColliderR as CollisionShape3D
-@onready var foot_collider_l = %FootColliderL as CollisionShape3D
-@onready var foot_collider_r = %FootColliderR as CollisionShape3D
-@onready var rig = %rig as Node3D
-@onready var hit_skeleton_modifier = %HitSkeletonModifier as HitSkeletonModifier
+@export var bone_current_transforms: Dictionary[int, Transform3D]:
+	get:
+		return hit_skeleton_modifier.current_transforms
+	set(value):
+		hit_skeleton_modifier.current_transforms = value
 
-@onready var animation_player = %AnimationPlayer as AnimationPlayer
-@onready var animation_tree = %AnimationTree as AnimationTree
+@export var bone_target_transforms: Dictionary[int, Transform3D]:
+	get:
+		return hit_skeleton_modifier.target_transforms
+	set(value):
+		hit_skeleton_modifier.target_transforms = value
+
+@onready var hand_collider_l: CollisionShape3D = %HandColliderL
+@onready var hand_collider_r: CollisionShape3D = %HandColliderR
+@onready var foot_collider_l: CollisionShape3D = %FootColliderL
+@onready var foot_collider_r: CollisionShape3D = %FootColliderR
+@onready var rig: Node3D = %rig
+@onready var hit_skeleton_modifier: HitSkeletonModifier = %HitSkeletonModifier
+
+@onready var animation_player: AnimationPlayer = %AnimationPlayer
+@onready var animation_tree: AnimationTree = %AnimationTree
 
 var move_speed = walk_speed
 var last_input_dir := Vector2.ZERO

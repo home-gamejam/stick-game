@@ -26,6 +26,12 @@ properties/4/replication_mode = 1
 properties/5/path = NodePath("View:position")
 properties/5/spawn = true
 properties/5/replication_mode = 1
+properties/6/path = NodePath("Model:bone_current_transforms")
+properties/6/spawn = true
+properties/6/replication_mode = 1
+properties/7/path = NodePath("Model:bone_target_transforms")
+properties/7/spawn = true
+properties/7/replication_mode = 1
 
 [node name="Controller" type="Node" node_paths=PackedStringArray("input_source", "character_model", "character_view")]
 script = ExtResource("1_yw30f")
