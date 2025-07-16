@@ -25,7 +25,6 @@ enum CharacterStateType {
 @onready var foot_collider_r = %FootColliderR as CollisionShape3D
 @onready var rig = %rig as Node3D
 @onready var hit_skeleton_modifier = %HitSkeletonModifier as HitSkeletonModifier
-@onready var hit_spring_bone_simulator = %HitSpringBoneSimulator as HitSpringBoneSimulator
 
 @onready var animation_player = %AnimationPlayer as AnimationPlayer
 @onready var animation_tree = %AnimationTree as AnimationTree
@@ -316,7 +315,6 @@ func move_based_on_input(delta: float, input_dir: Vector2 = Vector2.ZERO, rot_in
 		if collider.has_method("get_collision_layer"):
 			var layer = collider.get_collision_layer()
 			if layer & (1 << 3):
-				# hit_spring_bone_simulator.activate_for(1.0)
 				var vel = collision.get_collider_velocity()
 				print("ball vel: ", vel)
 				hit_skeleton_modifier.trigger("Chest", vel)
